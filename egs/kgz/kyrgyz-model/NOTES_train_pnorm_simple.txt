@@ -1,0 +1,264 @@
+
+http://kaldi-asr.org/doc/dnn2.html
+"The number of iterations per epoch is stored in a file like egs/nnet5d/egs/iters_per_epoch; it depends how much data we have and how many training jobs we run in parallel, and can vary from one to many tens" -- iterations as an option is just a fix for having too much data and not enough RAM
+
+
+http://www.danielpovey.com/files/2013_interspeech_nnet_lda.pdf
+
+"In this “hybrid” frame-work,  an  artificial  neural  network  (ANN)  is  trained  to
+output hidden Markov model (HMM) context-dependent state-level posterior probabilities [1, 2]. 
+The posteriors are converted into  quasi-likelihoods  by  dividing  by  the  prior  of  the  states,
+which  are  then  used  with  an  HMM  as  a  replacement  for  the
+Gaussian mixture model (GMM) likelihoods."
+
+"Our baseline features (shown in Figure 1,d=40) are obtained as follows.  
+The 13-dimensional Mel-frequency cepstral coefficient (MFCC) [3] features 
+are spliced in time taking a context size of 9 frames (i.e.,±4), followed by 
+de-correlation and dimensionality reduction to 40 using linear discriminant 
+analysis (LDA) [4].  The resulting features are further de-correlated
+using maximum likelihood linear transform (MLLT) [5], which
+is also known as global semi-tied covariance (STC) [6].  This
+is followed by speaker normalization using feature-space maximum likelihood 
+linear regression (fMLLR), also known as constrained MLLR (CMLLR) [7]. 
+The fMLLR in our baseline case has 40×41 parameters and is estimated using the GMM-based
+system applying speaker adaptive training (SAT) [8, 7]."
+
+"In our experiments fMLLR is applied both during training and
+test, which is known as SAT."
+
+
+
+
+###              ###
+### PREPARE DATA ###
+###              ###
+
+
+utils/split_data.sh
+[
+This script will not split the data-dir if it detects that the output is 
+newer than the input.
+]
+
+steps/nnet2/get_lda.sh
+[
+This script, which will generally be called from other neural-net training
+scripts, extracts the training examples used to train the neural net (and also
+the validation examples used for diagnostics), and puts them in separate archives.
+As well as extracting examples, this script will also do the LDA computation.
+
+USAGE: steps/nnet2/get_lda.sh [options] <data-dir> <lang-dir> <ali-dir> <exp-dir>
+]
+
+steps/nnet2/get_egs.sh
+[
+This script, which will generally be called from other neural-net training
+scripts, extracts the training examples used to train the neural net (and also
+the validation examples used for diagnostics), and puts them in separate archives.
+]
+
+
+
+
+###                  ###
+### INITIALIZE NNET  ###
+###                  ###
+
+nnet-am-init 
+[
+Initialize the neural network acoustic model and its associated transition-model, 
+from a tree, a topology file, and a neural-net without an associated acoustic model.
+
+USAGE1: nnet-am-init [options] <tree-in> <topology-in> <raw-nnet-in> <nnet-am-out>
+USAGE2:  nnet-am-init [options] <transition-model-in> <raw-nnet-in> <nnet-am-out>
+]
+
+
+nnet-train-transitions  
+[
+Train the transition probabilities of a neural network acoustic model from the 
+alignments of a previous model. In most cases, for my purposes these alignments 
+come from a GMM-HMM system.
+
+USAGE:  nnet-train-transitions [options] <nnet-in> <alignments-rspecifier> <nnet-out>
+]
+
+
+
+
+###                   ###
+### BEGIN TRAIN NNET  ###
+###                   ###
+
+# TRAINING NEURAL NET (PASS $x)
+
+nnet-shuffle-egs
+[
+Copy examples (typically single frames) for neural network training,
+from the input to output, but randomly shuffle the order.  This program will keep
+all of the examples in memory at once, unless you use the --buffer-size option
+
+USAGE:  nnet-shuffle-egs [options] <egs-rspecifier> <egs-wspecifier>
+]
+
+
+nnet-train-simple 
+[
+Train the neural network parameters with backprop and stochastic gradient descent using minibatches.  
+Training examples would be produced by nnet-get-egs. 
+
+USAGE: nnet-train-simple <model-in> <training-examples-in> <model-out>
+]
+
+
+# If we're taking an average over all jobs
+
+nnet-am-average | nnet-am-copy
+
+nnet-am-average
+[
+This program averages (or sums, if --sum=true) the parameters over a
+number of neural nets.  If you supply the option --skip-last-layer=true,
+the parameters of the last updatable layer are copied from <model1> instead
+of being averaged (useful in multi-language scenarios).
+The --weights option can be used to weight each model differently.
+
+USAGE:  nnet-am-average [options] <model1> <model2> ... <modelN> <model-out>
+]
+
+nnet-am-copy
+[
+Copy a (nnet2) neural net and its associated transition model,
+possibly changing the binary model
+Also supports multiplying all the learning rates by a factor
+(the --learning-rate-factor option) and setting them all to a given
+value (the --learning-rate options)
+
+USAGE:  nnet-am-copy [options] <nnet-in> <nnet-out>
+]
+
+# elif we're *just* taking the best job
+
+nnet-am-copy
+[
+Copy a (nnet2) neural net and its associated transition model,
+possibly changing the binary model
+Also supports multiplying all the learning rates by a factor
+(the --learning-rate-factor option) and setting them all to a given
+value (the --learning-rate options)
+
+USAGE:  nnet-am-copy [options] <nnet-in> <nnet-out>
+]
+
+
+# IF MIX-UP THIS ITERATION 
+
+nnet-am-mixup
+[
+Add mixture-components to a neural net (comparable to mixtures in a Gaussian
+mixture model).  Number of mixture components must be greater than the number of pdfs
+
+USAGE:  nnet-am-mixup [options] <nnet-in> <nnet-out>
+]
+
+
+
+
+##############################################
+### FINAL COMBINATION TO PRODUCE final.mdl ###
+##############################################
+
+nnet-combine-fast
+[
+Using a validation set, compute an optimal combination of a number of
+neural nets (the combination weights are separate for each layer and
+do not have to sum to one).  The optimization is BFGS, which is initialized
+from the best of the individual input neural nets (or as specified by
+--initial-model)
+
+USAGE:  nnet-combine-fast [options] <model-in1> <model-in2> ... <model-inN> <valid-examples-in> <model-out>
+]
+
+nnet-normalize-stddev
+[
+This program first identifies any affine or block affine layers that
+are followed by pnorm and then renormalize layers. Then it rescales
+those layers such that the parameter stddev is 1.0 after scaling
+(the target stddev is configurable by the --stddev option).
+If you supply the option --stddev-from=<model-filename>, it rescales
+those layers to match the standard deviations of corresponding layers
+in the specified model.
+
+USAGE: nnet-normalize-stddev [options] <model-in> <model-out>
+]
+
+nnet-compute-prob
+[
+Computes and prints the average log-prob per frame of the given data with a
+neural net.  The input of this is the output of e.g. nnet-get-egs.
+Aside from the logging output, which goes to the standard error, this program
+prints the average log-prob per frame to the standard output.
+Also see nnet-logprob, which produces a matrix of log-probs for each utterance.
+
+USAGE:  nnet-compute-prob [options] <model-in> <training-examples-in>
+]
+
+##############################################
+### GET AVERAGE POSTERIOR TO ADJUST PRIORS ###
+##############################################
+
+PIPELINE: nnet-subset-egs | nnet-compute-from-egs | matrix-sum-rows | vector-sum
+
+nnet-subset-egs
+[
+Creates a random subset of the input examples, of a specified size. 
+Uses no more memory than the size of the subset.
+
+USAGE:  nnet-subset-egs [options] <egs-rspecifier> [<egs-wspecifier2> ...]
+]
+
+
+nnet-compute-from-egs
+[
+Does the neural net computation, taking as input the nnet-training examples 
+(typically an archive with the extension .egs), ignoring the labels; it outputs 
+as a matrix the result.  Used mostly for debugging.
+
+USAGE:  nnet-compute-from-egs [options] <raw-nnet-in> <egs-rspecifier> <feature-wspecifier>
+]
+
+
+matrix-sum-rows
+[
+Sum the rows of an input table of matrices and output the corresponding table of vectors
+
+USAGE: matrix-sum-rows [options] <matrix-rspecifier> <vector-wspecifier>
+]
+
+
+vector-sum
+[
+Add vectors (e.g. weights, transition-accs; speaker vectors). 
+If you need to scale the inputs, use vector-scale on the inputs.
+
+USAGE 1: vector-sum [options] <vector-in-rspecifier1> [<vector-in-rspecifier2> <vector-in-rspecifier3> ...] <vector-out-wspecifier>
+USAGE 2: vector-sum [options] <vector-in-rspecifier> <vector-out-wxfilename> (sums a single table input to produce a single output):\n"
+USAGE 3: vector-sum [options] <vector-in-rxfilename1> <vector-in-rxfilename2> <vector-out-wxfilename> (sums single-file inputs to produce a single output)
+]
+
+
+# ADJUST PRIORS
+
+nnet-adjust-priors
+[
+Set the priors of the neural net to the computed posterios from the net, on typical data 
+(e.g. training data). This is correct under more general circumstances than using the priors 
+of the class labels in the training data. Typical usage of this program will involve computation
+ of an average pdf-level posterior with nnet-compute or nnet-compute-from-egs, piped into 
+matrix-sum-rows and then vector-sum, to compute the average posterior.
+
+USAGE: nnet-adjust-priors [options] <nnet-in> <summed-posterior-vector-in> <nnet-out>
+]
+ 
+
+# ALL DONE - CLEAN UP! #
