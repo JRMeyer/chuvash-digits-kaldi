@@ -6,6 +6,15 @@
 !/src/*/Makefile
 !/src/*/README
 
+# Audio files
+*.WAV
+*.wav
+*.sph
+*.MP3
+*.mp3
+*.FLAC
+*.flac
+
 # Compiled Object files and python ciles
 *.slo
 *.lo
@@ -70,6 +79,16 @@ GSYMS
 /src/kaldi.mk
 /src/kaldi.mk.tmp
 /src/kaldi.mk.bak
+
+# my /egs/
+/egs/kgz/*/mfcc
+/egs/kgz/*/plp
+/egs/kgz/*/exp
+/egs/kgz/*/data
+/egs/kgz/*/mfcc_*
+/egs/kgz/*/plp_*
+/egs/kgz/*/exp_*
+/egs/kgz/*/data_*
 
 # /egs/
 /egs/*/s*/mfcc
