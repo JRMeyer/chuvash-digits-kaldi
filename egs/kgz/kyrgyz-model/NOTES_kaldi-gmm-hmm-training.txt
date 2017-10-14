@@ -1,0 +1,37 @@
+Dan and Nikolay said on kaldi-help that the monophones are indeed
+trained with delta+delta-deltas, so align_deltas.sh is a deceptive
+name, and it really should be align_triphones.sh
+
+So the typical workflow for a run GMM script trains monophones from
+a flat start, then uses the alignments from that model to:
+
+(1) create a decision tree to decide what should be the triphones
+    we use out of the n^3 possible triphones
+    
+(2) start training the new triphone model
+
+Then what usually happens in the run scripts is that this triphone
+model + alignments get used to train a new triphone model with some
+kind of transformation (LDA/MLLT/fMLLR/etc) or SAT.
+
+Where I was getting confused is that the original triphone model (tri1)
+is used not only to train these other models with some adaptation training,
+but tri1 is also used to train a new triphone model with the exact same
+features (tri2a). This is in ways redundant, going off of what Dan and
+Nikolay said. I think it was just added for comparability between different
+final triphone acoustic models. That is we go:
+
+
+                  --> tri2a (just normal mfccs like tri1)
+                 /         
+mono0 --> tri1 --
+                 \
+                  --> tri2b (with some lda mllt adapataion)
+
+
+So now, tri2a and tri2b are more comparable, than say, tri2b and tri1.
+Because tri1 and tri2a are similar but not exactly the same because the
+decision tree gets re-made, so there can be more or less senomes in tri2a
+after its retrained.
+
+
