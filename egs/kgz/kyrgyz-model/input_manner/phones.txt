@@ -1,0 +1,9 @@
+SIL
+SPOKEN_NOISE
+a
+ch
+h
+l
+n
+p
+r
