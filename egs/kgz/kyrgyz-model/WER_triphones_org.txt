@@ -1,0 +1,1 @@
+%WER 4.17 [ 36 / 864, 10 ins, 7 del, 19 sub ] exp_org/triphones/decode_test/wer_11

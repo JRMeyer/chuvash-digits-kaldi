@@ -1,0 +1,7 @@
+# the files like $train_data_list and $dev2h_data_list contain a single column list where the number of rows is the number of training audio files, and each row has the BASENAME of the file with no extension:
+#
+# this list gets used in locals/make_corpus_subset.sh, and here's a snippet:
+#
+# for file_basename in `cat $input_data_list`; do
+#    if [[ -e $abs_src_dir/audio/$file_basename.sph ]] ; then
+
