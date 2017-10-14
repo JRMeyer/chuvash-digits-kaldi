@@ -15,6 +15,12 @@
 *.FLAC
 *.flac
 
+# model files
+*.raw
+*.mdl
+*.acc
+
+
 # Compiled Object files and python ciles
 *.slo
 *.lo
