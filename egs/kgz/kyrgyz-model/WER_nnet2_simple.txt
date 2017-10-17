@@ -1,0 +1,1 @@
+%WER 4.22 [ 45 / 1067, 11 ins, 8 del, 26 sub ] exp_org/nnet2/nnet2_simple/decode/wer_9
