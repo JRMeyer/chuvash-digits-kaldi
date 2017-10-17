@@ -1,0 +1,2 @@
+compute-cmvn-stats --spk2utt=ark:new_data/spk2utt scp:new_data/feats.scp ark,scp:new_data/plp/cmvn_new_data.ark,new_data/plp/cmvn_new_data.scp 
+LOG (compute-cmvn-stats[5.2.163~1-3af47]:main():compute-cmvn-stats.cc:171) Done accumulating CMVN stats for 239 utterances; 0 had errors.
