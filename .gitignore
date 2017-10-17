@@ -20,6 +20,8 @@
 *.mdl
 *.acc
 
+# and compressed files in egs
+/egs/**/*.gz
 
 # Compiled Object files and python ciles
 *.slo
