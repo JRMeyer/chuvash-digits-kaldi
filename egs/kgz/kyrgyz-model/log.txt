@@ -1,0 +1,87 @@
+
+###### BEGIN LANGUAGE INFO ######
+lang= org
+num_targets= 433
+data_dir= data/org/train
+ali_dir= exp/org/tri_ali
+egs_dir= exp/org/nnet3/egs
+###### END LANGUAGE INFO ######
+
+
+###### BEGIN LANGUAGE INFO ######
+lang= no_voice
+num_targets= 77
+data_dir= data/no_voice/train
+ali_dir= exp/no_voice/mono_ali
+egs_dir= exp/no_voice/nnet3/egs
+###### END LANGUAGE INFO ######
+
+### ============================ ###
+### CREATE CONFIG FILES FOR NNET ###
+### ============================ ###
+feat-to-dim scp:data/org/train/feats.scp - 
+nnet3-init exp/nnet3/multitask/configs//ref.config exp/nnet3/multitask/configs//ref.raw 
+LOG (nnet3-init[5.2.163~1-3af47]:main():nnet3-init.cc:80) Initialized raw neural net and wrote it to exp/nnet3/multitask/configs//ref.raw
+nnet3-info "nnet3-copy --edits='rename-node old-name=output-0 new-name=output' exp/nnet3/multitask/configs//ref.raw - |" 
+nnet3-copy '--edits=rename-node old-name=output-0 new-name=output' exp/nnet3/multitask/configs//ref.raw - 
+LOG (nnet3-copy[5.2.163~1-3af47]:main():nnet3-copy.cc:114) Copied raw neural net from exp/nnet3/multitask/configs//ref.raw to -
+nnet3-init exp/nnet3/multitask/configs//ref.config exp/nnet3/multitask/configs//ref.raw 
+LOG (nnet3-init[5.2.163~1-3af47]:main():nnet3-init.cc:80) Initialized raw neural net and wrote it to exp/nnet3/multitask/configs//ref.raw
+nnet3-info "nnet3-copy --edits='rename-node old-name=output-0 new-name=output' exp/nnet3/multitask/configs//ref.raw - |" 
+nnet3-copy '--edits=rename-node old-name=output-0 new-name=output' exp/nnet3/multitask/configs//ref.raw - 
+LOG (nnet3-copy[5.2.163~1-3af47]:main():nnet3-copy.cc:114) Copied raw neural net from exp/nnet3/multitask/configs//ref.raw to -
+steps/nnet3/xconfig_to_configs.py --xconfig-file exp/nnet3/multitask/configs/network.xconfig --config-dir exp/nnet3/multitask/configs/ --nnet-edits=rename-node old-name=output-0 new-name=output
+### ================== ###
+### MAKE NNET3 EGS DIR ###
+### ================== ###
+### MAKE SEPARATE EGS DIR PER LANGUAGE ###
+local/nnet3/prepare_multilingual_egs.sh --cmd utils/run.pl --cmvn-opts --norm-means=false --norm-vars=false --left-context 16 --right-context 12 2 data/org/train data/no_voice/train exp/org/tri_ali exp/no_voice/mono_ali exp/org/nnet3/egs exp/no_voice/nnet3/egs
+local/nnet3/prepare_multilingual_egs.sh --cmd utils/run.pl --cmvn-opts --norm-means=false --norm-vars=false --left-context 16 --right-context 12 2 data/org/train data/no_voice/train exp/org/tri_ali exp/no_voice/mono_ali exp/org/nnet3/egs exp/no_voice/nnet3/egs
+2
+data/org/train data/no_voice/train exp/org/tri_ali exp/no_voice/mono_ali exp/org/nnet3/egs exp/no_voice/nnet3/egs
+local/nnet3/prepare_multilingual_egs.sh: Generate separate egs directory per language for multilingual training.
+online_ivector_dir =
+local/nnet3/prepare_multilingual_egs.sh: Generate egs for 
+local/nnet3/prepare_multilingual_egs.sh: calling get_egs.sh
+steps/nnet3/get_egs.sh --cmvn-opts --norm-means=false --norm-vars=false --left-context 16 --right-context 12 --samples-per-iter 400000 --stage 0 --cmd utils/run.pl --generate-egs-scp true data/org/train exp/org/tri_ali exp/org/nnet3/egs
+steps/nnet3/get_egs.sh: feature type is raw
+steps/nnet3/get_egs.sh: working out number of frames of training data
+feat-to-len scp:data/org/train/feats.scp ark,t:- 
+steps/nnet3/get_egs.sh: working out feature dim
+*** steps/nnet3/get_egs.sh: warning: the --frames-per-eg is too large to generate one archive with
+*** as many as --samples-per-iter egs in it.  Consider reducing --frames-per-eg.
+steps/nnet3/get_egs.sh: creating 1 archives, each with 59680 egs, with
+steps/nnet3/get_egs.sh:   8 labels per example, and (left,right) context = (16,12)
+steps/nnet3/get_egs.sh: copying data alignments
+copy-int-vector ark:- ark,scp:exp/org/nnet3/egs/ali.ark,exp/org/nnet3/egs/ali.scp 
+LOG (copy-int-vector[5.2.163~1-3af47]:main():copy-int-vector.cc:83) Copied 549 vectors of int32.
+steps/nnet3/get_egs.sh: Getting validation and training subset examples.
+steps/nnet3/get_egs.sh: ... extracting validation and training-subset alignments.
+... Getting subsets of validation examples for diagnostics and combination.
+nnet3-copy-egs ark:- ark,scp:exp/org/nnet3/egs/combine.egs,exp/org/nnet3/egs/combine.scp 
+LOG (nnet3-copy-egs[5.2.163~1-3af47]:main():nnet3-copy-egs.cc:436) Read 7625 neural-network training examples, wrote 7625, 0 examples had errors.
+rm: cannot remove 'exp/org/nnet3/egs/train_combine.scp': No such file or directory
+rm: cannot remove 'exp/org/nnet3/egs/valid_combine.scp': No such file or directory
+steps/nnet3/get_egs.sh: Generating training examples on disk
+steps/nnet3/get_egs.sh: recombining and shuffling order of archives on disk
+steps/nnet3/get_egs.sh: removing temporary archives
+steps/nnet3/get_egs.sh: removing temporary alignments and transforms
+steps/nnet3/get_egs.sh: Finished preparing training examples
+online_ivector_dir =
+local/nnet3/prepare_multilingual_egs.sh: Generate egs for 
+local/nnet3/prepare_multilingual_egs.sh: calling get_egs.sh
+steps/nnet3/get_egs.sh --cmvn-opts --norm-means=false --norm-vars=false --left-context 16 --right-context 12 --samples-per-iter 400000 --stage 0 --cmd utils/run.pl --generate-egs-scp true data/no_voice/train exp/no_voice/mono_ali exp/no_voice/nnet3/egs
+steps/nnet3/get_egs.sh: feature type is raw
+steps/nnet3/get_egs.sh: working out number of frames of training data
+feat-to-len scp:data/no_voice/train/feats.scp ark,t:- 
+steps/nnet3/get_egs.sh: working out feature dim
+*** steps/nnet3/get_egs.sh: warning: the --frames-per-eg is too large to generate one archive with
+*** as many as --samples-per-iter egs in it.  Consider reducing --frames-per-eg.
+steps/nnet3/get_egs.sh: creating 1 archives, each with 60803 egs, with
+steps/nnet3/get_egs.sh:   8 labels per example, and (left,right) context = (16,12)
+steps/nnet3/get_egs.sh: copying data alignments
+copy-int-vector ark:- ark,scp:exp/no_voice/nnet3/egs/ali.ark,exp/no_voice/nnet3/egs/ali.scp 
+LOG (copy-int-vector[5.2.163~1-3af47]:main():copy-int-vector.cc:83) Copied 549 vectors of int32.
+steps/nnet3/get_egs.sh: Getting validation and training subset examples.
+steps/nnet3/get_egs.sh: ... extracting validation and training-subset alignments.
+... Getting subsets of validation examples for diagnostics and combination.
