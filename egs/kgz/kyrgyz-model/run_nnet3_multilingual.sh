@@ -262,8 +262,8 @@ if [ $stage -le 13 ]; then
     fi
     
 
-    test_data_dir=/home/josh/git/kaldi-mirror/egs/kgz/kyrgyz-model/data_org/test
-    graph_dir=/home/josh/git/kaldi-mirror/egs/kgz/kyrgyz-model/exp_org/${typo_list[0]}phones/graph
+    test_data_dir=data_org/test
+    graph_dir=exp_org/${typo_list[0]}phones/graph
     decode_dir=${exp_dir}/decode
     final_model=${exp_dir}/org/final_adj.mdl
     
