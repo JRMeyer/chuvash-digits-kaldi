@@ -5,7 +5,7 @@
 
 # USAGE:
 #
-#      ./run.sh
+#      ./run.sh <corpus_name>
 #
 # INPUT:
 #
@@ -113,6 +113,8 @@ if [ "$prep_data" -eq "1" ]; then
     printf "#### BEGIN DATA PREP ####\n";
     printf "####=================####\n\n";
 
+    echo "$0: looking for audio data in $audio_dir"
+    
     # Make sure we have the audio data (WAV file utterances)
     if [ ! -d $audio_dir ]; then
         printf '\n####\n#### ERROR: '"${audio_dir}"' not found \n####\n\n';
