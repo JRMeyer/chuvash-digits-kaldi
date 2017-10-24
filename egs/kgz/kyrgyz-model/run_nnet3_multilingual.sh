@@ -113,7 +113,7 @@ input dim=$feat_dim name=input
 relu-renorm-layer name=tdnn1 input=Append(input@-2,input@-1,input,input@1,input@2) dim=50
 relu-renorm-layer name=tdnn2 dim=50
 relu-renorm-layer name=tdnn3 input=Append(-1,2) dim=50
-# relu-renorm-layer name=tdnn4 input=Append(-3,3) dim=50
+relu-renorm-layer name=tdnn4 input=Append(-3,3) dim=50
 # relu-renorm-layer name=tdnn5 input=Append(-3,3) dim=50
 # relu-renorm-layer name=tdnn6 input=Append(-7,2) dim=50
 # adding the layers for diffrent language's output
@@ -125,7 +125,7 @@ EOF
         
         num_targets=`tree-info ${multi_ali_dirs[$i]}/tree 2>/dev/null | grep num-pdfs | awk '{print $2}'` || exit 1;
 
-        echo " relu-renorm-layer name=prefinal-affine-lang-${i} input=tdnn3 dim=50"
+        echo " relu-renorm-layer name=prefinal-affine-lang-${i} input=tdnn4 dim=50"
         echo " output-layer name=output-${i} dim=$num_targets max-change=1.5"
         
     done >> $exp_dir/configs/network.xconfig
@@ -164,7 +164,7 @@ if [ $stage -le 9 ]; then
         
     steps/nnet3/multilingual/combine_egs.sh \
         --cmd "$cmd" \
-        --samples-per-iter 4000 \
+        --samples-per-iter 8000 \
         --lang2weight $lang2weight \
         $num_langs \
         ${multi_egs_dirs[@]} \
@@ -184,13 +184,13 @@ if [ $stage -le 11 ]; then
     steps/nnet3/train_raw_dnn.py \
         --stage=-5 \
         --cmd="$cmd" \
-        --trainer.num-epochs 1 \
+        --trainer.num-epochs 3 \
         --trainer.optimization.num-jobs-initial=1 \
         --trainer.optimization.num-jobs-final=1 \
         --trainer.optimization.initial-effective-lrate=0.0015 \
         --trainer.optimization.final-effective-lrate=0.00015 \
         --trainer.optimization.minibatch-size=256,128 \
-        --trainer.samples-per-iter=4000 \
+        --trainer.samples-per-iter=8000 \
         --trainer.max-param-change=2.0 \
         --trainer.srand=0 \
         --feat.cmvn-opts="--norm-means=false --norm-vars=false" \
@@ -273,10 +273,10 @@ if [ $stage -le 13 ]; then
     silence_phone="SIL"
 
     steps/nnet3/decode.sh \
-        --nj 4 \
+        --nj `nproc` \
         --cmd $cmd \
-        --max-active 300 \
-        --min-active 100 \
+        --max-active 600 \
+        --min-active 200 \
         $graph_dir \
         $test_data_dir\
         $decode_dir \
