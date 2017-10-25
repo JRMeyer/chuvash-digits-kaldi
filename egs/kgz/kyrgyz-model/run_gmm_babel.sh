@@ -30,7 +30,7 @@ silence_phone="SIL"
 ##
 #
 input_dir=input_babel
-babel_data_dir=/home/josh/Desktop/IARPA_BABEL_BP_105/conversational/
+babel_data_dir=/data/turkish/conversational/
 config_dir=config
 cmd="utils/run.pl"
 #
@@ -61,7 +61,7 @@ printf "####======================================####\n\n";
 
 echo "### Subsetting the TRAIN set ###"
 
-train_data_list=/home/josh/git/kaldi-mirror/egs/babel/s5d/conf/lists/105-turkish/train.LimitedLP.list
+train_data_list=~/kaldi-mirror/egs/babel/s5d/conf/lists/105-turkish/train.LimitedLP.list
 local/babel/make_corpus_subset.sh "${babel_data_dir}/training" "$train_data_list" ./${data_dir}/raw_train_data
 train_data_dir=`utils/make_absolute.sh ./${data_dir}/raw_train_data`
 
