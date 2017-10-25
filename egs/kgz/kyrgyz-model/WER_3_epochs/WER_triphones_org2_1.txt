@@ -1,0 +1,1 @@
+%WER 5.98 [ 54 / 903, 12 ins, 6 del, 36 sub ] exp_org2/triphones/decode_test/wer_11
