@@ -71,6 +71,8 @@ tot_gauss_tri=1000
 decode_beam=13
 decode_lattice_beam=7
 decode_max_active_states=700
+num_iters_mono=10
+num_iters_tri=10
 #
 ##
 ###
@@ -252,7 +254,7 @@ if [ "$train_monophones" -eq "1" ]; then
     steps/train_mono.sh \
         --cmd "$cmd" \
         --nj $num_processors \
-        --num-iters 10 \
+        --num-iters $num_iters_mono \
         --totgauss $tot_gauss_mono \
         --beam 6 \
         ${data_dir}/${train_dir} \
@@ -299,7 +301,7 @@ if [ "$train_triphones" -eq "1" ]; then
 
     steps/train_deltas.sh \
         --cmd "$cmd" \
-        --num-iters 10 \
+        --num-iters $num_iters_tri \
         --beam 10 \
         $num_leaves_tri \
         $tot_gauss_tri \
