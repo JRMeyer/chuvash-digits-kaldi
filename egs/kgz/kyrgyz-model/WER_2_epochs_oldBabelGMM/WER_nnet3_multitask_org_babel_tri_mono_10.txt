@@ -1,0 +1,84 @@
+%WER 11.28 [ 109 / 966, 9 ins, 26 del, 74 sub ] exp/nnet3/multitask/decode/wer_10
+test_data_dir=data_org/test
+graph_dir=exp_org/triphones/graph
+decode_dir=exp/nnet3/multitask/decode
+final_model=exp/nnet3/multitask/org/final_adj.mdl
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= org
+    num_targets= 427
+    data_dir= data/org/train
+    ali_dir= exp/org/tri_ali
+    egs_dir= exp/org/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= babel
+    num_targets= 266
+    data_dir= data/babel/train
+    ali_dir= exp/babel/mono_ali
+    egs_dir= exp/babel/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    #######################
+    ### BEGIN NNET INFO ###
+    #######################
+    
+left-context: 6
+right-context: 7
+num-parameters: 56393
+modulus: 1
+input-node name=input dim=13
+component-node name=tdnn1.affine component=tdnn1.affine input=Append(Offset(input, -2), Offset(input, -1), input, Offset(input, 1), Offset(input, 2)) input-dim=65 output-dim=50
+component-node name=tdnn1.relu component=tdnn1.relu input=tdnn1.affine input-dim=50 output-dim=50
+component-node name=tdnn1.renorm component=tdnn1.renorm input=tdnn1.relu input-dim=50 output-dim=50
+component-node name=tdnn2.affine component=tdnn2.affine input=tdnn1.renorm input-dim=50 output-dim=50
+component-node name=tdnn2.relu component=tdnn2.relu input=tdnn2.affine input-dim=50 output-dim=50
+component-node name=tdnn2.renorm component=tdnn2.renorm input=tdnn2.relu input-dim=50 output-dim=50
+component-node name=tdnn3.affine component=tdnn3.affine input=Append(Offset(tdnn2.renorm, -1), Offset(tdnn2.renorm, 2)) input-dim=100 output-dim=50
+component-node name=tdnn3.relu component=tdnn3.relu input=tdnn3.affine input-dim=50 output-dim=50
+component-node name=tdnn3.renorm component=tdnn3.renorm input=tdnn3.relu input-dim=50 output-dim=50
+component-node name=tdnn4.affine component=tdnn4.affine input=Append(Offset(tdnn3.renorm, -3), Offset(tdnn3.renorm, 3)) input-dim=100 output-dim=50
+component-node name=tdnn4.relu component=tdnn4.relu input=tdnn4.affine input-dim=50 output-dim=50
+component-node name=tdnn4.renorm component=tdnn4.renorm input=tdnn4.relu input-dim=50 output-dim=50
+component-node name=prefinal-affine-lang-0.affine component=prefinal-affine-lang-0.affine input=tdnn4.renorm input-dim=50 output-dim=50
+component-node name=prefinal-affine-lang-0.relu component=prefinal-affine-lang-0.relu input=prefinal-affine-lang-0.affine input-dim=50 output-dim=50
+component-node name=prefinal-affine-lang-0.renorm component=prefinal-affine-lang-0.renorm input=prefinal-affine-lang-0.relu input-dim=50 output-dim=50
+component-node name=output-0.affine component=output-0.affine input=prefinal-affine-lang-0.renorm input-dim=50 output-dim=427
+component-node name=output-0.log-softmax component=output-0.log-softmax input=output-0.affine input-dim=427 output-dim=427
+output-node name=output input=output-0.log-softmax dim=427 objective=linear
+component-node name=prefinal-affine-lang-1.affine component=prefinal-affine-lang-1.affine input=tdnn4.renorm input-dim=50 output-dim=50
+component-node name=prefinal-affine-lang-1.relu component=prefinal-affine-lang-1.relu input=prefinal-affine-lang-1.affine input-dim=50 output-dim=50
+component-node name=prefinal-affine-lang-1.renorm component=prefinal-affine-lang-1.renorm input=prefinal-affine-lang-1.relu input-dim=50 output-dim=50
+component-node name=output-1.affine component=output-1.affine input=prefinal-affine-lang-1.renorm input-dim=50 output-dim=266
+component-node name=output-1.log-softmax component=output-1.log-softmax input=output-1.affine input-dim=266 output-dim=266
+output-node name=output-1 input=output-1.log-softmax dim=266 objective=linear
+component name=tdnn1.affine type=NaturalGradientAffineComponent, input-dim=65, output-dim=50, learning-rate=0.00015, max-change=0.75, linear-params-rms=0.3945, bias-{mean,stddev}=0.1191,2.427, rank-in=20, rank-out=80, num-samples-history=2000, update-period=4, alpha=4
+component name=tdnn1.relu type=RectifiedLinearComponent, dim=50, self-repair-scale=1e-05, count=1.43e+04, self-repaired-proportion=0.0753333, value-avg=[percentiles(0,1,2,5 10,20,50,80,90 95,98,99,100)=(0.22,0.22,0.22,0.25 0.47,0.63,1.5,5.1,5.9 6.3,7.9,7.9,9.0), mean=2.79, stddev=2.39], deriv-avg=[percentiles(0,1,2,5 10,20,50,80,90 95,98,99,100)=(0.09,0.09,0.09,0.16 0.22,0.28,0.50,0.93,0.96 0.97,0.99,0.99,0.99), mean=0.57, stddev=0.286]
+component name=tdnn1.renorm type=NormalizeComponent, input-dim=50, output-dim=50, target-rms=1, add-log-stddev=false
+component name=tdnn2.affine type=NaturalGradientAffineComponent, input-dim=50, output-dim=50, learning-rate=0.00015, max-change=0.75, linear-params-rms=0.2467, bias-{mean,stddev}=-0.01276,0.9944, rank-in=20, rank-out=80, num-samples-history=2000, update-period=4, alpha=4
+component name=tdnn2.relu type=RectifiedLinearComponent, dim=50, self-repair-scale=1e-05, count=1.23e+04, self-repaired-proportion=0.0786667, value-avg=[percentiles(0,1,2,5 10,20,50,80,90 95,98,99,100)=(0.01,0.01,0.01,0.08 0.09,0.15,0.53,1.4,2.2 2.6,3.2,3.2,4.0), mean=0.864, stddev=0.89], deriv-avg=[percentiles(0,1,2,5 10,20,50,80,90 95,98,99,100)=(0.06,0.06,0.06,0.12 0.15,0.23,0.50,0.85,0.95 0.98,1.0,1.0,1.0), mean=0.53, stddev=0.295]
+component name=tdnn2.renorm type=NormalizeComponent, input-dim=50, output-dim=50, target-rms=1, add-log-stddev=false
+component name=tdnn3.affine type=NaturalGradientAffineComponent, input-dim=100, output-dim=50, learning-rate=0.00015, max-change=0.75, linear-params-rms=0.1917, bias-{mean,stddev}=0.1301,1.008, rank-in=20, rank-out=80, num-samples-history=2000, update-period=4, alpha=4
+component name=tdnn3.relu type=RectifiedLinearComponent, dim=50, self-repair-scale=1e-05, count=7.17e+03, self-repaired-proportion=0.134, value-avg=[percentiles(0,1,2,5 10,20,50,80,90 95,98,99,100)=(4e-05,4e-05,4e-05,0.02 0.03,0.26,0.93,2.0,2.8 3.4,4.1,4.1,4.6), mean=1.25, stddev=1.13], deriv-avg=[percentiles(0,1,2,5 10,20,50,80,90 95,98,99,100)=(0.0006,0.0006,0.0006,0.07 0.14,0.27,0.53,0.94,0.99 1.0,1.0,1.0,1.0), mean=0.569, stddev=0.306]
+component name=tdnn3.renorm type=NormalizeComponent, input-dim=50, output-dim=50, target-rms=1, add-log-stddev=false
+component name=tdnn4.affine type=NaturalGradientAffineComponent, input-dim=100, output-dim=50, learning-rate=0.00015, max-change=0.75, linear-params-rms=0.1967, bias-{mean,stddev}=-0.227,0.976, rank-in=20, rank-out=80, num-samples-history=2000, update-period=4, alpha=4
+component name=tdnn4.relu type=RectifiedLinearComponent, dim=50, self-repair-scale=1e-05, count=4.1e+03, self-repaired-proportion=0.112, value-avg=[percentiles(0,1,2,5 10,20,50,80,90 95,98,99,100)=(0,0,0,0 5e-05,0.03,0.75,1.9,2.4 2.6,2.8,2.8,3.0), mean=1.02, stddev=0.942], deriv-avg=[percentiles(0,1,2,5 10,20,50,80,90 95,98,99,100)=(0,0,0,0 0.0005,0.09,0.54,0.89,0.95 0.97,0.97,0.97,0.99), mean=0.502, stddev=0.352]
+component name=tdnn4.renorm type=NormalizeComponent, input-dim=50, output-dim=50, target-rms=1, add-log-stddev=false
+component name=prefinal-affine-lang-0.affine type=NaturalGradientAffineComponent, input-dim=50, output-dim=50, learning-rate=0.00015, max-change=0.75, linear-params-rms=0.1649, bias-{mean,stddev}=-0.1694,0.9708, rank-in=20, rank-out=80, num-samples-history=2000, update-period=4, alpha=4
+component name=prefinal-affine-lang-0.relu type=RectifiedLinearComponent, dim=50, self-repair-scale=1e-05
+component name=prefinal-affine-lang-0.renorm type=NormalizeComponent, input-dim=50, output-dim=50, target-rms=1, add-log-stddev=false
+component name=output-0.affine type=NaturalGradientAffineComponent, input-dim=50, output-dim=427, learning-rate=0.00015, max-change=1.5, linear-params-rms=0.1433, bias-{mean,stddev}=8.921e-09,0.02388, rank-in=20, rank-out=80, num-samples-history=2000, update-period=4, alpha=4
+component name=output-0.log-softmax type=LogSoftmaxComponent, dim=427
+component name=prefinal-affine-lang-1.affine type=NaturalGradientAffineComponent, input-dim=50, output-dim=50, learning-rate=0.00015, max-change=0.75, linear-params-rms=0.2433, bias-{mean,stddev}=-0.05946,1.036, rank-in=20, rank-out=80, num-samples-history=2000, update-period=4, alpha=4
+component name=prefinal-affine-lang-1.relu type=RectifiedLinearComponent, dim=50, self-repair-scale=1e-05, count=3.58e+03, self-repaired-proportion=0.045, value-avg=[percentiles(0,1,2,5 10,20,50,80,90 95,98,99,100)=(0,0,0,0.002 0.05,0.24,0.55,0.81,0.98 1.1,1.4,1.4,1.7), mean=0.57, stddev=0.363], deriv-avg=[percentiles(0,1,2,5 10,20,50,80,90 95,98,99,100)=(0,0,0,0.01 0.11,0.27,0.52,0.65,0.72 0.77,0.86,0.86,0.93), mean=0.473, stddev=0.228]
+component name=prefinal-affine-lang-1.renorm type=NormalizeComponent, input-dim=50, output-dim=50, target-rms=1, add-log-stddev=false
+component name=output-1.affine type=NaturalGradientAffineComponent, input-dim=50, output-dim=266, learning-rate=0.00015, max-change=1.5, linear-params-rms=0.2128, bias-{mean,stddev}=1.45e-07,0.07719, rank-in=20, rank-out=80, num-samples-history=2000, update-period=4, alpha=4
+component name=output-1.log-softmax type=LogSoftmaxComponent, dim=266
+
+    #####################
+    ### END NNET INFO ###
+    #####################
+    
