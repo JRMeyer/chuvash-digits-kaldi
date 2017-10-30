@@ -4,8 +4,8 @@
 
 
 
-cmp=utils/run.pl
-data_dir=new_data
+cmd=utils/run.pl
+data_dir=data_tokmok
 plp_dir=${data_dir}/plp
 
 
