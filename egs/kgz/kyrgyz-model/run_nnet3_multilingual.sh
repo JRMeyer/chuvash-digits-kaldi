@@ -32,7 +32,7 @@ set -e
 . ./path.sh
 . ./utils/parse_options.sh
 
-stage=0
+stage=13
 
 lang_list=($1)
 # this list of names 'mono' or 'ali' will
@@ -262,7 +262,7 @@ if [ $stage -le 13 ]; then
     fi
     
 
-    test_data_dir=data_org/test
+    test_data_dir=data_tokmok
     graph_dir=exp_org/${typo_list[0]}phones/graph
     decode_dir=${exp_dir}/decode
     final_model=${exp_dir}/org/final_adj.mdl
