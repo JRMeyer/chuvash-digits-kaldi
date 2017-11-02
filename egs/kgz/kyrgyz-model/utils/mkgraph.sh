@@ -19,12 +19,9 @@ P=1
 tscale=1.0
 loopscale=0.1
 
-reverse=false
-
 for x in `seq 5`; do 
     [ "$1" == "--mono" ] && N=1 && P=0 && shift;
     [ "$1" == "--quinphone" ] && N=5 && P=2 && shift;
-    [ "$1" == "--reverse" ] && reverse=true && shift;
     [ "$1" == "--transition-scale" ] && tscale=$2 && shift 2;
     [ "$1" == "--self-loop-scale" ] && loopscale=$2 && shift 2;
 done
@@ -126,27 +123,15 @@ echo "### compile Ha.fst ###"
 if [[ ! -s $graph_dir/Ha.fst || $graph_dir/Ha.fst -ot $model  \
     || $graph_dir/Ha.fst -ot $lang_dir/tmp/ilabels_${N}_${P} ]]; then
 
-    if $reverse; then
-
-        make-h-transducer --reverse=true --push_weights=true \
-            --disambig-syms-out=$graph_dir/disambig_tid.int \
-            --transition-scale=$tscale \
-            $lang_dir/tmp/ilabels_${N}_${P} \
-            $tree \
-            $model \
-            > $graph_dir/Ha.fst \
-            || exit 1;
-        
-    else        
-        make-h-transducer --disambig-syms-out=$graph_dir/disambig_tid.int \
-            --transition-scale=$tscale \
-            $lang_dir/tmp/ilabels_${N}_${P} \
-            $tree \
-            $model \
-            > $graph_dir/Ha.fst \
-            || exit 1;
-        
-    fi
+    make-h-transducer \
+        --disambig-syms-out=$graph_dir/disambig_tid.int \
+        --transition-scale=$tscale \
+        $lang_dir/tmp/ilabels_${N}_${P} \
+        $tree \
+        $model \
+        > $graph_dir/Ha.fst \
+        || exit 1;
+    
 fi
 
 
