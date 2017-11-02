@@ -27,7 +27,18 @@
 #
 
 
+
+
+config_nnet=1
+make_egs=1
+train_nnet=1
+make_copies_nnet=1
+decode_test=1
+
+
+
 set -e
+
 
 . ./path.sh
 . ./utils/parse_options.sh
@@ -90,8 +101,9 @@ if [ 1 ]; then
     done
 fi
 
+
     
-if [ $stage -le 8 ]; then
+if [ "$config_nnet" -eq "1" ]; then
 
     echo "### ============================ ###";
     echo "### CREATE CONFIG FILES FOR NNET ###";
@@ -139,7 +151,7 @@ fi
 
 
 
-if [ $stage -le 9 ]; then
+if [ "$make_egs" -eq "1" ]; then
         
     echo "### ================== ###"
     echo "### MAKE NNET3 EGS DIR ###"
@@ -175,11 +187,11 @@ fi
 
 
 
-if [ $stage -le 11 ]; then
+if [ "$train_nnet" -eq "1" ]; then
 
-    echo "### ================= ###"
-    echo "### TRAIN THE NNET!!! ###"
-    echo "### ================= ###"
+    echo "### ================ ###"
+    echo "### BEGIN TRAIN NNET ###"
+    echo "### ================ ###"
 
     steps/nnet3/train_raw_dnn.py \
         --stage=-5 \
@@ -203,12 +215,17 @@ if [ $stage -le 11 ]; then
         --dir=$exp_dir  \
         || exit 1;
     
+    echo "### ============== ###"
+    echo "### END TRAIN NNET ###"
+    echo "### ============== ###"
+
+    
 fi
 
 
 
 
-if [ $stage -le 12 ]; then
+if [ "$make_copies_nnet" -eq "1" ]; then
 
     echo "### ========================== ###"
     echo "### SPLIT & COPY NNET PER LANG ###"
@@ -250,7 +267,7 @@ fi
 
 
 
-if [ $stage -le 13 ]; then
+if [ "$decode_test" -eq "1" ]; then
 
     echo "### ============== ###"
     echo "### BEGIN DECODING ###"
@@ -261,7 +278,6 @@ if [ $stage -le 13 ]; then
         echo "it with mkgraph.sh --mono (the flag is important!)"
     fi
     
-
     test_data_dir=data_tokmok
     graph_dir=exp_org/${typo_list[0]}phones/graph
     decode_dir=${exp_dir}/decode
@@ -300,10 +316,10 @@ if [ $stage -le 13 ]; then
     done
 
 
-    echo test_data_dir=$test_data_dir >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
-    echo graph_dir=$graph_dir >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
-    echo decode_dir=$decode_dir >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
-    echo final_model=$final_model >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
+    echo "test_data_dir=$test_data_dir" >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
+    echo "graph_dir=$graph_dir" >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
+    echo "decode_dir=$decode_dir" >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
+    echo "final_model=$final_model" >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
     
     
     for i in `seq 0 $[$num_langs-1]`;do
@@ -333,6 +349,11 @@ if [ $stage -le 13 ]; then
     ### END NNET INFO ###
     #####################
     " >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
+
+
+    echo "###==============###"
+    echo "### END DECODING ###"
+    echo "###==============###"
 
 fi
 
