@@ -45,19 +45,30 @@ tree=$2/tree
 model=$2/final.mdl
 graph_dir=$3
 
-mkdir -p $graph_dir
 
-# If $lang_dir/tmp/LG.fst does not exist or is older than its sources, make it...
-# (note: the [[ ]] brackets make the || type operators work (inside [ ], we
-# would have to use -o instead),  -f means file exists, and -ot means older than).
-
-for f in $lang_dir/L.fst $lang_dir/G.fst $lang_dir/phones.txt \
-    $lang_dir/words.txt $lang_dir/phones/silence.csl \
-    $lang_dir/phones/disambig.int $model $tree; do
+for f in $lang_dir/L.fst \
+             $lang_dir/G.fst \
+             $lang_dir/phones.txt \
+             $lang_dir/words.txt \
+             $lang_dir/phones/silence.csl \
+             $lang_dir/phones/disambig.int \
+             $model \
+             $tree; do
     [ ! -f $f ] && echo "mkgraph.sh: expected $f to exist" && exit 1;
 done
 
+mkdir -p $graph_dir
 mkdir -p $lang_dir/tmp
+
+
+
+##########
+### LG ###
+##########
+
+echo "### compile LG.fst ###"
+
+# If LG.fst does not exist or is older than its sources, make it...
 
 if [[ ! -s $lang_dir/tmp/LG.fst || $lang_dir/tmp/LG.fst -ot $lang_dir/G.fst || \
     $lang_dir/tmp/LG.fst -ot $lang_dir/L_disambig.fst ]]; then
@@ -78,6 +89,15 @@ if [[ ! -s $lang_dir/tmp/LG.fst || $lang_dir/tmp/LG.fst -ot $lang_dir/G.fst || \
 fi
 
 
+
+
+
+###########
+### CLG ###
+###########
+
+echo "### compile CLG.fst ###"
+
 clg=$lang_dir/tmp/CLG_${N}_${P}.fst
 
 if [[ ! -s $clg || $clg -ot $lang_dir/tmp/LG.fst ]]; then
@@ -94,6 +114,14 @@ if [[ ! -s $clg || $clg -ot $lang_dir/tmp/LG.fst ]]; then
         || echo "[info]: CLG not stochastic."
 fi
 
+
+
+
+##########
+### Ha ###
+##########
+
+echo "### compile Ha.fst ###"
 
 if [[ ! -s $graph_dir/Ha.fst || $graph_dir/Ha.fst -ot $model  \
     || $graph_dir/Ha.fst -ot $lang_dir/tmp/ilabels_${N}_${P} ]]; then
@@ -121,6 +149,16 @@ if [[ ! -s $graph_dir/Ha.fst || $graph_dir/Ha.fst -ot $model  \
     fi
 fi
 
+
+
+
+
+#############
+### HCLGa ###
+#############
+
+echo "### compile HCLGa.fst ###"
+
 if [[ ! -s $graph_dir/HCLGa.fst || \
     $graph_dir/HCLGa.fst -ot $graph_dir/Ha.fst || \
     $graph_dir/HCLGa.fst -ot $clg ]]; then
@@ -138,6 +176,15 @@ if [[ ! -s $graph_dir/HCLGa.fst || \
         || echo "HCLGa is not stochastic"
 fi
 
+
+
+
+############
+### HCLG ###
+############
+
+echo "### compile HCLG.fst ###"
+
 if [[ ! -s $graph_dir/HCLG.fst || \
     $graph_dir/HCLG.fst -ot $graph_dir/HCLGa.fst ]]; then
     
@@ -153,6 +200,8 @@ if [[ ! -s $graph_dir/HCLG.fst || \
             || echo "[info]: final HCLG is not stochastic."
     fi
 fi
+
+
 
 # keep a copy of the lexicon and a list of silence phones with HCLG...
 # this means we can decode without reference to the $lang_dir directory.
