@@ -54,8 +54,8 @@ extract_feats=1
 train_monophones=1
 train_triphones=1
 adapt_models=0
-compile_graph=1
-decode_test=1
+compile_graph=0
+decode_test=0
 #
 ##
 ###
@@ -472,10 +472,12 @@ if [ "$decode_test" -eq "1" ]; then
 
     
     # DECODE WITH REGULAR TRIPHONES WITH VANILLA DELTA FEATURES
+
+    printf "\n ### Decoding with only 1 job, 4 jobs crashes:/ ### "
     
     steps/decode.sh \
         --cmd "$cmd" \
-        --nj $num_processors \
+        --nj 1 \
         --beam $decode_beam \
         --lattice-beam $decode_lattice_beam \
         --max-active $decode_max_active_states \
