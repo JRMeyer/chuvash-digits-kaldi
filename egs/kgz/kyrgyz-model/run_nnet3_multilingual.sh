@@ -28,6 +28,9 @@
 
 
 
+### STAGES
+##
+#
 
 config_nnet=1
 make_egs=1
@@ -35,6 +38,9 @@ train_nnet=1
 make_copies_nnet=1
 decode_test=1
 
+#
+##
+###
 
 
 set -e
@@ -43,7 +49,6 @@ set -e
 . ./path.sh
 . ./utils/parse_options.sh
 
-stage=13
 
 lang_list=($1)
 # this list of names 'mono' or 'ali' will
@@ -196,7 +201,7 @@ if [ "$train_nnet" -eq "1" ]; then
     steps/nnet3/train_raw_dnn.py \
         --stage=-5 \
         --cmd="$cmd" \
-        --trainer.num-epochs 2 \
+        --trainer.num-epochs 3 \
         --trainer.optimization.num-jobs-initial=1 \
         --trainer.optimization.num-jobs-final=1 \
         --trainer.optimization.initial-effective-lrate=0.0015 \
@@ -278,18 +283,20 @@ if [ "$decode_test" -eq "1" ]; then
         echo "it with mkgraph.sh --mono (the flag is important!)"
     fi
     
-    test_data_dir=data_tokmok
-    graph_dir=exp_org/${typo_list[0]}phones/graph
+    test_data_dir=data_${lang_list[0]}/test
+    graph_dir=exp_${lang_list[0]}/${typo_list[0]}phones/graph
     decode_dir=${exp_dir}/decode
-    final_model=${exp_dir}/org/final_adj.mdl
+    final_model=${exp_dir}/${lang_list[0]}/final_adj.mdl
     
     mkdir -p $decode_dir
 
     unknown_phone="SPOKEN_NOISE"
     silence_phone="SIL"
 
+    echo "### decoding with only one job:/ ###"
+    
     steps/nnet3/decode.sh \
-        --nj `nproc` \
+        --nj 1 \
         --cmd $cmd \
         --max-active 600 \
         --min-active 200 \
