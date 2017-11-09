@@ -10,8 +10,8 @@
 ### STAGES
 ##
 #
-prep_data=0
-extract_feats=0
+prep_data=1
+extract_feats=1
 train_monophones=1
 train_triphones=1
 #
