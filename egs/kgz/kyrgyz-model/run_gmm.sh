@@ -472,10 +472,12 @@ if [ "$decode_test" -eq "1" ]; then
 
     
     # DECODE WITH REGULAR TRIPHONES WITH VANILLA DELTA FEATURES
+
+    printf "\n ### Decoding with only 1 job, 4 jobs crashes:/ ### "
     
     steps/decode.sh \
         --cmd "$cmd" \
-        --nj $num_processors \
+        --nj 1 \
         --beam $decode_beam \
         --lattice-beam $decode_lattice_beam \
         --max-active $decode_max_active_states \
