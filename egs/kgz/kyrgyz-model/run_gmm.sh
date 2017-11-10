@@ -51,9 +51,9 @@ fi
 ##
 #
 prep_data=1
-extract_feats=1
-train_monophones=1
-train_triphones=1
+extract_feats=0
+train_monophones=0
+train_triphones=0
 adapt_models=0
 compile_graph=1
 decode_test=1
