@@ -38,10 +38,11 @@
 
 
 corpus_name=$1
+run=$2
 
-if [ "$#" -ne 1 ]; then
+if [ "$#" -ne 2 ]; then
     echo "ERROR: $0"
-    echo "USAGE: $0 <corpus_name>"
+    echo "USAGE: $0 <corpus_name> <run>"
     exit 1
 fi
 
@@ -54,8 +55,9 @@ extract_feats=0
 train_monophones=0
 train_triphones=0
 adapt_models=0
-compile_graph=0
-decode_test=0
+compile_graph=1
+decode_test=1
+save_model=0
 #
 ##
 ###
@@ -71,8 +73,8 @@ tot_gauss_tri=1000
 decode_beam=13
 decode_lattice_beam=7
 decode_max_active_states=700
-num_iters_mono=10
-num_iters_tri=10
+num_iters_mono=40
+num_iters_tri=40
 #
 ##
 ###
@@ -473,11 +475,11 @@ if [ "$decode_test" -eq "1" ]; then
     
     # DECODE WITH REGULAR TRIPHONES WITH VANILLA DELTA FEATURES
 
-    printf "\n ### Decoding with only 1 job, 4 jobs crashes:/ ### "
+    printf "\n ### Decoding with 4 jobs  ### "
     
     steps/decode.sh \
         --cmd "$cmd" \
-        --nj 1 \
+        --nj 4 \
         --beam $decode_beam \
         --lattice-beam $decode_lattice_beam \
         --max-active $decode_max_active_states \
@@ -493,14 +495,47 @@ if [ "$decode_test" -eq "1" ]; then
     printf "#### BEGIN CALCULATE WER ####\n";
     
     for x in ${exp_dir}/triphones/decode*; do
-        [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh > WER_triphones_${corpus_name}.txt;
+        [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh > WER_triphones_${corpus_name}_${run}.txt;
     done
 
     printf "\n####==============####\n";
     printf "#### END DECODING ####\n";
     printf "####==============####\n\n";
 
+    echo "num_iters_mono=${num_iters_mono}" >> WER_triphones_${corpus_name}_${run}.txt
+    echo "num_iters_tri=${num_iters_tri}" >> WER_triphones_${corpus_name}_${run}.txt
+    echo "Language Model=" >> WER_triphones_${corpus_name}_${run}.txt
+    head input_${corpus_name}/task.arpabo >> WER_triphones_${corpus_name}_${run}.txt
+    
 fi
+
+
+if [ "$save_model" -eq "1" ]; then
+
+    # Copy all necessary files to use new LM with this acoustic model
+    # and only necessary files to save space
+    
+    cp data_${corpus_name} ${corpus_name}_${run}
+
+    # delete unneeded files
+    rm -rf ${corpus_name}_${run}/train ${corpus_name}_${run}/test ${corpus_name}_${run}/lang_test
+
+    # copy acoustic model and decision tree to new dir
+    mkdir ${corpus_name}_${run}/model
+    cp exp_${corpus_name}/triphones/final.mdl ${corpus_name}_${run}/model/final.mdl
+    cp exp_${corpus_name}/triphones/tree ${corpus_name}_${run}/model/tree
+
+    tar -zcvf ${corpus_name}_${run}.tar.gz ${corpus_name}_${run}
+
+    # clean up
+    rm -rf ${corpus_name}_${run}
+
+    # move for storage
+    mkdir compressed_experiments
+    
+    mv ${corpus_name}_${run}.tar.gz compressed_experiments/${corpus_name}_${run}.tar.gz
+fi
+
 
 
 

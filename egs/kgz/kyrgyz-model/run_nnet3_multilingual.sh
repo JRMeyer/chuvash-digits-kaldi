@@ -42,7 +42,6 @@ decode_test=1
 ##
 ###
 
-
 set -e
 
 
@@ -127,12 +126,12 @@ if [ "$config_nnet" -eq "1" ]; then
     # The following definition is for the shared hidden layers of the nnet!
     cat <<EOF > $exp_dir/configs/network.xconfig
 input dim=$feat_dim name=input
-relu-renorm-layer name=tdnn1 input=Append(input@-2,input@-1,input,input@1,input@2) dim=50
-relu-renorm-layer name=tdnn2 dim=50
-relu-renorm-layer name=tdnn3 input=Append(-1,2) dim=50
-relu-renorm-layer name=tdnn4 input=Append(-3,3) dim=50
-# relu-renorm-layer name=tdnn5 input=Append(-3,3) dim=50
-# relu-renorm-layer name=tdnn6 input=Append(-7,2) dim=50
+relu-renorm-layer name=tdnn1 input=Append(input@-2,input@-1,input,input@1,input@2) dim=100
+relu-renorm-layer name=tdnn2 dim=100
+relu-renorm-layer name=tdnn3 input=Append(-1,2) dim=100
+relu-renorm-layer name=tdnn4 input=Append(-3,3) dim=100
+relu-renorm-layer name=tdnn5 input=Append(-3,3) dim=100
+#relu-renorm-layer name=tdnn6 input=Append(-7,2) dim=100
 # adding the layers for diffrent language's output
 EOF
     
@@ -142,7 +141,7 @@ EOF
         
         num_targets=`tree-info ${multi_ali_dirs[$i]}/tree 2>/dev/null | grep num-pdfs | awk '{print $2}'` || exit 1;
 
-        echo " relu-renorm-layer name=prefinal-affine-lang-${i} input=tdnn4 dim=50"
+        echo " relu-renorm-layer name=prefinal-affine-lang-${i} input=tdnn5 dim=100"
         echo " output-layer name=output-${i} dim=$num_targets max-change=1.5"
         
     done >> $exp_dir/configs/network.xconfig
@@ -201,7 +200,7 @@ if [ "$train_nnet" -eq "1" ]; then
     steps/nnet3/train_raw_dnn.py \
         --stage=-5 \
         --cmd="$cmd" \
-        --trainer.num-epochs 3 \
+        --trainer.num-epochs 5 \
         --trainer.optimization.num-jobs-initial=1 \
         --trainer.optimization.num-jobs-final=1 \
         --trainer.optimization.initial-effective-lrate=0.0015 \
@@ -223,7 +222,6 @@ if [ "$train_nnet" -eq "1" ]; then
     echo "### ============== ###"
     echo "### END TRAIN NNET ###"
     echo "### ============== ###"
-
     
 fi
 
@@ -293,10 +291,10 @@ if [ "$decode_test" -eq "1" ]; then
     unknown_phone="SPOKEN_NOISE"
     silence_phone="SIL"
 
-    echo "### decoding with only one job:/ ###"
+    echo "### decoding with 4 jobs, unigram LM ###"
     
     steps/nnet3/decode.sh \
-        --nj 1 \
+        --nj 4 \
         --cmd $cmd \
         --max-active 600 \
         --min-active 200 \
@@ -343,19 +341,19 @@ if [ "$decode_test" -eq "1" ]; then
     " >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
     done
 
-    echo "
-    #######################
-    ### BEGIN NNET INFO ###
-    #######################
-    " >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
+    # echo "
+    # #######################
+    # ### BEGIN NNET INFO ###
+    # #######################
+    # " >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
     
-    nnet3-info $final_model >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
+    # nnet3-info $final_model >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
     
-    echo "
-    #####################
-    ### END NNET INFO ###
-    #####################
-    " >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
+    # echo "
+    # #####################
+    # ### END NNET INFO ###
+    # #####################
+    # " >> WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
 
 
     echo "###==============###"
