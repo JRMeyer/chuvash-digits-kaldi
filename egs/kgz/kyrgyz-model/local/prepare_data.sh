@@ -130,6 +130,8 @@ for dir in $train_dir $test_dir; do
         >${data_dir}/${dir}/spk2utt
 done
 
+#clean up temp files
+rm -rf ${data_dir}/local/tmp
 
 
 ## get total number of seconds of WAVs in wav.scp
