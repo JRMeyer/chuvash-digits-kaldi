@@ -121,7 +121,7 @@ fi
 echo "### compile Ha.fst ###"
 
 if [[ ! -s $graph_dir/Ha.fst || $graph_dir/Ha.fst -ot $model  \
-    || $graph_dir/Ha.fst -ot $lang_dir/tmp/ilabels_${N}_${P} ]]; then
+            || $graph_dir/Ha.fst -ot $lang_dir/tmp/ilabels_${N}_${P} ]]; then
 
     make-h-transducer \
         --disambig-syms-out=$graph_dir/disambig_tid.int \
