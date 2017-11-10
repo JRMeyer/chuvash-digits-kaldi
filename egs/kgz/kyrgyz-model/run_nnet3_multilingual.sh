@@ -55,7 +55,8 @@ lang_list=($1)
 # and ...
 typo_list=($2)
 lang2weight=$3
-run=$4
+hidden_dim=$4
+run=$5
 
 cmd="utils/run.pl"
 
@@ -123,15 +124,16 @@ if [ "$config_nnet" -eq "1" ]; then
 
     feat_dim=`feat-to-dim scp:${multi_data_dirs[0]}/feats.scp -`
 
+    hidden_dim=$hidden_dim
     # The following definition is for the shared hidden layers of the nnet!
     cat <<EOF > $exp_dir/configs/network.xconfig
 input dim=$feat_dim name=input
-relu-renorm-layer name=tdnn1 input=Append(input@-2,input@-1,input,input@1,input@2) dim=100
-relu-renorm-layer name=tdnn2 dim=100
-relu-renorm-layer name=tdnn3 input=Append(-1,2) dim=100
-relu-renorm-layer name=tdnn4 input=Append(-3,3) dim=100
-relu-renorm-layer name=tdnn5 input=Append(-3,3) dim=100
-#relu-renorm-layer name=tdnn6 input=Append(-7,2) dim=100
+relu-renorm-layer name=tdnn1 input=Append(input@-2,input@-1,input,input@1,input@2) dim=$hidden_dim
+relu-renorm-layer name=tdnn2 dim=$hidden_dim
+relu-renorm-layer name=tdnn3 input=Append(-1,2) dim=$hidden_dim
+relu-renorm-layer name=tdnn4 input=Append(-3,3) dim=$hidden_dim
+relu-renorm-layer name=tdnn5 input=Append(-3,3) dim=$hidden_dim
+#relu-renorm-layer name=tdnn6 input=Append(-7,2) dim=$hidden_dim
 # adding the layers for diffrent language's output
 EOF
     
@@ -141,7 +143,7 @@ EOF
         
         num_targets=`tree-info ${multi_ali_dirs[$i]}/tree 2>/dev/null | grep num-pdfs | awk '{print $2}'` || exit 1;
 
-        echo " relu-renorm-layer name=prefinal-affine-lang-${i} input=tdnn5 dim=100"
+        echo " relu-renorm-layer name=prefinal-affine-lang-${i} input=tdnn5 dim=$hidden_dim"
         echo " output-layer name=output-${i} dim=$num_targets max-change=1.5"
         
     done >> $exp_dir/configs/network.xconfig
@@ -200,7 +202,7 @@ if [ "$train_nnet" -eq "1" ]; then
     steps/nnet3/train_raw_dnn.py \
         --stage=-5 \
         --cmd="$cmd" \
-        --trainer.num-epochs 5 \
+        --trainer.num-epochs 10 \
         --trainer.optimization.num-jobs-initial=1 \
         --trainer.optimization.num-jobs-final=1 \
         --trainer.optimization.initial-effective-lrate=0.0015 \
@@ -222,7 +224,8 @@ if [ "$train_nnet" -eq "1" ]; then
     echo "### ============== ###"
     echo "### END TRAIN NNET ###"
     echo "### ============== ###"
-    
+
+    utils/format_accuracy_for_plot.sh "exp/nnet3/multitask/log" "ACC_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt";
 fi
 
 
