@@ -4,16 +4,9 @@
 
 for run in {1..20}
 do
-    ./run_nnet3_multilingual.sh "org org2" "tri tri" "0.5,0.5" "${run}_2gram5epoch5layer100dim"
-  
-    ./run_nnet3_multilingual.sh "org org2" "tri mono" "0.5,0.5" "${run}_2gram5epoch5layer100dim"
-
-    ./run_nnet3_multilingual.sh "org libri" "tri tri" "0.5,0.5" "${run}_2gram5epoch5layer100dim"
-  
-    ./run_nnet3_multilingual.sh "org libri" "tri mono" "0.5,0.5" "${run}_2gram5epoch5layer100dim"
-
-    ./run_nnet3_multilingual.sh "org no_voice" "tri tri" "0.5,0.5" "${run}_2gram5epoch5layer100dim"
-  
-    ./run_nnet3_multilingual.sh "org no_voice" "tri mono" "0.5,0.5" "${run}_2gram5epoch5layer100dim"
-  
+    for dim in 100 150 200 250 300 350 400 450 500 550 600
+    do
+        ./run_nnet3_multilingual.sh "org org2" "tri tri" "0.5,0.5" $dim "2gram_5epoch_5layer_${dim}dim_${run}"
+        
+    done
 done
