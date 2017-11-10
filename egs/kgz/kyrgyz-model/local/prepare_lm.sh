@@ -68,10 +68,14 @@ test_dir=${data_dir}/lang_test
 rm -rf ${data_dir}/lang_test
 cp -r ${data_dir}/lang $test_dir
     
-cat ${data_dir}/local/lm.arpa | arpa2fst - | fstprint | utils/eps2disambig.pl \
-    | utils/s2eps.pl | fstcompile --isymbols=${test_dir}/words.txt \
-    --osymbols=${test_dir}/words.txt --keep_isymbols=false \
-    --keep_osymbols=false | fstrmepsilon | fstarcsort --sort_type=ilabel \
+cat ${data_dir}/local/lm.arpa | arpa2fst - | \
+    fstprint | utils/eps2disambig.pl | utils/s2eps.pl | \
+    fstcompile --isymbols=${test_dir}/words.txt \
+               --osymbols=${test_dir}/words.txt \
+               --keep_isymbols=false \
+               --keep_osymbols=false | \
+    fstrmepsilon | \
+    fstarcsort --sort_type=ilabel \
     > ${test_dir}/G.fst
 
 fstisstochastic ${test_dir}/G.fst
