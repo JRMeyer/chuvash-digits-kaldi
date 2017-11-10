@@ -149,10 +149,17 @@ if [ $stage -le 0 ]; then
             || { echo "Mismatch in number of pdfs with $model"; exit 1; }
     fi
     $cmd --num-threads $num_threads JOB=1:$nj $decode_dir/log/decode.JOB.log \
-        gmm-latgen-faster$thread_string --max-active=$max_active --beam=$beam \
-        --lattice-beam=$lattice_beam --acoustic-scale=$acwt \
-        --allow-partial=true --word-symbol-table=$graph_dir/words.txt $model \
-        $graph_dir/HCLG.fst "$feats" "ark:|gzip -c > $decode_dir/lat.JOB.gz" \
+         gmm-latgen-faster$thread_string \
+         --max-active=$max_active \
+         --beam=$beam \
+         --lattice-beam=$lattice_beam \
+         --acoustic-scale=$acwt \
+         --allow-partial=true \
+         --word-symbol-table=$graph_dir/words.txt \
+         $model \
+         $graph_dir/HCLG.fst \
+         "$feats" \
+         "ark:|gzip -c > $decode_dir/lat.JOB.gz" \
         || exit 1;
 fi
 
