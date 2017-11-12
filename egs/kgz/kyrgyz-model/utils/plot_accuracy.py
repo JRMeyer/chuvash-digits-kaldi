@@ -11,13 +11,22 @@ import csv
 from collections import defaultdict
 from operator import itemgetter
 
+import argparse
+parser = argparse.ArgumentParser()
+
+#-db DATABSE -u USERNAME -p PASSWORD -size 20
+parser.add_argument("-i", "--infile")
+parser.add_argument("-t", "--plotTitle")
+
+args = parser.parse_args()
+
 
 # example
 # train: output1: 100: .53
 
 data = defaultdict(dict)
 
-with open('results.txt') as csvfile:
+with open(args.infile) as csvfile:
     reader = csv.reader(csvfile, delimiter=" ")
     
     for row in reader:
@@ -52,6 +61,7 @@ plt.plot(valid0[0], valid0[1], label='valid-TASK-A')
 plt.plot(valid1[0], valid1[1], label='valid-TASK-B')
 plt.legend()
 plt.xlabel('Training Iteration')
-plt.title('5 Epochs | 5 Layers | 100-dim ')
+title='5 Epochs | 5 Layers | ' + str(args.plotTitle) + '-dim '
+plt.title(title)
 plt.ylabel('Frame Classification Accuracy')
 plt.show()
