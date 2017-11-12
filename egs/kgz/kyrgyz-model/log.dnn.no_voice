@@ -11310,3 +11310,239 @@ steps/nnet3/multilingual/combine_egs.sh: Finished preparing multilingual trainin
 2017-11-12 07:50:51,998 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 672, learning rate is 0.000258496635842.
 2017-11-12 07:51:05,232 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 673)
 2017-11-12 07:51:05,240 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 673, learning rate is 0.000257821144396.
+2017-11-12 07:51:18,448 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 674)
+2017-11-12 07:51:18,456 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 674, learning rate is 0.000257147418112.
+2017-11-12 07:51:31,880 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 675)
+2017-11-12 07:51:31,884 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 675, learning rate is 0.000256475452379.
+2017-11-12 07:51:45,145 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 676)
+2017-11-12 07:51:45,151 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 676, learning rate is 0.000255805242596.
+2017-11-12 07:51:58,818 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 677)
+2017-11-12 07:51:58,823 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 677, learning rate is 0.000255136784174.
+2017-11-12 07:52:12,421 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 678)
+2017-11-12 07:52:12,430 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 678, learning rate is 0.000254470072536.
+2017-11-12 07:52:25,619 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 679)
+2017-11-12 07:52:25,623 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 679, learning rate is 0.000253805103118.
+2017-11-12 07:52:39,354 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 680)
+2017-11-12 07:52:39,358 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 680, learning rate is 0.000253141871368.
+2017-11-12 07:52:52,912 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 681)
+2017-11-12 07:52:52,918 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 681, learning rate is 0.000252480372745.
+2017-11-12 07:53:05,922 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 682)
+2017-11-12 07:53:05,926 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 682, learning rate is 0.000251820602718.
+2017-11-12 07:53:19,699 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 683)
+2017-11-12 07:53:19,703 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 683, learning rate is 0.000251162556773.
+2017-11-12 07:53:32,208 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 684)
+2017-11-12 07:53:32,213 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 684, learning rate is 0.000250506230402.
+2017-11-12 07:53:45,072 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 685)
+2017-11-12 07:53:45,079 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 685, learning rate is 0.000249851619114.
+2017-11-12 07:53:58,802 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 686)
+2017-11-12 07:53:58,811 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 686, learning rate is 0.000249198718425.
+2017-11-12 07:54:12,604 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 687)
+2017-11-12 07:54:12,608 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 687, learning rate is 0.000248547523866.
+2017-11-12 07:54:25,731 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 688)
+2017-11-12 07:54:25,739 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 688, learning rate is 0.000247898030979.
+2017-11-12 07:54:39,066 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 689)
+2017-11-12 07:54:39,070 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 689, learning rate is 0.000247250235316.
+2017-11-12 07:54:52,386 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 690)
+2017-11-12 07:54:52,394 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 690, learning rate is 0.000246604132443.
+2017-11-12 07:55:05,772 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 691)
+2017-11-12 07:55:05,776 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 691, learning rate is 0.000245959717936.
+2017-11-12 07:55:19,224 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 692)
+2017-11-12 07:55:19,230 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 692, learning rate is 0.000245316987383.
+2017-11-12 07:55:31,813 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 693)
+2017-11-12 07:55:31,817 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 693, learning rate is 0.000244675936384.
+2017-11-12 07:55:45,157 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 694)
+2017-11-12 07:55:45,167 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 694, learning rate is 0.00024403656055.
+2017-11-12 07:55:58,725 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 695)
+2017-11-12 07:55:58,729 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 695, learning rate is 0.000243398855503.
+2017-11-12 07:56:12,405 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 696)
+2017-11-12 07:56:12,409 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 696, learning rate is 0.000242762816878.
+2017-11-12 07:56:26,091 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 697)
+2017-11-12 07:56:26,099 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 697, learning rate is 0.000242128440319.
+2017-11-12 07:56:39,406 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 698)
+2017-11-12 07:56:39,423 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 698, learning rate is 0.000241495721483.
+2017-11-12 07:56:52,789 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 699)
+2017-11-12 07:56:52,793 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 699, learning rate is 0.00024086465604.
+2017-11-12 07:57:05,588 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 700)
+2017-11-12 07:57:05,595 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 700, learning rate is 0.000240235239667.
+2017-11-12 07:57:18,766 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 701)
+2017-11-12 07:57:18,770 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 701, learning rate is 0.000239607468056.
+2017-11-12 07:57:32,318 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 702)
+2017-11-12 07:57:32,322 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 702, learning rate is 0.000238981336909.
+2017-11-12 07:57:45,826 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 703)
+2017-11-12 07:57:45,838 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 703, learning rate is 0.000238356841938.
+2017-11-12 07:57:58,864 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 704)
+2017-11-12 07:57:58,871 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 704, learning rate is 0.000237733978869.
+2017-11-12 07:58:12,667 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 705)
+2017-11-12 07:58:12,672 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 705, learning rate is 0.000237112743437.
+2017-11-12 07:58:26,253 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 706)
+2017-11-12 07:58:26,260 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 706, learning rate is 0.000236493131389.
+2017-11-12 07:58:39,856 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 707)
+2017-11-12 07:58:39,866 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 707, learning rate is 0.000235875138482.
+2017-11-12 07:58:52,398 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 708)
+2017-11-12 07:58:52,403 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 708, learning rate is 0.000235258760485.
+2017-11-12 07:59:05,181 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 709)
+2017-11-12 07:59:05,185 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 709, learning rate is 0.00023464399318.
+2017-11-12 07:59:18,471 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 710)
+2017-11-12 07:59:18,475 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 710, learning rate is 0.000234030832355.
+2017-11-12 07:59:31,152 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 711)
+2017-11-12 07:59:31,159 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 711, learning rate is 0.000233419273814.
+2017-11-12 07:59:45,522 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 712)
+2017-11-12 07:59:45,528 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 712, learning rate is 0.00023280931337.
+2017-11-12 07:59:59,175 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 713)
+2017-11-12 07:59:59,180 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 713, learning rate is 0.000232200946846.
+2017-11-12 08:00:11,875 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 714)
+2017-11-12 08:00:11,879 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 714, learning rate is 0.000231594170077.
+2017-11-12 08:00:24,962 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 715)
+2017-11-12 08:00:24,970 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 715, learning rate is 0.000230988978909.
+2017-11-12 08:00:38,344 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 716)
+2017-11-12 08:00:38,348 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 716, learning rate is 0.000230385369199.
+2017-11-12 08:00:51,879 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 717)
+2017-11-12 08:00:51,883 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 717, learning rate is 0.000229783336813.
+2017-11-12 08:01:05,421 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 718)
+2017-11-12 08:01:05,427 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 718, learning rate is 0.000229182877631.
+2017-11-12 08:01:19,081 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 719)
+2017-11-12 08:01:19,087 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 719, learning rate is 0.000228583987541.
+2017-11-12 08:01:32,688 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 720)
+2017-11-12 08:01:32,692 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 720, learning rate is 0.000227986662443.
+2017-11-12 08:01:46,184 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 721)
+2017-11-12 08:01:46,192 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 721, learning rate is 0.000227390898247.
+2017-11-12 08:01:59,707 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 722)
+2017-11-12 08:01:59,711 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 722, learning rate is 0.000226796690875.
+2017-11-12 08:02:13,318 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 723)
+2017-11-12 08:02:13,324 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 723, learning rate is 0.000226204036257.
+2017-11-12 08:02:26,017 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 724)
+2017-11-12 08:02:26,022 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 724, learning rate is 0.000225612930338.
+2017-11-12 08:02:39,264 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 725)
+2017-11-12 08:02:39,268 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 725, learning rate is 0.000225023369069.
+2017-11-12 08:02:52,239 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 726)
+2017-11-12 08:02:52,243 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 726, learning rate is 0.000224435348414.
+2017-11-12 08:03:05,847 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 727)
+2017-11-12 08:03:05,852 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 727, learning rate is 0.000223848864348.
+2017-11-12 08:03:18,616 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 728)
+2017-11-12 08:03:18,623 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 728, learning rate is 0.000223263912854.
+2017-11-12 08:03:32,474 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 729)
+2017-11-12 08:03:32,483 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 729, learning rate is 0.000222680489929.
+2017-11-12 08:03:45,899 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 730)
+2017-11-12 08:03:45,907 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 730, learning rate is 0.000222098591578.
+2017-11-12 08:03:59,493 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 731)
+2017-11-12 08:03:59,498 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 731, learning rate is 0.000221518213816.
+2017-11-12 08:04:12,948 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 732)
+2017-11-12 08:04:12,955 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 732, learning rate is 0.000220939352671.
+2017-11-12 08:04:26,628 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 733)
+2017-11-12 08:04:26,632 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 733, learning rate is 0.000220362004179.
+2017-11-12 08:04:40,104 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 734)
+2017-11-12 08:04:40,111 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 734, learning rate is 0.000219786164387.
+2017-11-12 08:04:52,952 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 735)
+2017-11-12 08:04:52,957 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 735, learning rate is 0.000219211829353.
+2017-11-12 08:05:06,546 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 736)
+2017-11-12 08:05:06,550 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 736, learning rate is 0.000218638995145.
+2017-11-12 08:05:19,311 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 737)
+2017-11-12 08:05:19,315 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 737, learning rate is 0.000218067657841.
+2017-11-12 08:05:32,962 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 738)
+2017-11-12 08:05:32,967 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 738, learning rate is 0.000217497813529.
+2017-11-12 08:05:46,287 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 739)
+2017-11-12 08:05:46,295 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 739, learning rate is 0.000216929458308.
+2017-11-12 08:05:59,493 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 740)
+2017-11-12 08:05:59,499 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 740, learning rate is 0.000216362588286.
+2017-11-12 08:06:13,042 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 741)
+2017-11-12 08:06:13,046 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 741, learning rate is 0.000215797199583.
+2017-11-12 08:06:26,315 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 742)
+2017-11-12 08:06:26,323 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 742, learning rate is 0.000215233288327.
+2017-11-12 08:06:39,953 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 743)
+2017-11-12 08:06:39,957 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 743, learning rate is 0.000214670850659.
+2017-11-12 08:06:53,313 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 744)
+2017-11-12 08:06:53,316 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 744, learning rate is 0.000214109882726.
+2017-11-12 08:07:06,753 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 745)
+2017-11-12 08:07:06,759 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 745, learning rate is 0.000213550380689.
+2017-11-12 08:07:19,615 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 746)
+2017-11-12 08:07:19,626 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 746, learning rate is 0.000212992340716.
+2017-11-12 08:07:33,361 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 747)
+2017-11-12 08:07:33,366 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 747, learning rate is 0.000212435758988.
+2017-11-12 08:07:46,226 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 748)
+2017-11-12 08:07:46,231 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 748, learning rate is 0.000211880631693.
+2017-11-12 08:08:00,144 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 749)
+2017-11-12 08:08:00,151 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 749, learning rate is 0.000211326955032.
+2017-11-12 08:08:13,728 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 750)
+2017-11-12 08:08:13,739 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 750, learning rate is 0.000210774725212.
+2017-11-12 08:08:27,514 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 751)
+2017-11-12 08:08:27,518 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 751, learning rate is 0.000210223938454.
+2017-11-12 08:08:40,927 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 752)
+2017-11-12 08:08:40,936 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 752, learning rate is 0.000209674590987.
+2017-11-12 08:08:54,370 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 753)
+2017-11-12 08:08:54,375 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 753, learning rate is 0.000209126679049.
+2017-11-12 08:09:07,638 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 754)
+2017-11-12 08:09:07,642 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 754, learning rate is 0.000208580198889.
+2017-11-12 08:09:21,255 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 755)
+2017-11-12 08:09:21,259 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 755, learning rate is 0.000208035146765.
+2017-11-12 08:09:34,994 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 756)
+2017-11-12 08:09:34,998 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 756, learning rate is 0.000207491518947.
+2017-11-12 08:09:47,751 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 757)
+2017-11-12 08:09:47,758 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 757, learning rate is 0.000206949311712.
+2017-11-12 08:10:00,877 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 758)
+2017-11-12 08:10:00,882 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 758, learning rate is 0.000206408521347.
+2017-11-12 08:10:13,681 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 759)
+2017-11-12 08:10:13,686 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 759, learning rate is 0.000205869144151.
+2017-11-12 08:10:27,218 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 760)
+2017-11-12 08:10:27,223 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 760, learning rate is 0.000205331176431.
+2017-11-12 08:10:40,643 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 761)
+2017-11-12 08:10:40,659 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 761, learning rate is 0.000204794614502.
+2017-11-12 08:10:54,345 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 762)
+2017-11-12 08:10:54,349 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 762, learning rate is 0.000204259454693.
+2017-11-12 08:11:07,951 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 763)
+2017-11-12 08:11:07,955 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 763, learning rate is 0.000203725693338.
+2017-11-12 08:11:21,588 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 764)
+2017-11-12 08:11:21,592 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 764, learning rate is 0.000203193326784.
+2017-11-12 08:11:34,423 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 765)
+2017-11-12 08:11:34,427 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 765, learning rate is 0.000202662351386.
+2017-11-12 08:11:48,047 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 766)
+2017-11-12 08:11:48,051 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 766, learning rate is 0.000202132763508.
+2017-11-12 08:12:01,485 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 767)
+2017-11-12 08:12:01,490 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 767, learning rate is 0.000201604559524.
+2017-11-12 08:12:14,481 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 768)
+2017-11-12 08:12:14,485 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 768, learning rate is 0.000201077735819.
+2017-11-12 08:12:27,731 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 769)
+2017-11-12 08:12:27,739 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 769, learning rate is 0.000200552288785.
+2017-11-12 08:12:40,762 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 770)
+2017-11-12 08:12:40,767 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 770, learning rate is 0.000200028214824.
+2017-11-12 08:12:54,472 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 771)
+2017-11-12 08:12:54,483 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 771, learning rate is 0.00019950551035.
+2017-11-12 08:13:08,027 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 772)
+2017-11-12 08:13:08,031 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 772, learning rate is 0.000198984171783.
+2017-11-12 08:13:22,026 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 773)
+2017-11-12 08:13:22,034 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 773, learning rate is 0.000198464195554.
+2017-11-12 08:13:35,597 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 774)
+2017-11-12 08:13:35,601 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 774, learning rate is 0.000197945578102.
+2017-11-12 08:13:49,297 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 775)
+2017-11-12 08:13:49,307 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 775, learning rate is 0.000197428315878.
+2017-11-12 08:14:02,605 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 776)
+2017-11-12 08:14:02,611 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 776, learning rate is 0.000196912405339.
+2017-11-12 08:14:16,266 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 777)
+2017-11-12 08:14:16,270 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 777, learning rate is 0.000196397842954.
+2017-11-12 08:14:29,300 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 778)
+2017-11-12 08:14:29,307 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 778, learning rate is 0.000195884625199.
+2017-11-12 08:14:42,818 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 779)
+2017-11-12 08:14:42,826 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 779, learning rate is 0.000195372748561.
+2017-11-12 08:14:56,217 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 780)
+2017-11-12 08:14:56,221 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 780, learning rate is 0.000194862209536.
+2017-11-12 08:15:09,437 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 781)
+2017-11-12 08:15:09,444 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 781, learning rate is 0.000194353004628.
+2017-11-12 08:15:23,355 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 782)
+2017-11-12 08:15:23,370 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 782, learning rate is 0.00019384513035.
+2017-11-12 08:15:36,692 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 783)
+2017-11-12 08:15:36,699 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 783, learning rate is 0.000193338583226.
+2017-11-12 08:15:50,037 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 784)
+2017-11-12 08:15:50,041 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 784, learning rate is 0.000192833359787.
+2017-11-12 08:16:03,986 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 785)
+2017-11-12 08:16:03,990 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 785, learning rate is 0.000192329456575.
+2017-11-12 08:16:17,181 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 786)
+2017-11-12 08:16:17,187 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 786, learning rate is 0.000191826870139.
+2017-11-12 08:16:30,598 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 787)
+2017-11-12 08:16:30,607 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 787, learning rate is 0.000191325597039.
+2017-11-12 08:16:44,243 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 788)
+2017-11-12 08:16:44,258 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 788, learning rate is 0.000190825633843.
+2017-11-12 08:16:57,846 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 789)
+2017-11-12 08:16:57,850 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 789, learning rate is 0.000190326977128.
+2017-11-12 08:17:11,287 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 790)
+2017-11-12 08:17:11,291 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 790, learning rate is 0.000189829623479.
+2017-11-12 08:17:24,916 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 791)
+2017-11-12 08:17:24,921 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 791, learning rate is 0.000189333569491.
