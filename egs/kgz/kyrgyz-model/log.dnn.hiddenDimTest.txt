@@ -17880,3 +17880,7 @@ steps/nnet3/multilingual/combine_egs.sh: Finished preparing multilingual trainin
 2017-11-11 20:17:21,515 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 35, learning rate is 0.00136873234953.
 2017-11-11 20:17:50,503 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 36)
 2017-11-11 20:17:50,512 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 36, learning rate is 0.0013651556415.
+2017-11-11 20:18:19,752 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 37)
+2017-11-11 20:18:19,756 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 37, learning rate is 0.00136158827995.
+2017-11-11 20:18:48,556 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 38)
+2017-11-11 20:18:48,560 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 38, learning rate is 0.00135803024047.
