@@ -17,7 +17,7 @@ echo "$0 $@"  # Print the command line for logging
 if [ -f path.sh ]; then . ./path.sh; fi
 . parse_options.sh || exit 1;
 
-if [ $# -lt 1 ] || [ $# -gt 3 ]; then
+if [ $# -ne 3 ]; then
    echo "Usage: $0 [options] <data-dir> [<log-dir> [<plp-dir>] ]";
    echo "e.g.: $0 data/train exp/make_plp/train mfcc"
    echo "Note: <log-dir> defaults to <data-dir>/log, and <plp-dir> defaults to <data-dir>/data"
@@ -29,16 +29,9 @@ if [ $# -lt 1 ] || [ $# -gt 3 ]; then
 fi
 
 data=$1
-if [ $# -ge 2 ]; then
-  logdir=$2
-else
-  logdir=$data/log
-fi
-if [ $# -ge 3 ]; then
-  plpdir=$3
-else
-  plpdir=$data/data
-fi
+logdir=$2
+plpdir=$3
+
 
 # make $plpdir an absolute pathname.
 plpdir=`perl -e '($dir,$pwd)= @ARGV; if($dir!~m:^/:) { $dir = "$pwd/$dir"; } print $dir; ' $plpdir ${PWD}`
@@ -59,6 +52,7 @@ scp=$data/wav.scp
 
 required="$scp $plp_config"
 
+
 for f in $required; do
   if [ ! -f $f ]; then
     echo "make_plp.sh: no such file $f"
@@ -66,6 +60,7 @@ for f in $required; do
   fi
 done
 utils/validate_data_dir.sh --no-text --no-feats $data || exit 1;
+
 
 if [ -f $data/spk2warp ]; then
   echo "$0 [info]: using VTLN warp factors from $data/spk2warp"
@@ -75,11 +70,13 @@ elif [ -f $data/utt2warp ]; then
   vtln_opts="--vtln-map=ark:$data/utt2warp"
 fi
 
+
 for n in $(seq $nj); do
   # the next command does nothing unless $plpdir/storage/ exists, see
   # utils/create_data_link.pl for more info.
   utils/create_data_link.pl $plpdir/raw_plp_$name.$n.ark
 done
+
 
 if [ -f $data/segments ]; then
   echo "$0 [info]: segments file exists: using that."
@@ -99,45 +96,46 @@ if [ -f $data/segments ]; then
      || exit 1;
 
 else
-  echo "$0: [info]: no segments file exists: assuming wav.scp indexed by utterance."
-  split_scps=""
-  for n in $(seq $nj); do
-    split_scps="$split_scps $logdir/wav_${name}.$n.scp"
-  done
-
-  utils/split_scp.pl $scp $split_scps || exit 1;
-
-  $cmd JOB=1:$nj $logdir/make_plp_${name}.JOB.log \
-    compute-plp-feats  $vtln_opts --verbose=2 --config=$plp_config scp,p:$logdir/wav_${name}.JOB.scp ark:- \| \
-    copy-feats --compress=$compress ark:- \
-      ark,scp:$plpdir/raw_plp_$name.JOB.ark,$plpdir/raw_plp_$name.JOB.scp \
-      || exit 1;
-
+    echo "$0: [info]: no segments file exists: assuming wav.scp indexed by utterance."
+    split_scps=""
+    for n in $(seq $nj); do
+        split_scps="$split_scps $logdir/wav_${name}.$n.scp"
+    done
+    
+    utils/split_scp.pl $scp $split_scps || exit 1;
+    
+    $cmd JOB=1:$nj $logdir/make_plp_${name}.JOB.log \
+         compute-plp-feats  $vtln_opts --verbose=2 --config=$plp_config scp,p:$logdir/wav_${name}.JOB.scp ark:- \| \
+         copy-feats --compress=$compress ark:- \
+         ark,scp:$plpdir/raw_plp_$name.JOB.ark,$plpdir/raw_plp_$name.JOB.scp \
+        || exit 1;
+    
 fi
 
 
 if [ -f $logdir/.error.$name ]; then
-  echo "Error producing plp features for $name:"
-  tail $logdir/make_plp_${name}.1.log
-  exit 1;
+    echo "Error producing plp features for $name:"
+    tail $logdir/make_plp_${name}.1.log
+    exit 1;
 fi
 
 # concatenate the .scp files together.
 for n in $(seq $nj); do
-  cat $plpdir/raw_plp_$name.$n.scp || exit 1;
+    cat $plpdir/raw_plp_$name.$n.scp || exit 1;
 done > $data/feats.scp
 
 rm $logdir/wav_${name}.*.scp  $logdir/segments.* 2>/dev/null
 
 nf=`cat $data/feats.scp | wc -l`
 nu=`cat $data/utt2spk | wc -l`
+
 if [ $nf -ne $nu ]; then
-  echo "It seems not all of the feature files were successfully ($nf != $nu);"
-  echo "consider using utils/fix_data_dir.sh $data"
+    echo "It seems not all of the feature files were successfully ($nf != $nu);"
+    echo "consider using utils/fix_data_dir.sh $data"
 fi
 if [ $nf -lt $[$nu - ($nu/20)] ]; then
-  echo "Less than 95% the features were successfully generated.  Probably a serious error."
-  exit 1;
+    echo "Less than 95% the features were successfully generated.  Probably a serious error."
+    exit 1;
 fi
 
 echo "Succeeded creating PLP features for $name"
