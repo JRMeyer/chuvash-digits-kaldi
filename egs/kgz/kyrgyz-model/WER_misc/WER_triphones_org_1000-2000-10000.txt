@@ -1,0 +1,14 @@
+%WER 56.10 [ 575 / 1025, 109 ins, 21 del, 445 sub ] exp_org/triphones/decode_test/wer_11
+num_iters_mono=40
+num_iters_tri=40
+Language Model=
+
+\data\
+ngram  1=    103998
+ngram  2=    566871
+
+
+\1-grams:
+-5.7221	<s>	-0.587865
+-3.41999	ой	-0.480036
+-4.64292	жүгүртүүнүн	-0.31079
