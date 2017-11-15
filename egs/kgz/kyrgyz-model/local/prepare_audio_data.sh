@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Given dir of WAV files, create dir for train, create 'wav.scp',
+# create 'text', create 'utt2spk' and 'spk2utt'
+
+
 # USAGE:
 #
 # local/prepare_data.sh \
@@ -45,22 +49,22 @@ fi
 # Creating ./${data_dir} directory
 mkdir -p ${data_dir}/local
 mkdir -p ${data_dir}/local/tmp
-cd ${data_dir}/local
 
+local_dir=${data_dir}/local
 
 
 ###                                                     ###
 ### Check if utt IDs in transcripts and audio dir match ###
 ###                                                     ###
 
-ls -1 ../../${audio_dir} > tmp/audio.list
-awk -F"." '{print $1}' tmp/audio.list > tmp/utt-ids-audio.txt
-awk -F" " '{print $1}' $transcripts > tmp/utt-ids-transcripts.txt
-for fileName in tmp/utt-ids-audio.txt tmp/utt-ids-transcripts.txt; do
+ls -1 $audio_dir > $local_dir/tmp/audio.list
+awk -F"." '{print $1}' $local_dir/tmp/audio.list > $local_dir/tmp/utt-ids-audio.txt
+awk -F" " '{print $1}' $transcripts > $local_dir/tmp/utt-ids-transcripts.txt
+for fileName in $local_dir/tmp/utt-ids-audio.txt $local_dir/tmp/utt-ids-transcripts.txt; do
     LC_ALL=C sort -i $fileName -o $fileName;
 done;
-diff tmp/utt-ids-audio.txt tmp/utt-ids-transcripts.txt > tmp/diff-ids.txt
-if [ -s tmp/diff-ids.txt ]; then
+diff $local_dir/tmp/utt-ids-audio.txt $local_dir/tmp/utt-ids-transcripts.txt > $local_dir/tmp/diff-ids.txt
+if [ -s $local_dir/tmp/diff-ids.txt ]; then
     printf "\n####\n#### ERROR: Audio files & transcripts mismatch \n####\n\n";
     exit 0;
 fi
@@ -72,10 +76,10 @@ fi
 ###                                         ###
 
 # make two-column lists of utt IDs and path to audio
-../../local/create_wav_scp.pl $audio_dir tmp/audio.list > tmp/${data_type}_wav.scp
+local/create_wav_scp.pl $audio_dir $local_dir/tmp/audio.list > $local_dir/tmp/${data_type}_wav.scp
 # make two-column lists of utt IDs and transcripts
-../../local/create_txt.pl $transcripts tmp/audio.list > tmp/${data_type}.txt
-cd ../..
+local/create_txt.pl $transcripts $local_dir/tmp/audio.list > $local_dir/tmp/${data_type}.txt
+
 mkdir -p $data_dir/$data_type
 # Make wav.scp
 cp $data_dir/local/tmp/${data_type}_wav.scp $data_dir/$data_type/wav.scp
@@ -86,7 +90,7 @@ cat $data_dir/$data_type/text | awk '{printf("%s %s\n", $1, $1);}' > $data_dir/$
 # Make spk2utt
 utils/utt2spk_to_spk2utt.pl <$data_dir/$data_type/utt2spk > $data_dir/$data_type/spk2utt
 #clean up temp files
-rm -rf ${data_dir}/local/tmp
+rm -rf $local_dir/tmp
 
 
 
