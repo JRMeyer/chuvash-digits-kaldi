@@ -42,7 +42,7 @@ printf "####=========================####\n\n";
 
 # utils/mkgraph.sh \
 #     --mono \
-#     ${data_dir}/lang_test \
+#     ${data_dir}/lang_decode \
 #     ${exp_dir}/monophones \
 #     ${exp_dir}/monophones/graph \
 #     || printf "\n####\n#### ERROR: mkgraph.sh \n####\n\n" \
@@ -51,7 +51,7 @@ printf "####=========================####\n\n";
 echo "### Compile triphone graph in ${exp_dir}/triphones/graph"
 
 utils/mkgraph.sh \
-    ${data_dir}/lang_test \
+    ${data_dir}/lang_decode \
     ${exp_dir}/triphones \
     ${exp_dir}/triphones/graph \
     || printf "\n####\n#### ERROR: mkgraph.sh \n####\n\n" \

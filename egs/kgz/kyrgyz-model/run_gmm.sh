@@ -50,6 +50,7 @@ fi
 ### STAGES
 ##
 #
+prep_audio_data=1
 prep_data=1
 extract_feats=1
 train_gmm=1
@@ -105,6 +106,20 @@ plp_dir=plp_${corpus_name}
 
 
 
+    # Given dir of WAV files, create dir for train, create 'wav.scp',
+    # create 'text', create 'utt2spk' and 'spk2utt', and copy the language model
+    # from elsewhere (ARPA format)
+
+if [ "$prep_audio_data" -eq "1" ]; then
+
+    local/prepare_audio_data.sh \
+        $audio_dir \
+        "`pwd`"/$input_dir/transcripts \
+        $data_dir \
+        train \
+        || printf "\n####\n#### ERROR: prepare_data.sh \n####\n\n" \
+        || exit 1;
+fi
 
 
 if [ "$prep_data" -eq "1" ]; then
@@ -113,7 +128,7 @@ if [ "$prep_data" -eq "1" ]; then
     printf "#### DATA PREP ####\n";
     printf "####===========####\n\n";
 
-    ./prep_data.sh $input_dir $audio_dir $data_dir
+    ./prep_data.sh $input_dir $data_dir
     
 fi
 

@@ -11,12 +11,12 @@
 # 
 
 input_dir=$1
-audio_dir=$2
-data_dir=$3
+data_dir=$2
 
-if [ "$#" -ne 3 ]; then
+
+if [ "$#" -ne 2 ]; then
     echo "ERROR: $0"
-    echo "USAGE: $0 <input_dir> <audio_dir>"
+    echo "USAGE: $0 <input_dir> <data_dir>"
     exit 1
 fi
 
@@ -24,27 +24,19 @@ fi
 check_input=1
 prep_data=1
 
+
 if [ "$check_input" -eq "1" ]; then
     
     printf "\n####=================####\n";
     printf "#### BEGIN CHECK INPUT ####\n";
     printf "####=================####\n\n";
 
-    echo "$0: looking for audio data in $audio_dir"
-    
-    # Make sure we have the audio data (WAV file utterances)
-    if [ ! -d $audio_dir ]; then
-        printf '\n####\n#### ERROR: '"${audio_dir}"' not found \n####\n\n';
-        exit 1;
-    fi
-
     # sort input files by bytes (C-style) and re-save them with orginal filename
     for fileName in \
         lexicon.txt \
             lexicon_nosil.txt \
-            phones.txt \
-            transcripts; do
-        LC_ALL=C sort -i ${input_dir}/${fileName} -o ${input_dir}/${fileName};
+            phones.txt; do
+        LC_ALL=C sort -i $input_dir/$fileName -o $input_dir/$fileName;
     done;
     
 fi
@@ -58,22 +50,8 @@ if [ "$prep_data" -eq "1" ]; then
     printf "#### BEGIN DATA PREP ####\n";
     printf "####=================####\n\n";
 
-    # Given dir of WAV files, create dir for train, create 'wav.scp',
-    # create 'text', create 'utt2spk' and 'spk2utt', and copy the language model
-    # from elsewhere (ARPA format)
 
-    local/prepare_data.sh \
-        $audio_dir \
-        $input_dir \
-        $data_dir \
-        train \
-        || printf "\n####\n#### ERROR: prepare_data.sh \n####\n\n" \
-        || exit 1;
-
-    # copy the language mode to the working dir (i.e. ${data_dir}/local )
-    cp $input_dir/task.arpabo $data_dir/local/lm.arpa
-
-    # Copy and paste existing phonetic dictionary, language model, and phone list
+    # Copy and paste existing phonetic dictionary, and phone list
 
     local/prepare_dict.sh \
         $data_dir \
@@ -86,6 +64,9 @@ if [ "$prep_data" -eq "1" ]; then
     # This script can add word-position-dependent phones, and constructs a host of
     # other derived files, that go in data/lang/.
     # This creates the FST for the lexicon.
+
+    # copy the language mode to the working dir (i.e. ${data_dir}/local )
+    cp $input_dir/task.arpabo $data_dir/local/lm.arpa
 
     local/prepare_lang.sh \
         --position-dependent-phones false \

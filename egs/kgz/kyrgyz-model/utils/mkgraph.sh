@@ -28,7 +28,7 @@ done
 
 if [ $# != 3 ]; then
     echo "Usage: utils/mkgraph.sh [options] <lang-dir> <model-dir> <graphdir>"
-    echo "e.g.: utils/mkgraph.sh data/lang_test exp/tri1/ exp/tri1/graph"
+    echo "e.g.: utils/mkgraph.sh data/lang_decode exp/tri1/ exp/tri1/graph"
     echo " Options:"
     echo " --mono          #  For monophone models."
     echo " --quinphone     #  For models with 5-phone context (3 is default)"
