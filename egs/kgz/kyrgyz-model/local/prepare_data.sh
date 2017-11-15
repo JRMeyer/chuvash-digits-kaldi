@@ -58,10 +58,20 @@ data_dir=$3
 data_type=$4 
 
 
+for f in $input_dir/transcripts; do 
+    if [ ! -f $f ]; then
+        printf '\n####\n#### $0: ERROR: $f not found \n####\n\n';
+        exit 1;
+    fi
+done
+
+
+
 # Creating ./${data_dir} directory
 mkdir -p ${data_dir}/local
 mkdir -p ${data_dir}/local/tmp
 cd ${data_dir}/local
+
 
 
 
@@ -87,6 +97,7 @@ fi
 
 
 
+
 ###                        ###
 ### Most Important section ###
 ###                        ###
@@ -95,10 +106,7 @@ fi
 ../../local/create_kgz_wav_scp.pl $audio_dir tmp/audio.list > tmp/${data_type}_wav.scp
 # make two-column lists of utt IDs and transcripts
 ../../local/create_kgz_txt.pl ../../${input_dir}/transcripts tmp/audio.list > tmp/${data_type}.txt
-# copy the language mode to the working dir (i.e. ${data_dir}/local )
-cp ../../${input_dir}/task.arpabo lm.arpa
 cd ../..
-
 
 mkdir -p ${data_dir}/${data_type}
 cp ${data_dir}/local/tmp/${data_type}_wav.scp ${data_dir}/${data_type}/wav.scp

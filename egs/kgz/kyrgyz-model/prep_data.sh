@@ -70,6 +70,9 @@ if [ "$prep_data" -eq "1" ]; then
         || printf "\n####\n#### ERROR: prepare_data.sh \n####\n\n" \
         || exit 1;
 
+    # copy the language mode to the working dir (i.e. ${data_dir}/local )
+    cp $input_dir/task.arpabo $data_dir/local/lm.arpa
+
     # Copy and paste existing phonetic dictionary, language model, and phone list
 
     local/prepare_dict.sh \
