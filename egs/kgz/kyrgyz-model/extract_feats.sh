@@ -2,6 +2,7 @@
 
 # extract feats for some dir
 
+# INPUT:
 
 cmd=utils/run.pl
 num_jobs=`nproc`
