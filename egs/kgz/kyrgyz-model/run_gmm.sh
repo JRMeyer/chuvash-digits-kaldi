@@ -109,31 +109,24 @@ plp_dir=plp_${corpus_name}
 
 if [ "$prep_audio_data" -eq "1" ]; then
 
-    printf "\n####=================####\n";
-    printf "#### AUDIO DATA PREP ####\n";
-    printf "####=================####\n\n";
+    printf "\n####==========================####\n";
+    printf "#### TRAINING AUDIO DATA PREP ####\n";
+    printf "####==========================####\n\n";
 
     local/prepare_audio_data.sh \
         /data/downsampled/train \
         /data/downsampled/transcripts.train \
         $data_dir \
         train
-
-    # local/prepare_audio_data.sh \
-    #     /data/downsampled/test \
-    #     /data/downsampled/transcripts.test \
-    #     $data_dir \
-    #     test
-    
 fi
 
 
 
 if [ "$prep_data" -eq "1" ]; then
     
-    printf "\n####===========####\n";
-    printf "#### DATA PREP ####\n";
-    printf "####===========####\n\n";
+    printf "\n####========================####\n";
+    printf "#### Create L.fst and G.fst ####\n";
+    printf "####========================####\n\n";
 
     ./prep_data.sh $input_dir $data_dir
     
