@@ -53,7 +53,7 @@ fi
 prep_data=1
 extract_feats=1
 train_gmm=1
-compile_graph=0
+compile_graph=1
 decode_test=0
 save_model=0
 #
@@ -64,14 +64,14 @@ save_model=0
 ### HYPER-PARAMETERS
 ##
 #
-tot_gauss_mono=1000
-num_leaves_tri=1000
-tot_gauss_tri=2000
+tot_gauss_mono=500
+num_leaves_tri=500
+tot_gauss_tri=1000
 decode_beam=13
 decode_lattice_beam=7
 decode_max_active_states=700
-num_iters_mono=40
-num_iters_tri=40
+num_iters_mono=10
+num_iters_tri=10
 #
 ##
 ###
@@ -98,7 +98,6 @@ cmd="utils/run.pl"
 #
 data_dir=data_${corpus_name}
 exp_dir=exp_${corpus_name}
-# mfcc_dir=mfcc_${corpus_name}
 plp_dir=plp_${corpus_name}
 #
 ##
@@ -110,9 +109,9 @@ plp_dir=plp_${corpus_name}
 
 if [ "$prep_data" -eq "1" ]; then
     
-    printf "\n####=================####\n";
-    printf "#### BEGIN DATA PREP ####\n";
-    printf "####=================####\n\n";
+    printf "\n####===========####\n";
+    printf "#### DATA PREP ####\n";
+    printf "####===========####\n\n";
 
     ./prep_data.sh $input_dir $audio_dir $data_dir
     
@@ -122,9 +121,9 @@ fi
 
 if [ "$extract_feats" -eq "1" ]; then
 
-    printf "\n####==========================####\n";
-    printf "#### BEGIN FEATURE EXTRACTION ####\n";
-    printf "####==========================####\n\n";
+    printf "\n####====================####\n";
+    printf "#### FEATURE EXTRACTION ####\n";
+    printf "####====================####\n\n";
 
     ./extract_feats.sh $data_dir/train $plp_dir 
     
@@ -134,9 +133,9 @@ fi
 
 if [ "$train_gmm" -eq "1" ]; then
 
-    printf "\n####==========================####\n";
-    printf "#### BEGIN FEATURE EXTRACTION ####\n";
-    printf "####==========================####\n\n";
+    printf "\n####===============####\n";
+    printf "#### TRAINING GMMs ####\n";
+    printf "####===============####\n\n";
 
     ./train_gmm.sh \
         $data_dir \
@@ -152,11 +151,11 @@ fi
 
 if [ "$compile_graph" -eq "1" ]; then
     
-    printf "\n####=========================####\n";
-    printf "#### BEGIN GRAPH COMPILATION ####\n";
-    printf "####=========================####\n\n";
+    printf "\n####===================####\n";
+    printf "#### GRAPH COMPILATION ####\n";
+    printf "####===================####\n\n";
 
-    compile_graph.sh
+    ./compile_graph.sh $data_dir $exp_dir
     
 fi
 
@@ -168,7 +167,7 @@ if [ "$decode_test" -eq "1" ]; then
     printf "#### BEGIN DECODING ####\n";
     printf "####================####\n\n";
 
-    test_gmm.sh
+    ./test_gmm.sh
 fi
 
 exit;
