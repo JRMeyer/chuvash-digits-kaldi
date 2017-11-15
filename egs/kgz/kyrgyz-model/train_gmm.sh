@@ -246,7 +246,7 @@ if [ "$save_model" -eq "1" ]; then
     cp data_${corpus_name} ${corpus_name}_${run}
 
     # delete unneeded files
-    rm -rf ${corpus_name}_${run}/train ${corpus_name}_${run}/test ${corpus_name}_${run}/lang_test
+    rm -rf ${corpus_name}_${run}/train ${corpus_name}_${run}/test ${corpus_name}_${run}/lang_decode
 
     # copy acoustic model and decision tree to new dir
     mkdir ${corpus_name}_${run}/model
