@@ -86,7 +86,7 @@ unknown_word="<unk>"
 unknown_phone="SPOKEN_NOISE"
 silence_phone="SIL"
 input_dir=input_${corpus_name}
-audio_dir="${input_dir}/audio"
+train_audio_dir="${input_dir}/audio"
 config_dir=config
 cmd="utils/run.pl"
 #
@@ -106,20 +106,27 @@ plp_dir=plp_${corpus_name}
 
 
 
-    # Given dir of WAV files, create dir for train, create 'wav.scp',
-    # create 'text', create 'utt2spk' and 'spk2utt', and copy the language model
-    # from elsewhere (ARPA format)
 
 if [ "$prep_audio_data" -eq "1" ]; then
 
+    printf "\n####=================####\n";
+    printf "#### AUDIO DATA PREP ####\n";
+    printf "####=================####\n\n";
+
     local/prepare_audio_data.sh \
-        $audio_dir \
-        "`pwd`"/$input_dir/transcripts \
+        /data/downsampled/train \
+        /data/downsampled/transcripts.train \
         $data_dir \
-        train \
-        || printf "\n####\n#### ERROR: prepare_data.sh \n####\n\n" \
-        || exit 1;
+        train
+
+    # local/prepare_audio_data.sh \
+    #     /data/downsampled/test \
+    #     /data/downsampled/transcripts.test \
+    #     $data_dir \
+    #     test
+    
 fi
+
 
 
 if [ "$prep_data" -eq "1" ]; then
