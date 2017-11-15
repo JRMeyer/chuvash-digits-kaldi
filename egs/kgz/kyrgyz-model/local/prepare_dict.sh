@@ -17,7 +17,7 @@
 #    "silence_phone"
 
 # OUTPUT:
-# josh@yoga:~/git/kaldi-mirror/egs/kgz/kyrgyz-model$ tree data_org/
+#
 # data_org/
 # └── local
 #     └── dict
@@ -32,6 +32,9 @@ data_dir=$1
 input_dir=$2
 silence_phone=$3
 dict_dir=${data_dir}/local/dict
+
+echo "$0: Creating $dict_dir and moving lexicon files from $input_dir into it."
+echo "$0: This script really is just copy-pasting, nothing new generated."
 
 # Creating ./${dict_dir} directory
 mkdir -p $dict_dir
