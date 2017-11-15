@@ -21,7 +21,7 @@
 #
 # josh@yoga:~/git/kaldi-mirror/egs/kgz/kyrgyz-model$ tree data_org/
 # data_org/
-# └── lang_test
+# └── lang_decode
 #     ├── G.fst              MOST IMPORTANT FILE! (other files copied from lang)
 #     ├── L_disambig.fst
 #     ├── L.fst
@@ -61,11 +61,11 @@
 . path.sh
 
 data_dir=$1
-test_dir=${data_dir}/lang_test
+test_dir=${data_dir}/lang_decode
 
 # Preparing language model in $test_dir
 
-rm -rf ${data_dir}/lang_test
+rm -rf ${data_dir}/lang_decode
 cp -r ${data_dir}/lang $test_dir
     
 cat ${data_dir}/local/lm.arpa | arpa2fst - | \

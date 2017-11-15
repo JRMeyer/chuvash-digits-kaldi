@@ -440,7 +440,7 @@ utils/gen_topo.pl \
     >$lang_dir/topo
 
 
-# Create the lexicon FST with disambiguation symbols, and put it in lang_test.
+# Create the lexicon FST with disambiguation symbols, and put it in lang_decode.
 # There is an extra step where we create a loop to "pass through" the
 # disambiguation symbols from G.fst.
 phone_disambig_symbol=`grep \#0 $lang_dir/phones.txt | awk '{print $2}'`
