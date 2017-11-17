@@ -388,16 +388,34 @@ cat $phone_dir/align_lexicon.txt | utils/sym2int.pl -f 3- $lang_dir/phones.txt |
 if $silprob; then
     # Usually it's the same as having a fixed-prob L.fst
     # it matters a little bit in discriminative trainings
-    utils/make_lexicon_fst_silprob.pl $tmp_dir/lexiconp_silprob_disambig.txt $src_dir/silprob.txt $silphone '#'$ndisambig | \
+    utils/make_lexicon_fst_silprob.pl \
+        $tmp_dir/lexiconp_silprob_disambig.txt \
+        $src_dir/silprob.txt \
+        $silphone '#'$ndisambig | \
         sed 's=\#[0-9][0-9]*=<eps>=g' | \
-        fstcompile --isymbols=$lang_dir/phones.txt --osymbols=$lang_dir/words.txt \
-        --keep_isymbols=false --keep_osymbols=false |   \
-        fstarcsort --sort_type=olabel > $lang_dir/L.fst || exit 1;
+        fstcompile \
+            --isymbols=$lang_dir/phones.txt \
+            --osymbols=$lang_dir/words.txt \
+            --keep_isymbols=false \
+            --keep_osymbols=false |   \
+        fstarcsort \
+            --sort_type=olabel \
+            > $lang_dir/L.fst \
+        || exit 1;
 else
-    utils/make_lexicon_fst.pl --pron-probs $tmp_dir/lexiconp.txt $sil_prob $silphone | \
-        fstcompile --isymbols=$lang_dir/phones.txt --osymbols=$lang_dir/words.txt \
-        --keep_isymbols=false --keep_osymbols=false | \
-        fstarcsort --sort_type=olabel > $lang_dir/L.fst || exit 1;
+    utils/make_lexicon_fst.pl \
+        --pron-probs $tmp_dir/lexiconp.txt \
+        $sil_prob \
+        $silphone | \
+        fstcompile \
+            --isymbols=$lang_dir/phones.txt \
+            --osymbols=$lang_dir/words.txt \
+            --keep_isymbols=false \
+            --keep_osymbols=false | \
+        fstarcsort \
+            --sort_type=olabel \
+            > $lang_dir/L.fst \
+        || exit 1;
 fi
 
 # The file oov.txt contains a word that we will map any OOVs to during

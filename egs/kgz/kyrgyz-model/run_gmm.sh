@@ -50,13 +50,14 @@ fi
 ### STAGES
 ##
 #
-prep_audio_data=1
-prep_data=1
-extract_feats=1
+prep_train_audio=0
+extract_train_feats=0
+compile_Lfst=0
 train_gmm=1
 compile_graph=1
-decode_test=0
-save_model=0
+prep_test_audio=1
+extract_test_feats=1
+decode_test=1
 #
 ##
 ###
@@ -68,9 +69,6 @@ save_model=0
 tot_gauss_mono=500
 num_leaves_tri=500
 tot_gauss_tri=1000
-decode_beam=13
-decode_lattice_beam=7
-decode_max_active_states=700
 num_iters_mono=10
 num_iters_tri=10
 #
@@ -107,7 +105,7 @@ plp_dir=plp_${corpus_name}
 
 
 
-if [ "$prep_audio_data" -eq "1" ]; then
+if [ "$prep_train_audio" -eq "1" ]; then
 
     printf "\n####==========================####\n";
     printf "#### TRAINING AUDIO DATA PREP ####\n";
@@ -122,28 +120,32 @@ fi
 
 
 
-if [ "$prep_data" -eq "1" ]; then
-    
-    printf "\n####========================####\n";
-    printf "#### Create L.fst and G.fst ####\n";
-    printf "####========================####\n\n";
-
-    ./prep_data.sh $input_dir $data_dir
-    
-fi
-
-
-
-if [ "$extract_feats" -eq "1" ]; then
+if [ "$extract_train_feats" -eq "1" ]; then
 
     printf "\n####====================####\n";
     printf "#### FEATURE EXTRACTION ####\n";
     printf "####====================####\n\n";
 
-    ./extract_feats.sh $data_dir/train $plp_dir 
-    
+    ./extract_feats.sh $data_dir/train $plp_dir $num_processors
+   
+    # this file gets checked in another script
+    mkdir -p $exp_dir/log
+    echo $num_processors > $exp_dir/num_jobs
+
 fi
 
+
+
+
+if [ "$compile_Lfst" -eq "1" ]; then
+    
+    printf "\n####==============####\n";
+    printf "#### Create L.fst ####\n";
+    printf "####==============####\n\n";
+
+    ./compile_Lfst.sh $input_dir $data_dir
+    
+fi
 
 
 if [ "$train_gmm" -eq "1" ]; then
@@ -170,9 +172,46 @@ if [ "$compile_graph" -eq "1" ]; then
     printf "#### GRAPH COMPILATION ####\n";
     printf "####===================####\n\n";
 
-    ./compile_graph.sh $data_dir $exp_dir
+    utils/mkgraph.sh \
+        $input_dir \
+        $data_dir \
+        $data_dir/lang_decode \
+        $exp_dir/triphones/graph \
+        exp_org/triphones/tree \
+        exp_org/triphones/final.mdl \
+        || printf "\n####\n#### ERROR: mkgraph.sh \n####\n\n" \
+        || exit 1;
+
+fi
+
+
+
+
+if [ "$prep_test_audio" -eq "1" ]; then
+
+    printf "\n####==========================####\n";
+    printf "#### TESTING AUDIO DATA PREP ####\n";
+    printf "####==========================####\n\n";
+
+    local/prepare_audio_data.sh \
+        /data/downsampled/test \
+        /data/downsampled/transcripts.test \
+        $data_dir \
+        test
+fi
+
+
+
+if [ "$extract_test_feats" -eq "1" ]; then
+
+    printf "\n####====================####\n";
+    printf "#### FEATURE EXTRACTION ####\n";
+    printf "####====================####\n\n";
+
+    ./extract_feats.sh $data_dir/test $plp_dir $num_processors
     
 fi
+
 
 
 
@@ -182,7 +221,17 @@ if [ "$decode_test" -eq "1" ]; then
     printf "#### BEGIN DECODING ####\n";
     printf "####================####\n\n";
 
-    ./test_gmm.sh
+    suffix=${corpus_name}_${run}
+    
+    ./test_gmm.sh \
+        $exp_dir/triphones/graph/HCLG.fst \
+        $exp_dir/triphones/final.mdl \
+        $data_dir/test \
+        $suffix \
+        $num_processors;
+    
+
+
 fi
 
 exit;
