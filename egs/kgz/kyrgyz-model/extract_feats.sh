@@ -53,6 +53,7 @@ steps/compute_cmvn_stats.sh \
 
 utils/fix_data_dir.sh $data_dir
 
+
 echo "$0: splitting feats into $num_jobs subdirs"
 utils/split_data.sh $data_dir $num_jobs || exit 1;
 
