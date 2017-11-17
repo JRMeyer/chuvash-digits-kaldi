@@ -65,8 +65,6 @@ test_dir=${data_dir}/lang_decode
 
 # Preparing language model in $test_dir
 
-rm -rf ${data_dir}/lang_decode
-cp -r ${data_dir}/lang $test_dir
     
 cat ${data_dir}/local/lm.arpa | arpa2fst - | \
     fstprint | utils/eps2disambig.pl | utils/s2eps.pl | \
