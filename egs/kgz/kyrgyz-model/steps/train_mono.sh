@@ -85,7 +85,8 @@ if [ $stage -le -4 ]; then
 
     echo "### Define audio features ###"
 
-    echo $cmvn_opts  > $exp_dir/cmvn_opts # keep track of options to CMVN.
+    mkdir -p $exp_dir
+    echo $cmvn_opts > $exp_dir/cmvn_opts # keep track of options to CMVN.
 
     # the dirs we already split data into
     sdata=$data_dir/split$nj;
