@@ -67,7 +67,7 @@ mkdir -p $exp_dir/log
 echo $nj > $exp_dir/num_jobs
 
 sdata=$data_dir/split$nj;
-split_data.sh $data_dir $nj || exit 1;
+# split_data.sh $data_dir $nj || exit 1;
 
 echo $cmvn_opts  > $exp_dir/cmvn_opts
 
