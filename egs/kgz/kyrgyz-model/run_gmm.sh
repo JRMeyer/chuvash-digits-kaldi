@@ -50,9 +50,9 @@ fi
 ### STAGES
 ##
 #
-prep_train_audio=0
-extract_train_feats=0
-compile_Lfst=0
+prep_train_audio=1
+extract_train_feats=1
+compile_Lfst=1
 train_gmm=1
 compile_graph=1
 prep_test_audio=1
@@ -122,15 +122,11 @@ fi
 
 if [ "$extract_train_feats" -eq "1" ]; then
 
-    printf "\n####====================####\n";
-    printf "#### FEATURE EXTRACTION ####\n";
-    printf "####====================####\n\n";
+    printf "\n####==========================####\n";
+    printf "#### TRAIN FEATURE EXTRACTION ####\n";
+    printf "####==========================####\n\n";
 
     ./extract_feats.sh $data_dir/train $plp_dir $num_processors
-   
-    # this file gets checked in another script
-    mkdir -p $exp_dir/log
-    echo $num_processors > $exp_dir/num_jobs
 
 fi
 
@@ -204,9 +200,9 @@ fi
 
 if [ "$extract_test_feats" -eq "1" ]; then
 
-    printf "\n####====================####\n";
-    printf "#### FEATURE EXTRACTION ####\n";
-    printf "####====================####\n\n";
+    printf "\n####=========================####\n";
+    printf "#### TEST FEATURE EXTRACTION ####\n";
+    printf "####=========================####\n\n";
 
     ./extract_feats.sh $data_dir/test $plp_dir $num_processors
     
