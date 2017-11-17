@@ -27,11 +27,6 @@ prep_data=1
 
 if [ "$prep_data" -eq "1" ]; then
     
-    printf "\n####=================####\n";
-    printf "#### BEGIN DATA PREP ####\n";
-    printf "####=================####\n\n";
-
-    
     echo "### Setup L.fst ###"
     
     for i in lexicon.txt lexicon_nosil.txt phones.txt; do

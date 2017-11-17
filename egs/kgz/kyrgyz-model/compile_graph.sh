@@ -50,10 +50,13 @@ printf "####=========================####\n\n";
 
 echo "### Compile triphone graph in ${exp_dir}/triphones/graph"
 
+
 utils/mkgraph.sh \
-    ${data_dir}/lang_decode \
-    ${exp_dir}/triphones \
-    ${exp_dir}/triphones/graph \
+    $input_dir \
+    $data_dir \
+    $data_dir/lang_decode \
+    $exp_dir/triphones \
+    $exp_dir/triphones/graph \
     || printf "\n####\n#### ERROR: mkgraph.sh \n####\n\n" \
     || exit 1;
 

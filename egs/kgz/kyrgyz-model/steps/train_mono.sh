@@ -79,23 +79,17 @@ for f in \
 done        
 
 
-mkdir -p $exp_dir/log
-echo $nj > $exp_dir/num_jobs
-sdata=$data_dir/split$nj;
-
-# split data if we have new input
-[[ -d $sdata && $data_dir/feats.scp -ot $sdata ]] \
-    || split_data.sh $data_dir $nj \
-    || exit 1;
-
 
 
 if [ $stage -le -4 ]; then
 
-    echo "### Preparing audio features ###"
+    echo "### Define audio features ###"
 
     echo $cmvn_opts  > $exp_dir/cmvn_opts # keep track of options to CMVN.
-    
+
+    # the dirs we already split data into
+    sdata=$data_dir/split$nj;
+
     feats="ark,s,cs:apply-cmvn $cmvn_opts --utt2spk=ark:$sdata/JOB/utt2spk"
     feats="$feats scp:$sdata/JOB/cmvn.scp scp:$sdata/JOB/feats.scp ark:- |"
     feats="$feats add-deltas ark:- ark:- |"
