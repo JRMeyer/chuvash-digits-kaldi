@@ -50,10 +50,10 @@ fi
 ### STAGES
 ##
 #
-prep_train_audio=1
-extract_train_feats=1
-compile_Lfst=1
-train_gmm=1
+prep_train_audio=0
+extract_train_feats=0
+compile_Lfst=0
+train_gmm=0
 compile_graph=1
 prep_test_audio=1
 extract_test_feats=1
@@ -66,11 +66,11 @@ decode_test=1
 ### HYPER-PARAMETERS
 ##
 #
-tot_gauss_mono=500
-num_leaves_tri=500
-tot_gauss_tri=1000
-num_iters_mono=10
-num_iters_tri=10
+tot_gauss_mono=1000
+num_leaves_tri=1000
+tot_gauss_tri=2000
+num_iters_mono=30
+num_iters_tri=30
 #
 ##
 ###
@@ -84,7 +84,6 @@ unknown_word="<unk>"
 unknown_phone="SPOKEN_NOISE"
 silence_phone="SIL"
 input_dir=input_${corpus_name}
-train_audio_dir="${input_dir}/audio"
 config_dir=config
 cmd="utils/run.pl"
 #
@@ -112,8 +111,8 @@ if [ "$prep_train_audio" -eq "1" ]; then
     printf "####==========================####\n\n";
 
     local/prepare_audio_data.sh \
-        /data/downsampled/train \
-        /data/downsampled/transcripts.train \
+        $input_dir/audio\
+        $input_dir/transcripts \
         $data_dir \
         train
 fi
@@ -173,8 +172,8 @@ if [ "$compile_graph" -eq "1" ]; then
         $data_dir \
         $data_dir/lang_decode \
         $exp_dir/triphones/graph \
-        exp_org/triphones/tree \
-        exp_org/triphones/final.mdl \
+        $exp_dir/triphones/tree \
+        $exp_dir/triphones/final.mdl \
         || printf "\n####\n#### ERROR: mkgraph.sh \n####\n\n" \
         || exit 1;
 

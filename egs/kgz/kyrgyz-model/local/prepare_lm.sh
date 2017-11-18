@@ -60,23 +60,29 @@
 
 . path.sh
 
-data_dir=$1
-test_dir=${data_dir}/lang_decode
 
-# Preparing language model in $test_dir
+test_dir=$1
 
+
+# Compile G.fst!
     
-cat ${data_dir}/local/lm.arpa | arpa2fst - | \
+cat $test_dir/lm.arpa | arpa2fst - | \
     fstprint | utils/eps2disambig.pl | utils/s2eps.pl | \
-    fstcompile --isymbols=${test_dir}/words.txt \
-               --osymbols=${test_dir}/words.txt \
+    fstcompile --isymbols=$test_dir/words.txt \
+               --osymbols=$test_dir/words.txt \
                --keep_isymbols=false \
                --keep_osymbols=false | \
     fstrmepsilon | \
     fstarcsort --sort_type=ilabel \
-    > ${test_dir}/G.fst
+    > $test_dir/G.fst
 
-fstisstochastic ${test_dir}/G.fst
+
+
+
+
+# Everything below is only for diagnostic.
+
+fstisstochastic $test_dir/G.fst
       
 # The output of fstisstochastic should be like:
 # 9.14233e-05 -0.259833
@@ -85,22 +91,22 @@ fstisstochastic ${test_dir}/G.fst
 # Because of the <s> fiasco for these particular LMs the first number is not
 # as close to zero as it could be.
 
-# Everything below is only for diagnostic.
-# Checking that G has no cycles with empty words on them (e.g. <s>, </s>);
-# this might cause determinization failure of CLG.
-# #0 is treated as an empty word.
 
 mkdir -p tmpdir.g
 
 awk '{if(NF==1){ printf("0 0 %s %s\n", $1,$1); }} END{print "0 0 #0 #0"; print "0";}' \
-    < ${data_dir}/local/dict/lexicon.txt  >tmpdir.g/select_empty.fst.txt
+    < $test_dir/dict/lexicon.txt  >tmpdir.g/select_empty.fst.txt
+
+# Checking that G has no cycles with empty words on them (e.g. <s>, </s>);
+# this might cause determinization failure of CLG.
+# #0 is treated as an empty word.
 
 fstcompile \
-    --isymbols=${test_dir}/words.txt \
-    --osymbols=${test_dir}/words.txt \
+    --isymbols=$test_dir/words.txt \
+    --osymbols=$test_dir/words.txt \
     tmpdir.g/select_empty.fst.txt | \
     fstarcsort --sort_type=olabel | \
-    fstcompose - ${test_dir}/G.fst \
+    fstcompose - $test_dir/G.fst \
                > tmpdir.g/empty_words.fst
 
 fstinfo tmpdir.g/empty_words.fst | grep cyclic | grep -w 'y' && \
