@@ -51,8 +51,13 @@ model=$6
 # move all info about lexicon (which we needed for training) into
 # new dir for decoding
 cp -r $data_dir/lang $lang_decode_dir
+cp -r $data_dir/local/dict $lang_decode_dir/dict
+cp $input_dir/task.arpabo $lang_decode_dir/lm.arpa
+
+
 
 for f in $lang_decode_dir/L.fst \
+             $lang_decode_dir/lm.arpa \
              $lang_decode_dir/phones.txt \
              $lang_decode_dir/words.txt \
              $lang_decode_dir/phones/silence.csl \
@@ -61,6 +66,8 @@ for f in $lang_decode_dir/L.fst \
              $tree; do
     [ ! -f $f ] && echo "mkgraph.sh: expected $f to exist" && exit 1;
 done
+
+
 
 mkdir -p $graph_dir
 mkdir -p $lang_decode_dir/tmp
@@ -71,13 +78,14 @@ mkdir -p $lang_decode_dir/tmp
 ### Compile G.fst ###
 #####################
 
-
-# move language model
-cp $input_dir/task.arpabo $data_dir/local/lm.arpa
+# this following script should not make reference to the original data_dir, if
+# I want to have an intuitive script. G.fst has nothing to do with training,
+# and if I make a data_decode dir by copying the data_dir, that copying
+# should mean that I should be able to only reference the data_decode dir
 
 # create G.fst
 local/prepare_lm.sh \
-    $data_dir \
+    $lang_decode_dir \
     || printf "\n####\n#### ERROR: prepare_lm.sh\n####\n\n" \
     || exit 1;
 
