@@ -54,10 +54,10 @@ prep_train_audio=1
 extract_train_feats=1
 compile_Lfst=1
 train_gmm=1
-compile_graph=1
-prep_test_audio=1
-extract_test_feats=1
-decode_test=1
+compile_graph=0
+prep_test_audio=0
+extract_test_feats=0
+decode_test=0
 #
 ##
 ###
@@ -66,8 +66,8 @@ decode_test=1
 ### HYPER-PARAMETERS
 ##
 #
-tot_gauss_mono=1000
-num_leaves_tri=1000
+tot_gauss_mono=500
+num_leaves_tri=750
 tot_gauss_tri=2000
 num_iters_mono=40
 num_iters_tri=40
