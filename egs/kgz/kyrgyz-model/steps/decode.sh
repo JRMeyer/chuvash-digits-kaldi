@@ -9,7 +9,7 @@ transform_dir=   # this option won't normally be used, but it can be used if you
 iter=
 model= # You can specify the model to use (e.g. if you want to use the .alimdl)
 stage=0
-nj=4
+nj=1
 cmd=run.pl
 max_active=7000
 beam=12.0
@@ -26,7 +26,11 @@ skip_scoring=false
 [ -f ./path.sh ] && . ./path.sh; # source the path.
 . parse_options.sh || exit 1;
 
-if [ $# != 5 ]; then
+
+echo $0 $#
+
+
+if [ $# != 6 ]; then
     echo "Usage: steps/decode.sh [options] <graph-dir> <data-dir> <decode-dir> <unknown_phone> <silence_phone>"
     echo "... where <decode-dir> is assumed to be a sub-directory of the directory"
     echo " where the model is."
@@ -51,44 +55,34 @@ if [ $# != 5 ]; then
 fi
 
 
-graph_dir=$1
-data_dir=$2
-decode_dir=$3
-unknown_phone=$4
-silence_phone=$5
-# The model directory is one level up from decoding directory.
-model_dir=`dirname $decode_dir`;
+graph=$1
+model=$2
+data_dir=$3
+decode_dir=$4
+unknown_phone=$5
+silence_phone=$6
+
+graph_dir=`dirname $graph`
+model_dir=`dirname $model`
 split_data_dir=$data_dir/split$nj;
 
-mkdir -p $decode_dir/log
-
-[[ -d $split_data_dir && $data_dir/feats.scp -ot $split_data_dir ]] || \
-    split_data.sh $data_dir $nj || exit 1;
-
-echo $nj > $decode_dir/num_jobs
-
-# if --model <mdl> was not specified on the command line...
-if [ -z "$model" ]; then
-    if [ -z $iter ]; then model=$model_dir/final.mdl; 
-    else model=$model_dir/$iter.mdl; fi
-fi
-
-if [ $(basename $model) != final.alimdl ] ; then
-    if [ -f $(dirname $model)/final.alimdl ] ; then
-        echo -e '\n\n' 
-        echo 'WARNING: $0 Speaker independent system decoding with SAT model!' 
-        echo 'WARNING: $0 This is OK if you know what you are doing...' 
-        echo -e '\n\n'
-    fi
-fi
-
-for f in $split_data_dir/1/feats.scp $split_data_dir/1/cmvn.scp $model \
-    $graph_dir/HCLG.fst; do
+# Check for feats + model + graph
+for f in $split_data_dir/1/feats.scp \
+             $split_data_dir/1/cmvn.scp \
+             $model \
+             $graph; do
     [ ! -f $f ] && echo "decode.sh: no such file $f" && exit 1;
 done
 
-if [ -f $model_dir/final.mat ]; then feat_type=lda; else feat_type=delta; fi
+
+if [ -f $model_dir/final.mat ]; then
+    feat_type=lda;
+else
+    feat_type=delta;
+fi
+
 echo "decode.sh: feature type is $feat_type";
+
 
 splice_opts=`cat $model_dir/splice_opts 2>/dev/null` # frame-splicing options.
 cmvn_opts=`cat $model_dir/cmvn_opts 2>/dev/null`
@@ -114,8 +108,12 @@ case $feat_type in
     *) echo "Invalid feature type $feat_type" && exit 1;
 esac
 
-if [ ! -z "$transform_dir" ]; then # add transforms to features...
+
+ # add transforms to features if we transformed in training
+if [ ! -z "$transform_dir" ]; then
+    
     echo "Using fMLLR transforms from $transform_dir"
+
     [ ! -f $transform_dir/trans.1 ] && \
         echo "Expected $transform_dir/trans.1 to exist."
     [ ! -s $transform_dir/num_jobs ] && \
@@ -143,11 +141,13 @@ if [ ! -z "$transform_dir" ]; then # add transforms to features...
     fi
 fi
 
+
 if [ $stage -le 0 ]; then
     if [ -f "$graph_dir/num_pdfs" ]; then
         [ "`cat $graph_dir/num_pdfs`" -eq `am-info --print-args=false $model | grep pdfs | awk '{print $NF}'` ] \
             || { echo "Mismatch in number of pdfs with $model"; exit 1; }
     fi
+
     $cmd --num-threads $num_threads JOB=1:$nj $decode_dir/log/decode.JOB.log \
          gmm-latgen-faster$thread_string \
          --max-active=$max_active \
@@ -157,7 +157,7 @@ if [ $stage -le 0 ]; then
          --allow-partial=true \
          --word-symbol-table=$graph_dir/words.txt \
          $model \
-         $graph_dir/HCLG.fst \
+         $graph \
          "$feats" \
          "ark:|gzip -c > $decode_dir/lat.JOB.gz" \
         || exit 1;
