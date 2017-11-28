@@ -26,7 +26,7 @@ for x in `seq 5`; do
     [ "$1" == "--self-loop-scale" ] && loopscale=$2 && shift 2;
 done
 
-if [ $# != 3 ]; then
+if [ $# != 6 ]; then
     echo "Usage: utils/mkgraph.sh [options] <lang-dir> <model-dir> <graphdir>"
     echo "e.g.: utils/mkgraph.sh data/lang_decode exp/tri1/ exp/tri1/graph"
     echo " Options:"
@@ -37,26 +37,57 @@ fi
 
 if [ -f path.sh ]; then . ./path.sh; fi
 
-lang_dir=$1
-tree=$2/tree
-model=$2/final.mdl
-graph_dir=$3
 
 
-for f in $lang_dir/L.fst \
-             $lang_dir/G.fst \
-             $lang_dir/phones.txt \
-             $lang_dir/words.txt \
-             $lang_dir/phones/silence.csl \
-             $lang_dir/phones/disambig.int \
+input_dir=$1
+data_dir=$2
+lang_decode_dir=$3
+graph_dir=$4
+tree=$5
+model=$6
+
+
+
+# move all info about lexicon (which we needed for training) into
+# new dir for decoding
+cp -r $data_dir/lang $lang_decode_dir
+cp -r $data_dir/local/dict $lang_decode_dir/dict
+cp $input_dir/task.arpabo $lang_decode_dir/lm.arpa
+
+
+
+for f in $lang_decode_dir/L.fst \
+             $lang_decode_dir/lm.arpa \
+             $lang_decode_dir/phones.txt \
+             $lang_decode_dir/words.txt \
+             $lang_decode_dir/phones/silence.csl \
+             $lang_decode_dir/phones/disambig.int \
              $model \
              $tree; do
     [ ! -f $f ] && echo "mkgraph.sh: expected $f to exist" && exit 1;
 done
 
-mkdir -p $graph_dir
-mkdir -p $lang_dir/tmp
 
+
+mkdir -p $graph_dir
+mkdir -p $lang_decode_dir/tmp
+
+
+
+#####################
+### Compile G.fst ###
+#####################
+
+# this following script should not make reference to the original data_dir, if
+# I want to have an intuitive script. G.fst has nothing to do with training,
+# and if I make a data_decode dir by copying the data_dir, that copying
+# should mean that I should be able to only reference the data_decode dir
+
+# create G.fst
+local/prepare_lm.sh \
+    $lang_decode_dir \
+    || printf "\n####\n#### ERROR: prepare_lm.sh\n####\n\n" \
+    || exit 1;
 
 
 ##########
@@ -67,21 +98,21 @@ echo "### compile LG.fst ###"
 
 # If LG.fst does not exist or is older than its sources, make it...
 
-if [[ ! -s $lang_dir/tmp/LG.fst || $lang_dir/tmp/LG.fst -ot $lang_dir/G.fst || \
-    $lang_dir/tmp/LG.fst -ot $lang_dir/L_disambig.fst ]]; then
+if [[ ! -s $lang_decode_dir/tmp/LG.fst || $lang_decode_dir/tmp/LG.fst -ot $lang_decode_dir/G.fst || \
+    $lang_decode_dir/tmp/LG.fst -ot $lang_decode_dir/L_disambig.fst ]]; then
 
     fsttablecompose \
-        $lang_dir/L_disambig.fst \
-        $lang_dir/G.fst | \
+        $lang_decode_dir/L_disambig.fst \
+        $lang_decode_dir/G.fst | \
         fstdeterminizestar --use-log=true | \
         fstminimizeencoded | \
         fstpushspecial | \
         fstarcsort --sort_type=ilabel \
-        > $lang_dir/tmp/LG.fst \
+        > $lang_decode_dir/tmp/LG.fst \
         || exit 1;
 
     fstisstochastic \
-        $lang_dir/tmp/LG.fst \
+        $lang_decode_dir/tmp/LG.fst \
         || echo "[info]: LG not stochastic."
 fi
 
@@ -95,15 +126,15 @@ fi
 
 echo "### compile CLG.fst ###"
 
-clg=$lang_dir/tmp/CLG_${N}_${P}.fst
+clg=$lang_decode_dir/tmp/CLG_${N}_${P}.fst
 
-if [[ ! -s $clg || $clg -ot $lang_dir/tmp/LG.fst ]]; then
+if [[ ! -s $clg || $clg -ot $lang_decode_dir/tmp/LG.fst ]]; then
 
     fstcomposecontext --context-size=$N --central-position=$P \
-        --read-disambig-syms=$lang_dir/phones/disambig.int \
-        --write-disambig-syms=$lang_dir/tmp/disambig_ilabels_${N}_${P}.int \
-        $lang_dir/tmp/ilabels_${N}_${P} \
-        < $lang_dir/tmp/LG.fst | \
+        --read-disambig-syms=$lang_decode_dir/phones/disambig.int \
+        --write-disambig-syms=$lang_decode_dir/tmp/disambig_ilabels_${N}_${P}.int \
+        $lang_decode_dir/tmp/ilabels_${N}_${P} \
+        < $lang_decode_dir/tmp/LG.fst | \
         fstarcsort --sort_type=ilabel \
         > $clg;
 
@@ -121,12 +152,12 @@ fi
 echo "### compile Ha.fst ###"
 
 if [[ ! -s $graph_dir/Ha.fst || $graph_dir/Ha.fst -ot $model  \
-            || $graph_dir/Ha.fst -ot $lang_dir/tmp/ilabels_${N}_${P} ]]; then
+            || $graph_dir/Ha.fst -ot $lang_decode_dir/tmp/ilabels_${N}_${P} ]]; then
 
     make-h-transducer \
         --disambig-syms-out=$graph_dir/disambig_tid.int \
         --transition-scale=$tscale \
-        $lang_dir/tmp/ilabels_${N}_${P} \
+        $lang_decode_dir/tmp/ilabels_${N}_${P} \
         $tree \
         $model \
         > $graph_dir/Ha.fst \
@@ -189,19 +220,19 @@ fi
 
 
 # keep a copy of the lexicon and a list of silence phones with HCLG...
-# this means we can decode without reference to the $lang_dir directory.
+# this means we can decode without reference to the $lang_decode_dir directory.
 
 
-cp $lang_dir/words.txt $graph_dir/ || exit 1;
+cp $lang_decode_dir/words.txt $graph_dir/ || exit 1;
 mkdir -p $graph_dir/phones
 # might be needed for ctm scoring
-cp $lang_dir/phones/word_boundary.* $graph_dir/phones/ 2>/dev/null
-cp $lang_dir/phones/align_lexicon.* $graph_dir/phones/ 2>/dev/null
+cp $lang_decode_dir/phones/word_boundary.* $graph_dir/phones/ 2>/dev/null
+cp $lang_decode_dir/phones/align_lexicon.* $graph_dir/phones/ 2>/dev/null
 
-cp $lang_dir/phones/disambig.{txt,int} $graph_dir/phones/ 2> /dev/null
-cp $lang_dir/phones/silence.csl $graph_dir/phones/ || exit 1;
+cp $lang_decode_dir/phones/disambig.{txt,int} $graph_dir/phones/ 2> /dev/null
+cp $lang_decode_dir/phones/silence.csl $graph_dir/phones/ || exit 1;
 # ignore the error if it's not there.
-cp $lang_dir/phones.txt $graph_dir/ 2> /dev/null 
+cp $lang_decode_dir/phones.txt $graph_dir/ 2> /dev/null 
 
 # to make const fst:
 # fstconvert --fst_type=const $graph_dir/HCLG.fst $graph_dir/HCLG_c.fst

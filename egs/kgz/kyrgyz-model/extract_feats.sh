@@ -5,18 +5,17 @@
 # INPUT:
 
 cmd=utils/run.pl
-num_jobs=`nproc`
 
 data_dir=$1
 feat_dir=$2
+num_jobs=$3
 
 
-
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 3 ]; then
     echo "ERROR: $0"
     echo ""
-    echo "USAGE: $0 <data_dir> <feat_dir>"
-    echo "     : $0 data_org/train data_org/plp"
+    echo "USAGE: $0 <data_dir> <feat_dir> <num_jobs>"
+    echo "     : $0 data_org/train data_org/plp 4"
     exit 1
 fi
 
@@ -53,6 +52,12 @@ steps/compute_cmvn_stats.sh \
     || exit 1;
 
 utils/fix_data_dir.sh $data_dir
+
+
+echo "$0: splitting feats into $num_jobs subdirs"
+utils/split_data.sh $data_dir $num_jobs || exit 1;
+
+
 
 
 
