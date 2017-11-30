@@ -39,7 +39,6 @@
 
 
 cmd=utils/run.pl
-num_processors=`nproc`
 train_monophones=1
 train_triphones=1
 adapt_models=0
@@ -48,7 +47,7 @@ save_model=0
 
 
 
-if [ "$#" -ne 7 ]; then
+if [ "$#" -ne 8 ]; then
     echo "ERROR: $0"
     echo "missing args"
     exit 1
@@ -63,7 +62,7 @@ num_iters_tri=$4
 tot_gauss_tri=$5
 num_leaves_tri=$6
 exp_dir=$7
-
+num_processors=$8
 
 
 

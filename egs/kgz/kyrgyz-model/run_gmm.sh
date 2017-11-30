@@ -66,11 +66,11 @@ decode_test=1
 ### HYPER-PARAMETERS
 ##
 #
-tot_gauss_mono=500
-num_leaves_tri=400
-tot_gauss_tri=1000
-num_iters_mono=10
-num_iters_tri=10
+tot_gauss_mono=1000
+num_leaves_tri=1000
+tot_gauss_tri=2000
+num_iters_mono=40
+num_iters_tri=40
 #
 ##
 ###
@@ -125,7 +125,10 @@ if [ "$extract_train_feats" -eq "1" ]; then
     printf "#### TRAIN FEATURE EXTRACTION ####\n";
     printf "####==========================####\n\n";
 
-    ./extract_feats.sh $data_dir/train $plp_dir $num_processors
+    ./extract_feats.sh \
+        $data_dir/train \
+        $plp_dir \
+        $num_processors
 
 fi
 
@@ -138,7 +141,9 @@ if [ "$compile_Lfst" -eq "1" ]; then
     printf "#### Create L.fst ####\n";
     printf "####==============####\n\n";
 
-    ./compile_Lfst.sh $input_dir $data_dir
+    ./compile_Lfst.sh \
+        $input_dir \
+        $data_dir
     
 fi
 
@@ -156,7 +161,8 @@ if [ "$train_gmm" -eq "1" ]; then
         $num_iters_tri \
         $tot_gauss_tri \
         $num_leaves_tri \
-        $exp_dir;
+        $exp_dir \
+        $num_processors;
 fi
 
 
@@ -203,7 +209,10 @@ if [ "$extract_test_feats" -eq "1" ]; then
     printf "#### TEST FEATURE EXTRACTION ####\n";
     printf "####=========================####\n\n";
 
-    ./extract_feats.sh $data_dir/test $plp_dir $num_processors
+    ./extract_feats.sh \
+        $data_dir/test \
+        $plp_dir \
+        $num_processors
     
 fi
 
@@ -225,8 +234,6 @@ if [ "$decode_test" -eq "1" ]; then
         $suffix \
         $num_processors;
     
-
-
 fi
 
 exit;
