@@ -85,9 +85,15 @@ if [ 1 ]; then
     printf "#### END DECODING ####\n";
     printf "####==============####\n\n";
 
-    echo "num_iters_mono=${num_iters_mono}" >> WER_triphones_${suffix}.txt
-    echo "num_iters_tri=${num_iters_tri}" >> WER_triphones_${suffix}.txt
-    echo "Language Model=" >> WER_triphones_${suffix}.txt
+    echo "###"
+    echo "graph = $graph" >> WER_triphones_${suffix}.txt
+
+    echo "###"
+    echo "acoustic model = $model" >> WER_triphones_${suffix}.txt
+    ../../../src/gmmbin/gmm-info $model >> WER_triphones_${suffix}.txt
+    
+    echo "###"
+    echo "test dir = $test_dir" >> WER_triphones_${suffix}.txt
     
 fi
 
