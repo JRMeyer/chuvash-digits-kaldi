@@ -48,6 +48,7 @@ set -e
 . ./path.sh
 . ./utils/parse_options.sh
 
+num_epochs=2
 
 lang_list=($1)
 # this list of names 'mono' or 'ali' will
@@ -202,7 +203,7 @@ if [ "$train_nnet" -eq "1" ]; then
     steps/nnet3/train_raw_dnn.py \
         --stage=-5 \
         --cmd="$cmd" \
-        --trainer.num-epochs 10 \
+        --trainer.num-epochs $num_epochs \
         --trainer.optimization.num-jobs-initial=1 \
         --trainer.optimization.num-jobs-final=1 \
         --trainer.optimization.initial-effective-lrate=0.0015 \
