@@ -22,11 +22,16 @@ if [ "$#" -ne 2 ]; then
 fi
 
 
-echo "### Setup L.fst ###"
+echo "$0: Looking for lexicon files in $input_dir"
 
-for i in lexicon.txt lexicon_nosil.txt phones.txt; do
+for i in lexicon.txt lexicon_nosil.txt; do
     LC_ALL=C sort -i $input_dir/$i -o $input_dir/$i;
 done;
+
+
+echo "$0: Extracting phonemes from $input_dir/lexicon.txt and saving them to $input_dir/phones.txt"
+cut -d' ' -f2- $input_dir/lexicon.txt | grep -o -E '\w+' | LC_ALL=C sort -u > $input_dir/phones.txt
+
 
 # move lexicon files
 local/prepare_dict.sh \
