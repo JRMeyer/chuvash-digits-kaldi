@@ -1,4 +1,0 @@
-%WER 73.95 [ 758 / 1025, 47 ins, 93 del, 618 sub ] data_org/test/decode/wer_11
-num_iters_mono=
-num_iters_tri=
-Language Model=
