@@ -48,7 +48,6 @@ set -e
 . ./path.sh
 . ./utils/parse_options.sh
 
-num_epochs=2
 
 lang_list=($1)
 # this list of names 'mono' or 'ali' will
@@ -57,7 +56,8 @@ lang_list=($1)
 typo_list=($2)
 lang2weight=$3
 hidden_dim=$4
-run=$5
+num_epochs=$5
+run=$6
 
 cmd="utils/run.pl"
 
@@ -183,7 +183,7 @@ if [ "$make_egs" -eq "1" ]; then
         
     steps/nnet3/multilingual/combine_egs.sh \
         --cmd "$cmd" \
-        --samples-per-iter 8000 \
+        --samples-per-iter 10000 \
         --lang2weight $lang2weight \
         $num_langs \
         ${multi_egs_dirs[@]} \
@@ -209,7 +209,7 @@ if [ "$train_nnet" -eq "1" ]; then
         --trainer.optimization.initial-effective-lrate=0.0015 \
         --trainer.optimization.final-effective-lrate=0.00015 \
         --trainer.optimization.minibatch-size=256,128 \
-        --trainer.samples-per-iter=8000 \
+        --trainer.samples-per-iter=10000 \
         --trainer.max-param-change=2.0 \
         --trainer.srand=0 \
         --feat.cmvn-opts="--norm-means=false --norm-vars=false" \
@@ -218,7 +218,7 @@ if [ "$train_nnet" -eq "1" ]; then
         --use-dense-targets false \
         --targets-scp ${multi_ali_dirs[0]} \
         --cleanup.remove-egs true \
-        --use-gpu false \
+        --use-gpu true \
         --dir=$exp_dir  \
         || exit 1;
     
@@ -298,7 +298,7 @@ if [ "$decode_test" -eq "1" ]; then
     echo "### decoding with 4 jobs, unigram LM ###"
     
     steps/nnet3/decode.sh \
-        --nj 4 \
+        --nj `nproc` \
         --cmd $cmd \
         --max-active 600 \
         --min-active 200 \
