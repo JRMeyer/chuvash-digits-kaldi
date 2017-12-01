@@ -110,6 +110,23 @@ if [ "$prep_train_audio" -eq "1" ]; then
     printf "#### TRAINING AUDIO DATA PREP ####\n";
     printf "####==========================####\n\n";
 
+    # since for multitask learning scripts, I can't have different labels
+    # for one audio file path, I make softlinks here to audio files and
+
+    cwd=`pwd`
+    cd $input_dir/audio
+    for i in /data/downsampled/train/*.wav; do
+        ln -s $i ${corpus_name}_${i##*/};
+    done
+    cd $cwd
+
+    while read line; do
+        echo "${corpus_name}_$line" >> $input_dir/transcripts
+    done</data/downsampled/transcripts.train
+
+    #
+    #
+    
     local/prepare_audio_data.sh \
         $input_dir/audio\
         $input_dir/transcripts \
