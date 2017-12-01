@@ -67,10 +67,10 @@ decode_test=1
 ##
 #
 tot_gauss_mono=1000
-num_leaves_tri=1000
+num_leaves_tri=900
 tot_gauss_tri=2000
-num_iters_mono=40
-num_iters_tri=40
+num_iters_mono=50
+num_iters_tri=50
 #
 ##
 ###
