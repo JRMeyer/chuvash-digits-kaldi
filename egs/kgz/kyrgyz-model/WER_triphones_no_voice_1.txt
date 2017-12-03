@@ -1,0 +1,10 @@
+%WER 59.02 [ 605 / 1025, 108 ins, 19 del, 478 sub ] data_no_voice/test/decode/wer_10
+graph = exp_no_voice/triphones/graph/HCLG.fst
+acoustic model = exp_no_voice/triphones/final.mdl
+number of phones 25
+number of pdfs 714
+number of transition-ids 1528
+number of transition-states 760
+feature dimension 39
+number of gaussians 2007
+test dir = data_no_voice/test
