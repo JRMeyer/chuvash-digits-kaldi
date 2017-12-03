@@ -226,7 +226,6 @@ if [ "$train_nnet" -eq "1" ]; then
     echo "### END TRAIN NNET ###"
     echo "### ============== ###"
 
-    utils/format_accuracy_for_plot.sh "exp/nnet3/multitask/log" "ACC_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt";
 fi
 
 
@@ -319,6 +318,9 @@ if [ "$decode_test" -eq "1" ]; then
         cat_langs="${cat_langs}_${lang_list[$i]}"
         cat_typos="${cat_typos}_${typo_list[$i]}"
     done
+
+    # Get training ACC in right format for plotting
+    utils/format_accuracy_for_plot.sh "exp/nnet3/multitask/log" "ACC_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt";
     
     for x in ${decode_dir}*; do
         [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh > WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
