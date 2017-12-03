@@ -1,1 +1,0 @@
-%WER 27.82 [ 1472 / 5292, 183 ins, 244 del, 1045 sub ] exp_libri/triphones/decode_test/wer_11
