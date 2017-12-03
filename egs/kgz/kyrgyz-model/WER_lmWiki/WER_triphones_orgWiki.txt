@@ -1,1 +1,0 @@
-%WER 70.86 [ 625 / 882, 37 ins, 79 del, 509 sub ] exp_orgWiki/triphones/decode_test/wer_11
