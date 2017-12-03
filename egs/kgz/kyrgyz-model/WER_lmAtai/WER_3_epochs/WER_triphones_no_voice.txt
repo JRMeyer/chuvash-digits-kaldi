@@ -1,1 +1,0 @@
-%WER 4.21 [ 39 / 927, 13 ins, 2 del, 24 sub ] exp_no_voice/triphones/decode_test/wer_11
