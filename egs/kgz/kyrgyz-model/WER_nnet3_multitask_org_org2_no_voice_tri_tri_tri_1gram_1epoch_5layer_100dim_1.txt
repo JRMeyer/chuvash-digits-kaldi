@@ -1,4 +1,4 @@
-%WER 51.41 [ 527 / 1025, 84 ins, 38 del, 405 sub ] exp/nnet3/multitask/decode/wer_9
+%WER 94.44 [ 968 / 1025, 1 ins, 428 del, 539 sub ] exp/nnet3/multitask/decode/wer_9
 test_data_dir=data_org/test
 graph_dir=exp_org/triphones/graph
 decode_dir=exp/nnet3/multitask/decode
@@ -19,5 +19,14 @@ final_model=exp/nnet3/multitask/org/final_adj.mdl
     data_dir= data/org2/train
     ali_dir= exp/org2/tri_ali
     egs_dir= exp/org2/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= no_voice
+    num_targets= 714
+    data_dir= data/no_voice/train
+    ali_dir= exp/no_voice/tri_ali
+    egs_dir= exp/no_voice/nnet3/egs
     ###### END LANGUAGE INFO ######
     
