@@ -24554,3 +24554,223 @@ steps/nnet3/multilingual/combine_egs.sh: Finished preparing multilingual trainin
 2017-12-02 09:18:17,461 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 1, learning rate is 0.00149521061012.
 2017-12-02 09:18:21,488 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 2)
 2017-12-02 09:18:21,497 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 2, learning rate is 0.00149043651242.
+2017-12-02 09:18:26,195 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 3)
+2017-12-02 09:18:26,214 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 3, learning rate is 0.00148567765805.
+2017-12-02 09:18:30,790 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 4)
+2017-12-02 09:18:30,810 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 4, learning rate is 0.00148093399836.
+2017-12-02 09:18:36,153 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 5)
+2017-12-02 09:18:36,175 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 5, learning rate is 0.00147620548483.
+2017-12-02 09:18:42,301 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 6)
+2017-12-02 09:18:42,336 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 6, learning rate is 0.00147149206909.
+2017-12-02 09:18:48,576 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 7)
+2017-12-02 09:18:48,610 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 7, learning rate is 0.00146679370294.
+2017-12-02 09:18:54,115 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 8)
+2017-12-02 09:18:54,147 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 8, learning rate is 0.00146211033833.
+2017-12-02 09:18:59,157 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 9)
+2017-12-02 09:18:59,182 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 9, learning rate is 0.00145744192737.
+2017-12-02 09:19:05,348 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 10)
+2017-12-02 09:19:05,395 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 10, learning rate is 0.00145278842229.
+2017-12-02 09:19:10,814 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 11)
+2017-12-02 09:19:10,848 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 11, learning rate is 0.00144814977551.
+2017-12-02 09:19:16,728 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 12)
+2017-12-02 09:19:16,759 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 12, learning rate is 0.0014435259396.
+2017-12-02 09:19:21,726 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 13)
+2017-12-02 09:19:21,751 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 13, learning rate is 0.00143891686725.
+2017-12-02 09:19:27,434 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 14)
+2017-12-02 09:19:27,467 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 14, learning rate is 0.00143432251133.
+2017-12-02 09:19:32,607 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 15)
+2017-12-02 09:19:32,638 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 15, learning rate is 0.00142974282485.
+2017-12-02 09:19:38,452 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 16)
+2017-12-02 09:19:38,483 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 16, learning rate is 0.00142517776098.
+2017-12-02 09:19:43,919 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 17)
+2017-12-02 09:19:43,966 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 17, learning rate is 0.00142062727302.
+2017-12-02 09:19:49,550 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 18)
+2017-12-02 09:19:49,644 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 18, learning rate is 0.00141609131443.
+2017-12-02 09:19:55,304 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 19)
+2017-12-02 09:19:55,335 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 19, learning rate is 0.00141156983882.
+2017-12-02 09:20:01,407 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 20)
+2017-12-02 09:20:01,439 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 20, learning rate is 0.00140706279996.
+2017-12-02 09:20:07,516 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 21)
+2017-12-02 09:20:07,559 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 21, learning rate is 0.00140257015174.
+2017-12-02 09:20:12,805 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 22)
+2017-12-02 09:20:12,836 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 22, learning rate is 0.00139809184821.
+2017-12-02 09:20:17,981 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 23)
+2017-12-02 09:20:18,003 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 23, learning rate is 0.00139362784358.
+2017-12-02 09:20:23,361 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 24)
+2017-12-02 09:20:23,395 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 24, learning rate is 0.00138917809219.
+2017-12-02 09:20:29,149 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 25)
+2017-12-02 09:20:29,165 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 25, learning rate is 0.00138474254853.
+2017-12-02 09:20:35,051 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 26)
+2017-12-02 09:20:35,060 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 26, learning rate is 0.00138032116724.
+2017-12-02 09:20:40,532 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 27)
+2017-12-02 09:20:40,567 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 27, learning rate is 0.00137591390308.
+2017-12-02 09:20:46,703 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 28)
+2017-12-02 09:20:46,731 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 28, learning rate is 0.00137152071101.
+2017-12-02 09:20:52,555 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 29)
+2017-12-02 09:20:52,590 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 29, learning rate is 0.00136714154607.
+2017-12-02 09:20:58,310 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 30)
+2017-12-02 09:20:58,343 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 30, learning rate is 0.00136277636348.
+2017-12-02 09:21:03,151 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 31)
+2017-12-02 09:21:03,179 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 31, learning rate is 0.0013584251186.
+2017-12-02 09:21:08,623 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 32)
+2017-12-02 09:21:08,652 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 32, learning rate is 0.00135408776692.
+2017-12-02 09:21:14,249 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 33)
+2017-12-02 09:21:14,285 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 33, learning rate is 0.00134976426409.
+2017-12-02 09:21:20,075 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 34)
+2017-12-02 09:21:20,099 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 34, learning rate is 0.00134545456589.
+2017-12-02 09:21:25,652 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 35)
+2017-12-02 09:21:25,731 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 35, learning rate is 0.00134115862824.
+2017-12-02 09:21:31,109 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 36)
+2017-12-02 09:21:31,134 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 36, learning rate is 0.0013368764072.
+2017-12-02 09:21:36,909 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 37)
+2017-12-02 09:21:36,947 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 37, learning rate is 0.00133260785898.
+2017-12-02 09:21:43,401 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 38)
+2017-12-02 09:21:43,423 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 38, learning rate is 0.00132835293992.
+2017-12-02 09:21:48,824 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 39)
+2017-12-02 09:21:48,855 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 39, learning rate is 0.0013241116065.
+2017-12-02 09:21:53,814 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 40)
+2017-12-02 09:21:53,849 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 40, learning rate is 0.00131988381535.
+2017-12-02 09:21:59,473 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 41)
+2017-12-02 09:21:59,499 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 41, learning rate is 0.00131566952323.
+2017-12-02 09:22:05,148 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 42)
+2017-12-02 09:22:05,187 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 42, learning rate is 0.00131146868703.
+2017-12-02 09:22:10,657 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 43)
+2017-12-02 09:22:10,682 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 43, learning rate is 0.0013072812638.
+2017-12-02 09:22:16,404 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 44)
+2017-12-02 09:22:16,459 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 44, learning rate is 0.0013031072107.
+2017-12-02 09:22:22,159 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 45)
+2017-12-02 09:22:22,196 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 45, learning rate is 0.00129894648504.
+2017-12-02 09:22:27,645 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 46)
+2017-12-02 09:22:27,654 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 46, learning rate is 0.00129479904428.
+2017-12-02 09:22:33,185 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 47)
+2017-12-02 09:22:33,223 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 47, learning rate is 0.00129066484599.
+2017-12-02 09:22:38,763 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 48)
+2017-12-02 09:22:38,791 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 48, learning rate is 0.00128654384789.
+2017-12-02 09:22:44,327 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 49)
+2017-12-02 09:22:44,376 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 49, learning rate is 0.00128243600783.
+2017-12-02 09:22:49,838 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 50)
+2017-12-02 09:22:49,862 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 50, learning rate is 0.00127834128381.
+2017-12-02 09:22:55,599 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 51)
+2017-12-02 09:22:55,627 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 51, learning rate is 0.00127425963394.
+2017-12-02 09:23:01,101 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 52)
+2017-12-02 09:23:01,132 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 52, learning rate is 0.00127019101648.
+2017-12-02 09:23:06,648 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 53)
+2017-12-02 09:23:06,683 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 53, learning rate is 0.00126613538981.
+2017-12-02 09:23:12,921 [steps/libs/nnet3/train/frame_level_objf/common.py:189 - train_one_iteration - INFO ] Training neural net (pass 54)
+2017-12-02 09:23:12,954 [steps/libs/nnet3/train/frame_level_objf/common.py:260 - train_one_iteration - INFO ] On iteration 54, learning rate is 0.00126209271247.
+2017-12-02 09:23:18,178 [steps/libs/common.py:176 - background_command_waiter - WARNING ] Command exited with status -2:  utils/run.pl exp/nnet3/multitask/log/compute_prob_valid.52.log                 nnet3-compute-prob "exp/nnet3/multitask/52.raw"                 "ark,bg:nnet3-copy-egs --outputs=ark:exp/nnet3/multitask/egs/valid_diagnostic.output.ark --weights=ark:exp/nnet3/multitask/egs/valid_diagnostic.weight.ark                     scp:exp/nnet3/multitask/egs/valid_diagnostic.scp ark:- |                     nnet3-merge-egs --minibatch-size=1:64 ark:-                     ark:- |" 
+2017-12-02 09:23:18,178 [steps/libs/common.py:176 - background_command_waiter - WARNING ] Command exited with status -2: utils/run.pl exp/nnet3/multitask/log/compute_prob_train.52.log                 nnet3-compute-prob "exp/nnet3/multitask/52.raw"                 "ark,bg:nnet3-copy-egs --outputs=ark:exp/nnet3/multitask/egs/train_diagnostic.output.ark --weights=ark:exp/nnet3/multitask/egs/train_diagnostic.weight.ark                     scp:exp/nnet3/multitask/egs/train_diagnostic.scp ark:- |                     nnet3-merge-egs --minibatch-size=1:64 ark:-                     ark:- |" 
+2017-12-02 09:23:18,180 [steps/libs/common.py:170 - background_command_waiter - ERROR ] Command exited with status -2: utils/run.pl --gpu 1 exp/nnet3/multitask/log/train.54.1.log                     nnet3-train  --read-cache=exp/nnet3/multitask/cache.54 --write-cache=exp/nnet3/multitask/cache.55                       --print-interval=10                     --momentum=0.0                     --max-param-change=2.0                     --backstitch-training-scale=0.0                     --backstitch-training-interval=1                     --srand=54                      "nnet3-copy --learning-rate=0.00126209271247 --scale=1.0 exp/nnet3/multitask/54.raw - |" "ark,bg:nnet3-copy-egs --frame=7 --outputs=ark:exp/nnet3/multitask/egs/egs.output.1.ark --weights=ark:exp/nnet3/multitask/egs/egs.weight.1.ark             scp:exp/nnet3/multitask/egs/egs.1.scp ark:- |             nnet3-shuffle-egs --buffer-size=5000             --srand=54 ark:- ark:- |              nnet3-merge-egs --minibatch-size=256,128 ark:- ark:- |"                     exp/nnet3/multitask/55.1.raw
+2017-12-02 09:23:18,185 [steps/libs/common.py:176 - background_command_waiter - WARNING ] Command exited with status -2: utils/run.pl exp/nnet3/multitask/log/compute_prob_train.54.log                 nnet3-compute-prob "exp/nnet3/multitask/54.raw"                 "ark,bg:nnet3-copy-egs --outputs=ark:exp/nnet3/multitask/egs/train_diagnostic.output.ark --weights=ark:exp/nnet3/multitask/egs/train_diagnostic.weight.ark                     scp:exp/nnet3/multitask/egs/train_diagnostic.scp ark:- |                     nnet3-merge-egs --minibatch-size=1:64 ark:-                     ark:- |" 
+2017-12-02 09:23:18,186 [steps/libs/common.py:176 - background_command_waiter - WARNING ] Command exited with status -2:  utils/run.pl exp/nnet3/multitask/log/compute_prob_valid.53.log                 nnet3-compute-prob "exp/nnet3/multitask/53.raw"                 "ark,bg:nnet3-copy-egs --outputs=ark:exp/nnet3/multitask/egs/valid_diagnostic.output.ark --weights=ark:exp/nnet3/multitask/egs/valid_diagnostic.weight.ark                     scp:exp/nnet3/multitask/egs/valid_diagnostic.scp ark:- |                     nnet3-merge-egs --minibatch-size=1:64 ark:-                     ark:- |" 
+2017-12-02 09:23:18,186 [steps/libs/common.py:176 - background_command_waiter - WARNING ] Command exited with status -2:  utils/run.pl exp/nnet3/multitask/log/compute_prob_valid.54.log                 nnet3-compute-prob "exp/nnet3/multitask/54.raw"                 "ark,bg:nnet3-copy-egs --outputs=ark:exp/nnet3/multitask/egs/valid_diagnostic.output.ark --weights=ark:exp/nnet3/multitask/egs/valid_diagnostic.weight.ark                     scp:exp/nnet3/multitask/egs/valid_diagnostic.scp ark:- |                     nnet3-merge-egs --minibatch-size=1:64 ark:-                     ark:- |" 
+2017-12-02 09:23:18,186 [steps/libs/common.py:176 - background_command_waiter - WARNING ] Command exited with status -2: utils/run.pl exp/nnet3/multitask/log/compute_prob_train.53.log                 nnet3-compute-prob "exp/nnet3/multitask/53.raw"                 "ark,bg:nnet3-copy-egs --outputs=ark:exp/nnet3/multitask/egs/train_diagnostic.output.ark --weights=ark:exp/nnet3/multitask/egs/train_diagnostic.weight.ark                     scp:exp/nnet3/multitask/egs/train_diagnostic.scp ark:- |                     nnet3-merge-egs --minibatch-size=1:64 ark:-                     ark:- |" 
+steps/nnet3/train_raw_dnn.py --stage=-5 --cmd=utils/run.pl --trainer.num-epochs 10 --trainer.optimization.num-jobs-initial=1 --trainer.optimization.num-jobs-final=1 --trainer.optimization.initial-effective-lrate=0.0015 --trainer.optimization.final-effective-lrate=0.00015 --trainer.optimization.minibatch-size=256,128 --trainer.samples-per-iter=10000 --trainer.max-param-change=2.0 --trainer.srand=0 --feat.cmvn-opts=--norm-means=false --norm-vars=false --feat-dir data/org/train --egs.dir exp/nnet3/multitask/egs --use-dense-targets false --targets-scp exp/org/tri_ali --cleanup.remove-egs true --use-gpu true --dir=exp/nnet3/multitask
+['steps/nnet3/train_raw_dnn.py', '--stage=-5', '--cmd=utils/run.pl', '--trainer.num-epochs', '10', '--trainer.optimization.num-jobs-initial=1', '--trainer.optimization.num-jobs-final=1', '--trainer.optimization.initial-effective-lrate=0.0015', '--trainer.optimization.final-effective-lrate=0.00015', '--trainer.optimization.minibatch-size=256,128', '--trainer.samples-per-iter=10000', '--trainer.max-param-change=2.0', '--trainer.srand=0', '--feat.cmvn-opts=--norm-means=false --norm-vars=false', '--feat-dir', 'data/org/train', '--egs.dir', 'exp/nnet3/multitask/egs', '--use-dense-targets', 'false', '--targets-scp', 'exp/org/tri_ali', '--cleanup.remove-egs', 'true', '--use-gpu', 'true', '--dir=exp/nnet3/multitask']
+use_multitask_egs=True
+
+###### BEGIN LANGUAGE INFO ######
+lang= org
+num_targets= 770
+data_dir= data/org/train
+ali_dir= exp/org/tri_ali
+egs_dir= exp/org/nnet3/egs
+###### END LANGUAGE INFO ######
+
+
+###### BEGIN LANGUAGE INFO ######
+lang= org
+num_targets= 770
+data_dir= data/org/train
+ali_dir= exp/org/tri_ali
+egs_dir= exp/org/nnet3/egs
+###### END LANGUAGE INFO ######
+
+### ============================ ###
+### CREATE CONFIG FILES FOR NNET ###
+### ============================ ###
+feat-to-dim scp:data/org/train/feats.scp - 
+nnet3-init exp/nnet3/multitask/configs//ref.config exp/nnet3/multitask/configs//ref.raw 
+steps/nnet3/xconfig_to_configs.py --xconfig-file exp/nnet3/multitask/configs/network.xconfig --config-dir exp/nnet3/multitask/configs/ --nnet-edits=rename-node old-name=output-0 new-name=output
+Traceback (most recent call last):
+  File "steps/nnet3/xconfig_to_configs.py", line 306, in <module>
+    main()
+  File "steps/nnet3/xconfig_to_configs.py", line 301, in main
+    check_model_contexts(args.config_dir, args.nnet_edits)
+  File "steps/nnet3/xconfig_to_configs.py", line 259, in check_model_contexts
+    "{0}/{1}.raw".format(config_dir, file_name))
+  File "steps/libs/common.py", line 89, in execute_command
+    p.communicate()
+  File "/usr/lib/python2.7/subprocess.py", line 797, in communicate
+    self.wait()
+  File "/usr/lib/python2.7/subprocess.py", line 1392, in wait
+    pid, sts = _eintr_retry_call(os.waitpid, self.pid, 0)
+  File "/usr/lib/python2.7/subprocess.py", line 476, in _eintr_retry_call
+    return func(*args)
+KeyboardInterrupt
+
+###### BEGIN LANGUAGE INFO ######
+lang= org
+num_targets= 770
+data_dir= data/org/train
+ali_dir= exp/org/tri_ali
+egs_dir= exp/org/nnet3/egs
+###### END LANGUAGE INFO ######
+
+
+###### BEGIN LANGUAGE INFO ######
+lang= org2
+num_targets= 722
+data_dir= data/org2/train
+ali_dir= exp/org2/tri_ali
+egs_dir= exp/org2/nnet3/egs
+###### END LANGUAGE INFO ######
+
+### ============================ ###
+### CREATE CONFIG FILES FOR NNET ###
+### ============================ ###
+feat-to-dim scp:data/org/train/feats.scp - 
+nnet3-init exp/nnet3/multitask/configs//ref.config exp/nnet3/multitask/configs//ref.raw 
+LOG (nnet3-init[5.3.83~1-9204]:main():nnet3-init.cc:80) Initialized raw neural net and wrote it to exp/nnet3/multitask/configs//ref.raw
+nnet3-info "nnet3-copy --edits='rename-node old-name=output-0 new-name=output' exp/nnet3/multitask/configs//ref.raw - |" 
+nnet3-copy '--edits=rename-node old-name=output-0 new-name=output' exp/nnet3/multitask/configs//ref.raw - 
+LOG (nnet3-copy[5.3.83~1-9204]:main():nnet3-copy.cc:114) Copied raw neural net from exp/nnet3/multitask/configs//ref.raw to -
+nnet3-init exp/nnet3/multitask/configs//ref.config exp/nnet3/multitask/configs//ref.raw 
+LOG (nnet3-init[5.3.83~1-9204]:main():nnet3-init.cc:80) Initialized raw neural net and wrote it to exp/nnet3/multitask/configs//ref.raw
+nnet3-info "nnet3-copy --edits='rename-node old-name=output-0 new-name=output' exp/nnet3/multitask/configs//ref.raw - |" 
+nnet3-copy '--edits=rename-node old-name=output-0 new-name=output' exp/nnet3/multitask/configs//ref.raw - 
+LOG (nnet3-copy[5.3.83~1-9204]:main():nnet3-copy.cc:114) Copied raw neural net from exp/nnet3/multitask/configs//ref.raw to -
+steps/nnet3/xconfig_to_configs.py --xconfig-file exp/nnet3/multitask/configs/network.xconfig --config-dir exp/nnet3/multitask/configs/ --nnet-edits=rename-node old-name=output-0 new-name=output
+### ================== ###
+### MAKE NNET3 EGS DIR ###
+### ================== ###
+### MAKE SEPARATE EGS DIR PER LANGUAGE ###
+local/nnet3/prepare_multilingual_egs.sh --cmd utils/run.pl --cmvn-opts --norm-means=false --norm-vars=false --left-context 16 --right-context 12 2 data/org/train data/org2/train exp/org/tri_ali exp/org2/tri_ali exp/org/nnet3/egs exp/org2/nnet3/egs
+local/nnet3/prepare_multilingual_egs.sh --cmd utils/run.pl --cmvn-opts --norm-means=false --norm-vars=false --left-context 16 --right-context 12 2 data/org/train data/org2/train exp/org/tri_ali exp/org2/tri_ali exp/org/nnet3/egs exp/org2/nnet3/egs
+2
+data/org/train data/org2/train exp/org/tri_ali exp/org2/tri_ali exp/org/nnet3/egs exp/org2/nnet3/egs
+local/nnet3/prepare_multilingual_egs.sh: Generate separate egs directory per language for multilingual training.
+online_ivector_dir =
+local/nnet3/prepare_multilingual_egs.sh: Generate egs for 
+local/nnet3/prepare_multilingual_egs.sh: calling get_egs.sh
+steps/nnet3/get_egs.sh --cmvn-opts --norm-means=false --norm-vars=false --left-context 16 --right-context 12 --samples-per-iter 400000 --stage 0 --cmd utils/run.pl --generate-egs-scp true data/org/train exp/org/tri_ali exp/org/nnet3/egs
+steps/nnet3/get_egs.sh: feature type is raw
+steps/nnet3/get_egs.sh: working out number of frames of training data
+feat-to-len scp:data/org/train/feats.scp ark,t:- 
+steps/nnet3/get_egs.sh: working out feature dim
+*** steps/nnet3/get_egs.sh: warning: the --frames-per-eg is too large to generate one archive with
+*** as many as --samples-per-iter egs in it.  Consider reducing --frames-per-eg.
+steps/nnet3/get_egs.sh: creating 1 archives, each with 60142 egs, with
+steps/nnet3/get_egs.sh:   8 labels per example, and (left,right) context = (16,12)
+steps/nnet3/get_egs.sh: copying data alignments
+copy-int-vector ark:- ark,scp:exp/org/nnet3/egs/ali.ark,exp/org/nnet3/egs/ali.scp 
+LOG (copy-int-vector[5.3.83~1-9204]:main():copy-int-vector.cc:83) Copied 546 vectors of int32.
+steps/nnet3/get_egs.sh: Getting validation and training subset examples.
+steps/nnet3/get_egs.sh: ... extracting validation and training-subset alignments.
+... Getting subsets of validation examples for diagnostics and combination.
+nnet3-copy-egs ark:- ark,scp:exp/org/nnet3/egs/combine.egs,exp/org/nnet3/egs/combine.scp 
+LOG (nnet3-copy-egs[5.3.83~1-9204]:main():nnet3-copy-egs.cc:436) Read 7625 neural-network training examples, wrote 7625, 0 examples had errors.
+rm: cannot remove 'exp/org/nnet3/egs/train_combine.scp': No such file or directory
+rm: cannot remove 'exp/org/nnet3/egs/valid_combine.scp': No such file or directory
+steps/nnet3/get_egs.sh: Generating training examples on disk
+steps/nnet3/get_egs.sh: recombining and shuffling order of archives on disk
