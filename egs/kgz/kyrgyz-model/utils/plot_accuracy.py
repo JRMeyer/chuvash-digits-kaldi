@@ -61,7 +61,7 @@ plt.plot(valid0[0], valid0[1], label='valid-TASK-A')
 plt.plot(valid1[0], valid1[1], label='valid-TASK-B')
 plt.legend()
 plt.xlabel('Training Iteration')
-title='5 Epochs | 5 Layers | ' + str(args.plotTitle) + '-dim '
+title='10 Epochs | 5 Layers | ' + str(args.plotTitle) + '-dim '
 plt.title(title)
 plt.ylabel('Frame Classification Accuracy')
 plt.show()
