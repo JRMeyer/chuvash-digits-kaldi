@@ -1,16 +1,22 @@
 #!/bin/bash
 
+ali_ark_file=$1
+
+
 while read line; do
 
+    # get length of alignment
     myarr=($line)
     len=${#myarr[@]}
-    
+
+    # set some counters
     index=0
     cur_id=''
     old_id=''
     frame_i=0
     frame_j=0
-    
+
+    # looping over the transitionID-to-frame level alignments
     for i in $line; do
 
         cur_id=$i
@@ -20,7 +26,6 @@ while read line; do
             utt_id=$i
             ((index++))
         elif [ "$index" -eq "1" ]; then
-            echo "FIRST FRAME"
             old_id=$i
             ((index++))
         elif [ "$cur_id" -eq "$old_id" ]; then
@@ -38,10 +43,9 @@ while read line; do
         
 
         if [ "$index" -eq "$len" ] ; then
-            echo "LAST FRAME"
             echo "$utt_id $old_id $frame_i $frame_j"
         fi
         
     done;
 
-done<exp_org/triphones_aligned/1.ali
+done<$ali_ark_file
