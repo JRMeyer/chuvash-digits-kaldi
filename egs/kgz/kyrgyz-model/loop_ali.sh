@@ -2,11 +2,14 @@
 
 while read line; do
 
-    index=-1
+    myarr=($line)
+    len=${#myarr[@]}
+    
+    index=0
     cur_id=''
     old_id=''
-    frame_i=-1
-    frame_j=-1
+    frame_i=0
+    frame_j=0
     
     for i in $line; do
 
@@ -15,25 +18,30 @@ while read line; do
         if [ "$index" -eq "0" ]; then
             # utt-id
             utt_id=$i
+            ((index++))
         elif [ "$index" -eq "1" ]; then
-            # first frame of alignment
+            echo "FIRST FRAME"
             old_id=$i
-            frame_i=0
+            ((index++))
         elif [ "$cur_id" -eq "$old_id" ]; then
              # repeat trans-id
-            :
+            ((index++))
         else
             # cur_id is not the same as old_id
-            frame_j=$index
+            frame_j=$((index-1))
             echo "$utt_id $old_id $frame_i $frame_j"
-
             # reset for next id
             old_id=$cur_id
-            frame_i=$index
+            frame_i=$((index-1))
+            ((index++))
         fi
+        
 
-        ((index++))
-
+        if [ "$index" -eq "$len" ] ; then
+            echo "LAST FRAME"
+            echo "$utt_id $old_id $frame_i $frame_j"
+        fi
+        
     done;
 
 done<exp_org/triphones_aligned/1.ali
