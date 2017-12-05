@@ -80,8 +80,10 @@ echo "$0: with $segs_per_job segments per job."
 
 # will split into segments00 segments01 ... etc
 split -l $segs_per_job --numeric-suffixes --additional-suffix=.tmp all_segments.txt segments
-
 rm all_segments.txt
+
+
+### EXTRACT FRAMES AND TRANSITION IDs ###
 
 for i in segments*.tmp; do
     echo "$0: Extracting $i from $feats_ark_file and saving to $segments_and_frames_${i}"
@@ -91,6 +93,8 @@ for i in segments*.tmp; do
 done
     
 
+
+### REFORMAT SO WE HAVE <LABEL> <DATA>\n ###
 
 trans_id=''
 frame=''
@@ -105,14 +109,20 @@ for segs in segments_and_frames_*; do
             i=($line);
             unset "i[${#i[@]}-1]";
             frame="${i[@]}";
+            echo "$trans_id $frame" >> tmp_${segs};
         else
             frame=$line;
+            echo "$trans_id $frame" >> tmp_${segs};
         fi;
-        echo "$trans_id $frame" >> tmp_${segs};
+        
     done<$segs & )
 
 done
 
+rm segments_and_frames_*
 
-rm segments*
-    
+cat tmp_segments* >> labeled_frames.txt
+
+rm tmp_segments*
+
+echo "$0: DONE! Find your labeled data in labeled_frames.txt"
