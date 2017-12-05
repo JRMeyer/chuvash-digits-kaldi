@@ -1,3 +1,0 @@
-transition-123 org_atai_02 25 30
-transition-123 org_atai_02 56 57
-transition-001 org_atai_02 0 1
