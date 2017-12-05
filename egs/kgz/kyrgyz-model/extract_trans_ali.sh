@@ -90,3 +90,29 @@ for i in segments*.tmp; do
     ( extract-rows $i ark:$feats_ark_file ark,t:segments_and_frames_${i} & ) 
 done
     
+
+
+trans_id=''
+frame=''
+
+for segs in segments_and_frames_*; do 
+
+    ( while read line; do
+        if `echo $line | grep -q "\["` ; then
+            i=($line);
+            trans_id=${i[0]};        
+        elif `echo $line | grep -q "\]"`; then
+            i=($line);
+            unset "i[${#i[@]}-1]";
+            frame="${i[@]}";
+        else
+            frame=$line;
+        fi;
+        echo "$trans_id $frame" >> tmp_${segs};
+    done<$segs & )
+
+done
+
+
+rm segments*
+    
