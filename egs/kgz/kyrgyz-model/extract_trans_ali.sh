@@ -79,29 +79,36 @@ echo "$0: splitting segments over $num_processors CPUs"
 echo "$0: with $segs_per_job segments per job."
 
 # will split into segments00 segments01 ... etc
-split -l $segs_per_job --numeric-suffixes --additional-suffix=.tmp all_segments.txt segments
+split -l $segs_per_job --numeric-suffixes --additional-suffix=.tmp all_segments.txt segments_split
 rm all_segments.txt
 
 
 ### EXTRACT FRAMES AND TRANSITION IDs ###
 
-for i in segments*.tmp; do
+# make an array for proc ids
+proc_ids=()
+
+for i in segments_split*.tmp; do
     echo "$0: Extracting $i from $feats_ark_file and saving to $segments_and_frames_${i}"
     touch segments_and_frames_${i}
     # extract the alignments from the original ark_file and save to outfile
-    ( extract-rows $i ark:$feats_ark_file ark,t:segments_and_frames_${i} & ) 
+    extract-rows $i ark:$feats_ark_file ark,t:segments_and_frames_${i} & 
+    proc_ids+=($!)
 done
-    
+# wait for subprocesses to stop
+for proc_id in ${proc_ids[*]}; do wait $proc_id; done;
+rm segments_split*.tmp
 
 
 ### REFORMAT SO WE HAVE <LABEL> <DATA>\n ###
 
 trans_id=''
 frame=''
+proc_ids=()
 
 for segs in segments_and_frames_*; do 
 
-    ( while read line; do
+    while read line; do
         if `echo $line | grep -q "\["` ; then
             i=($line);
             trans_id=${i[0]};        
@@ -115,9 +122,11 @@ for segs in segments_and_frames_*; do
             echo "$trans_id $frame" >> tmp_${segs};
         fi;
         
-    done<$segs & )
-
+    done<$segs &
+    proc_ids+=($!)
 done
+# wait for subprocesses to stop
+for proc_id in ${proc_ids[*]}; do wait $proc_id; done;
 
 rm segments_and_frames_*
 
