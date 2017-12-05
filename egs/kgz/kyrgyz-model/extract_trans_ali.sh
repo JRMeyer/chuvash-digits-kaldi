@@ -87,7 +87,6 @@ for i in segments*.tmp; do
     echo "$0: Extracting $i from $feats_ark_file and saving to $segments_and_frames_${i}"
     touch segments_and_frames_${i}
     # extract the alignments from the original ark_file and save to outfile
-    ( extract-rows $i ark:$feats_ark_file ark,t:segments_and_frames_${i} ) &
-
+    ( extract-rows $i ark:$feats_ark_file ark,t:segments_and_frames_${i} & ) 
 done
     
