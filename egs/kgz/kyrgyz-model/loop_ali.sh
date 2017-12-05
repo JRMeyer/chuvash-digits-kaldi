@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# given an alignment ark file, return
+# <utt-id> <trans-id> <start_frame> <end_frame>
+
+
 ali_ark_file=$1
 
 
