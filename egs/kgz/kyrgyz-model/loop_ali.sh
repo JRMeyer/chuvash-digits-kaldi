@@ -6,6 +6,9 @@
 
 ali_ark_file=$1
 
+echo "$0: assuming $1 is a compressed alignments file"
+gunzip -c $ali_ark_file > tmp.txt
+
 
 while read line; do
 
@@ -52,4 +55,6 @@ while read line; do
         
     done;
 
-done<$ali_ark_file
+done<tmp.txt
+
+rm tmp.txt
