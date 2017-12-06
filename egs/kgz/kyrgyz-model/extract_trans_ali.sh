@@ -17,6 +17,10 @@ gunzip -c $ali_ark_file > ali.txt
 
 
 
+echo "#########################"
+echo "### FORMAT ALIGNMENTS ###"
+echo "#########################"
+
 while read line; do
 
     # get length of alignment
@@ -42,11 +46,9 @@ while read line; do
         elif [ "$index" -eq "1" ]; then
             old_id=$i
             ((index++))
-            echo "$utt_id $old_id" >> utt_frame_aligments.txt
         elif [ "$cur_id" -eq "$old_id" ]; then
              # repeat trans-id
             ((index++))
-            echo "$utt_id $old_id" >> utt_frame_aligments.txt
         else
             # cur_id is not the same as old_id
             frame_j=$((index-1))
@@ -55,44 +57,40 @@ while read line; do
             old_id=$cur_id
             frame_i=$((index-1))
             ((index++))
-            echo "$utt_id $old_id" >> utt_frame_aligments.txt
         fi
         
-
         if [ "$index" -eq "$len" ] ; then
             # the last frame, we need to add one to length for extract-rows
             frame_j=$((frame_j+1))
             echo "$old_id $utt_id $frame_i $frame_j" >> all_segments.txt
-            echo "$utt_id $old_id" >> utt_frame_aligments.txt
-        fi
-
-        
-        
+        fi        
     done;
 
 done<ali.txt
 rm ali.txt
 
-echo "$0: alignments of the form <utt_id> <transition_id>\\n"
-echo "    where each new line is a frame can be found in utt_frame_alignments.txt"
-echo " this can be used to recover utt_id after all frames have been labeled"
 
+
+
+echo "### SPLIT ALIs FOR MULTIPLE JOBS ###"
 
 num_lines=(`wc -l all_segments.txt`)
 num_processors=(`nproc`)
 segs_per_job=$(( num_lines / num_processors ))
 
-# plus one in the numerator will round up
 echo "$0: processing $num_lines segments from $ali_ark_file"
 echo "$0: splitting segments over $num_processors CPUs"
 echo "$0: with $segs_per_job segments per job."
-
 # will split into segments00 segments01 ... etc
 split -l $segs_per_job --numeric-suffixes --additional-suffix=.tmp all_segments.txt segments_split
 rm all_segments.txt
 
 
-### EXTRACT FRAMES AND TRANSITION IDs ###
+
+
+echo "#################################"
+echo "### EXTRACT FRAMES FROM FEATS ###"
+echo "#################################"
 
 # make an array for proc ids
 proc_ids=()
@@ -109,7 +107,8 @@ for proc_id in ${proc_ids[*]}; do wait $proc_id; done;
 rm segments_split*.tmp
 
 
-### REFORMAT SO WE HAVE <LABEL> <DATA>\n ###
+
+echo "### REFORMAT to get <LABEL> <DATA>\n ###"
 
 trans_id=''
 frame=''
@@ -138,9 +137,7 @@ done
 for proc_id in ${proc_ids[*]}; do wait $proc_id; done;
 
 rm segments_and_frames_*
-
 cat tmp_segments* >> labeled_frames.txt
-
 rm tmp_segments*
 
 echo "$0: DONE! Find your labeled data in labeled_frames.txt"
