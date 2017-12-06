@@ -27,4 +27,4 @@ predict_data = np.loadtxt(f)
 
 prediction=clf.predict(predict_data)
 
-np.savetxt("forest_output.txt", prediction, delimiter=" ")
+np.savetxt("forest_output.txt", prediction, delimiter=" ", fmt="%s")
