@@ -42,9 +42,11 @@ while read line; do
         elif [ "$index" -eq "1" ]; then
             old_id=$i
             ((index++))
+            echo "$utt_id $old_id" >> utt_frame_aligments.txt
         elif [ "$cur_id" -eq "$old_id" ]; then
              # repeat trans-id
             ((index++))
+            echo "$utt_id $old_id" >> utt_frame_aligments.txt
         else
             # cur_id is not the same as old_id
             frame_j=$((index-1))
@@ -53,6 +55,7 @@ while read line; do
             old_id=$cur_id
             frame_i=$((index-1))
             ((index++))
+            echo "$utt_id $old_id" >> utt_frame_aligments.txt
         fi
         
 
@@ -60,13 +63,19 @@ while read line; do
             # the last frame, we need to add one to length for extract-rows
             frame_j=$((frame_j+1))
             echo "$old_id $utt_id $frame_i $frame_j" >> all_segments.txt
+            echo "$utt_id $old_id" >> utt_frame_aligments.txt
         fi
+
+        
         
     done;
 
 done<ali.txt
 rm ali.txt
 
+echo "$0: alignments of the form <utt_id> <transition_id>\\n"
+echo "    where each new line is a frame can be found in utt_frame_alignments.txt"
+echo " this can be used to recover utt_id after all frames have been labeled"
 
 
 num_lines=(`wc -l all_segments.txt`)
