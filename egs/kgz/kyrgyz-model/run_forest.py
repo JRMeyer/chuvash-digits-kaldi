@@ -15,6 +15,7 @@ Y = np.genfromtxt(train_Y, dtype='str' )
 
 clf = RandomForestClassifier()
 
+print("Training Random Forest")
 clf.fit(X,Y)
 
 
@@ -25,6 +26,8 @@ f = open(predict_X)
 predict_data = np.loadtxt(f)
 
 
+print("Prediction on data with Random Forest")
+
 prediction=clf.predict(predict_data)
 
-np.savetxt("forest_output.txt", prediction, delimiter=" ")
+np.savetxt("forest_output.txt", prediction, delimiter=" ", fmt="%s")
