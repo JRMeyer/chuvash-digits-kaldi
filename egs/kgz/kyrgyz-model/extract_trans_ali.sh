@@ -147,9 +147,3 @@ cat tmp_segments* >> labeled_frames.txt
 echo "$0: DONE! Find your labeled data in labeled_frames.txt"
 echo "$0: now you can use ./extract_sub_train_labels.sh on labeled_frames.txt"
 rm tmp_segments*
-
-cut -d" " -f2- labeled_frames.txt > just_frames.txt
-echo "$0: find data with no labels in just_frames.txt"
-echo "$0: this is for after you've trained a new classifier."
-
-
