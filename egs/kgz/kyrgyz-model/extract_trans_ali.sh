@@ -10,6 +10,12 @@ feats_ark_file=$2
 . ./path.sh
 
 
+if [ "$#" -ne "2" ]; then
+    echo " ERROR $0: wrong number of args"
+    exit 1;
+fi
+
+
 echo "$0: assuming $1 is a compressed alignments file"
 # returns a file like this:
 # utt-id 1 1 1 45 45 45 600 600 600 600 7 7 7
@@ -135,9 +141,15 @@ for segs in segments_and_frames_*; do
 done
 # wait for subprocesses to stop
 for proc_id in ${proc_ids[*]}; do wait $proc_id; done;
-
 rm segments_and_frames_*
+
 cat tmp_segments* >> labeled_frames.txt
+echo "$0: DONE! Find your labeled data in labeled_frames.txt"
+echo "$0: now you can use ./extract_sub_train_labels.sh on labeled_frames.txt"
 rm tmp_segments*
 
-echo "$0: DONE! Find your labeled data in labeled_frames.txt"
+cut -d" " -f2- labeled_frames.txt > just_frames.txt
+echo "$0: find data with no labels in just_frames.txt"
+echo "$0: this is for after you've trained a new classifier."
+
+
