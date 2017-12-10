@@ -31,4 +31,27 @@ clf.fit(train_frames, train_labels)
 print("Prediction on data with Random Forest")
 prediction=clf.predict(predict_frames)
 
-np.savetxt("forest_output.txt", prediction, delimiter=" ", fmt="%s")
+uttIDs = np.array(predict_uttIDs).reshape(-1,1)
+predictions = prediction.reshape(-1,1)
+output=np.concatenate((uttIDs,predictions), axis=1)
+
+alignments={}
+for row in output:
+    print(row[0])
+    if row[0] in alignments:
+        alignments[row[0]] = str(alignments[row[0]]) +" "+ str(row[1])
+    else:
+        alignments[row[0]] = str(row[1])
+        
+
+
+
+fout = "new_alignmentts.txt"
+fo = open(fout, "w")
+
+for k, v in alignments.items():
+    fo.write(str(k) + str(v) + '\n')
+    
+fo.close()
+            
+           
