@@ -6,12 +6,15 @@ import pandas as pd
 train_XY=sys.argv[1]
 predict_XY=sys.argv[2]
 
-train=pd.read_csv(train_XY, sep=" ")
+
+
+print("Assuming input data is a CSV, space-delimited, no header")
+# READ in training and testing data
+train=pd.read_csv(train_XY, sep=" ", header=None)
 train_labels = np.array( [ str(i) for i in train.iloc[:,0] ] )
 train_frames = train.iloc[:,1:].as_matrix()
 
-
-predict=pd.read_csv(predict_XY, sep=" ")
+predict=pd.read_csv(predict_XY, sep=" ", header=None)
 predict_uttIDs = predict.iloc[:,0]
 predict_frames = predict.iloc[:,1:].as_matrix()
 
