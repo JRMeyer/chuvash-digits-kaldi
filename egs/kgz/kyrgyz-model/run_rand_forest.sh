@@ -18,7 +18,7 @@
 
 # TRAIN and RUN FOREST
 
-./run_forest.py sub_500_data sub_500_labels predict_data
+./run_forest.py sub_500_data sub_500_labels reformatted_raw_plp_train.1.ark
 
 # reformat python output so it looks like original ali.ark
 ./reformat_tree_classes.sh
