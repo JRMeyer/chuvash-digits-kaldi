@@ -51,6 +51,7 @@ cmvn_opts=  # can be used for specifying CMVN options, if feature type is not ld
             # it doesn't make sense to use different options than were used as input to the
             # LDA transform).  This is used to turn off CMVN in the online-nnet experiments.
 generate_egs_scp=false # If true, it will generate egs.JOB.*.scp per egs archive
+num_targets='tree'
 
 echo "$0 $@"  # Print the command line for logging
 
@@ -93,10 +94,11 @@ dir=$3
 
 # Check some files.
 [ ! -z "$online_ivector_dir" ] && \
-  extra_files="$online_ivector_dir/ivector_online.scp $online_ivector_dir/ivector_period"
+    extra_files="$online_ivector_dir/ivector_online.scp $online_ivector_dir/ivector_period"
 
+echo "$0: num_targets = $num_targets" 
 for f in $data/feats.scp $alidir/ali.1.gz $alidir/final.mdl $alidir/tree $extra_files; do
-  [ ! -f $f ] && echo "$0: no such file $f" && exit 1;
+    [ ! -f $f ] && echo "$0: no such file $f" && exit 1;
 done
 
 sdata=$data/split$nj
@@ -110,9 +112,9 @@ num_ali_jobs=$(cat $alidir/num_jobs) || exit 1;
 
 num_utts=$(cat $data/utt2spk | wc -l)
 if ! [ $num_utts -gt $[$num_utts_subset*4] ]; then
-  echo "$0: number of utterances $num_utts in your training data is too small versus --num-utts-subset=$num_utts_subset"
-  echo "... you probably have so little data that it doesn't make sense to train a neural net."
-  exit 1
+    echo "$0: number of utterances $num_utts in your training data is too small versus --num-utts-subset=$num_utts_subset"
+    echo "... you probably have so little data that it doesn't make sense to train a neural net."
+    exit 1
 fi
 
 # Get list of validation utterances.
@@ -120,14 +122,14 @@ awk '{print $1}' $data/utt2spk | utils/shuffle_list.pl | head -$num_utts_subset 
     > $dir/valid_uttlist || exit 1;
 
 if [ -f $data/utt2uniq ]; then  # this matters if you use data augmentation.
-  echo "File $data/utt2uniq exists, so augmenting valid_uttlist to"
-  echo "include all perturbed versions of the same 'real' utterances."
-  mv $dir/valid_uttlist $dir/valid_uttlist.tmp
-  utils/utt2spk_to_spk2utt.pl $data/utt2uniq > $dir/uniq2utt
-  cat $dir/valid_uttlist.tmp | utils/apply_map.pl $data/utt2uniq | \
-    sort | uniq | utils/apply_map.pl $dir/uniq2utt | \
-    awk '{for(n=1;n<=NF;n++) print $n;}' | sort  > $dir/valid_uttlist
-  rm $dir/uniq2utt $dir/valid_uttlist.tmp
+    echo "File $data/utt2uniq exists, so augmenting valid_uttlist to"
+    echo "include all perturbed versions of the same 'real' utterances."
+    mv $dir/valid_uttlist $dir/valid_uttlist.tmp
+    utils/utt2spk_to_spk2utt.pl $data/utt2uniq > $dir/uniq2utt
+    cat $dir/valid_uttlist.tmp | utils/apply_map.pl $data/utt2uniq | \
+        sort | uniq | utils/apply_map.pl $dir/uniq2utt | \
+        awk '{for(n=1;n<=NF;n++) print $n;}' | sort  > $dir/valid_uttlist
+    rm $dir/uniq2utt $dir/valid_uttlist.tmp
 fi
 
 awk '{print $1}' $data/utt2spk | utils/filter_scp.pl --exclude $dir/valid_uttlist | \
@@ -138,54 +140,61 @@ awk '{print $1}' $data/utt2spk | utils/filter_scp.pl --exclude $dir/valid_uttlis
 # because we'll need the features with a different number of jobs than $alidir,
 # copy to ark,scp.
 if [ -f $transform_dir/raw_trans.1 ]; then
-  echo "$0: using raw transforms from $transform_dir"
-  if [ $stage -le 0 ]; then
-    $cmd $dir/log/copy_transforms.log \
-      copy-feats "ark:cat $transform_dir/raw_trans.* |" "ark,scp:$dir/trans.ark,$dir/trans.scp"
-  fi
+    echo "$0: using raw transforms from $transform_dir"
+    if [ $stage -le 0 ]; then
+        $cmd $dir/log/copy_transforms.log \
+             copy-feats "ark:cat $transform_dir/raw_trans.* |" "ark,scp:$dir/trans.ark,$dir/trans.scp"
+    fi
 fi
 
 ## Set up features.
 echo "$0: feature type is raw"
 
-feats="ark,s,cs:utils/filter_scp.pl --exclude $dir/valid_uttlist $sdata/JOB/feats.scp | apply-cmvn $cmvn_opts --utt2spk=ark:$sdata/JOB/utt2spk scp:$sdata/JOB/cmvn.scp scp:- ark:- |"
-valid_feats="ark,s,cs:utils/filter_scp.pl $dir/valid_uttlist $data/feats.scp | apply-cmvn $cmvn_opts --utt2spk=ark:$data/utt2spk scp:$data/cmvn.scp scp:- ark:- |"
-train_subset_feats="ark,s,cs:utils/filter_scp.pl $dir/train_subset_uttlist $data/feats.scp | apply-cmvn $cmvn_opts --utt2spk=ark:$data/utt2spk scp:$data/cmvn.scp scp:- ark:- |"
+feats="ark,s,cs:utils/filter_scp.pl --exclude $dir/valid_uttlist $sdata/JOB/feats.scp |"
+feats="$feats apply-cmvn $cmvn_opts --utt2spk=ark:$sdata/JOB/utt2spk scp:$sdata/JOB/cmvn.scp scp:- ark:- |"
+valid_feats="ark,s,cs:utils/filter_scp.pl $dir/valid_uttlist $data/feats.scp |"
+valid_feats="$valid_feats apply-cmvn $cmvn_opts --utt2spk=ark:$data/utt2spk scp:$data/cmvn.scp scp:- ark:- |"
+train_subset_feats="ark,s,cs:utils/filter_scp.pl $dir/train_subset_uttlist $data/feats.scp |"
+train_subset_feats="$train_subset_feats apply-cmvn $cmvn_opts --utt2spk=ark:$data/utt2spk scp:$data/cmvn.scp scp:- ark:- |"
 echo $cmvn_opts >$dir/cmvn_opts # caution: the top-level nnet training script should copy this to its own dir now.
 
 if [ -f $dir/trans.scp ]; then
-  feats="$feats transform-feats --utt2spk=ark:$sdata/JOB/utt2spk scp:$dir/trans.scp ark:- ark:- |"
-  valid_feats="$valid_feats transform-feats --utt2spk=ark:$data/utt2spk scp:$dir/trans.scp ark:- ark:- |"
-  train_subset_feats="$train_subset_feats transform-feats --utt2spk=ark:$data/utt2spk scp:$dir/trans.scp ark:- ark:- |"
+    feats="$feats transform-feats --utt2spk=ark:$sdata/JOB/utt2spk scp:$dir/trans.scp ark:- ark:- |"
+    valid_feats="$valid_feats transform-feats --utt2spk=ark:$data/utt2spk scp:$dir/trans.scp ark:- ark:- |"
+    train_subset_feats="$train_subset_feats transform-feats --utt2spk=ark:$data/utt2spk scp:$dir/trans.scp ark:- ark:- |"
 fi
 
 if [ ! -z "$online_ivector_dir" ]; then
-  ivector_dim=$(feat-to-dim scp:$online_ivector_dir/ivector_online.scp -) || exit 1;
-  echo $ivector_dim > $dir/info/ivector_dim
-  steps/nnet2/get_ivector_id.sh $online_ivector_dir > $dir/info/final.ie.id || exit 1
-  ivector_period=$(cat $online_ivector_dir/ivector_period) || exit 1;
-  ivector_opts="--online-ivectors=scp:$online_ivector_dir/ivector_online.scp --online-ivector-period=$ivector_period"
+    ivector_dim=$(feat-to-dim scp:$online_ivector_dir/ivector_online.scp -) || exit 1;
+    echo $ivector_dim > $dir/info/ivector_dim
+    steps/nnet2/get_ivector_id.sh $online_ivector_dir > $dir/info/final.ie.id || exit 1
+    ivector_period=$(cat $online_ivector_dir/ivector_period) || exit 1;
+    ivector_opts="--online-ivectors=scp:$online_ivector_dir/ivector_online.scp --online-ivector-period=$ivector_period"
 else
-  ivector_opts=""
-  echo 0 >$dir/info/ivector_dim
+    ivector_opts=""
+    echo 0 >$dir/info/ivector_dim
 fi
 
 if [ $stage -le 1 ]; then
-  echo "$0: working out number of frames of training data"
-  num_frames=$(steps/nnet2/get_num_frames.sh $data)
-  echo $num_frames > $dir/info/num_frames
-  echo "$0: working out feature dim"
-  feats_one="$(echo $feats | sed s/JOB/1/g)"
-  if feat_dim=$(feat-to-dim "$feats_one" - 2>/dev/null); then
-    echo $feat_dim > $dir/info/feat_dim
-  else # run without redirection to show the error.
-    feat-to-dim "$feats_one" -; exit 1
-  fi
+    echo "$0: working out number of frames of training data in $data"
+    num_frames=$(steps/nnet2/get_num_frames.sh $data)
+    echo "#### ERROR HERE! ####"
+    echo $num_frames > $dir/info/num_frames
+    echo "$0: found $num_frames frames of training data"
+    echo "$0: working out feature dim"
+    feats_one="$(echo $feats | sed s/JOB/1/g)"
+    if feat_dim=$(feat-to-dim "$feats_one" - 2>/dev/null); then
+        echo $feat_dim > $dir/info/feat_dim
+    else # run without redirection to show the error.
+        feat-to-dim "$feats_one" -; exit 1
+    fi
 else
-  num_frames=$(cat $dir/info/num_frames) || exit 1;
-  feat_dim=$(cat $dir/info/feat_dim) || exit 1;
+    num_frames=$(cat $dir/info/num_frames) || exit 1;
+    feat_dim=$(cat $dir/info/feat_dim) || exit 1;
 fi
 
+echo "$0: found $num_frames frames in $dir/info/num_frames"
+echo "$0: found feat_dim=$feat_dim in $dir/info/feat_dim"
 
 # the first field in frames_per_eg (which is a comma-separated list of numbers)
 # is the 'principal' frames-per-eg, and for purposes of working out the number
@@ -260,7 +269,14 @@ echo $left_context_initial > $dir/info/left_context_initial
 echo $right_context_final > $dir/info/right_context_final
 
 
-num_pdfs=$(tree-info --print-args=false $alidir/tree | grep num-pdfs | awk '{print $2}')
+if [ "$num_targets" == "tree"]; then
+   num_pdfs=$(tree-info --print-args=false $alidir/tree | grep num-pdfs | awk '{print $2}')
+else
+    num_pdfs=$num_targets
+fi
+
+echo "$0: num_pdfs= $num_pdfs"
+
 if [ $stage -le 3 ]; then
   echo "$0: Getting validation and training subset examples."
   rm $dir/.error 2>/dev/null
