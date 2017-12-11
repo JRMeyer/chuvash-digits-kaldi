@@ -92,11 +92,12 @@ data=$1
 alidir=$2
 dir=$3
 
+echo "$0: num_targets = $num_targets" 
+
 # Check some files.
 [ ! -z "$online_ivector_dir" ] && \
     extra_files="$online_ivector_dir/ivector_online.scp $online_ivector_dir/ivector_period"
 
-echo "$0: num_targets = $num_targets" 
 for f in $data/feats.scp $alidir/ali.1.gz $alidir/final.mdl $alidir/tree $extra_files; do
     [ ! -f $f ] && echo "$0: no such file $f" && exit 1;
 done
@@ -269,7 +270,7 @@ echo $left_context_initial > $dir/info/left_context_initial
 echo $right_context_final > $dir/info/right_context_final
 
 
-if [ "$num_targets" == "tree"]; then
+if [ "$num_targets" == "tree" ]; then
    num_pdfs=$(tree-info --print-args=false $alidir/tree | grep num-pdfs | awk '{print $2}')
 else
     num_pdfs=$num_targets
