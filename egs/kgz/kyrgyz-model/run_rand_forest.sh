@@ -23,3 +23,9 @@
 # reformat python output so it looks like original ali.ark
 ./reformat_tree_classes.sh
 
+
+
+# REPLICATE ORIGINAL ALI FORMAT
+# split into num_jobs as before (8) and tar them up
+split -da 1 -l $((wc -l < new_alignments.txt/8 + 1)) new_alignments.txt ali. --additional-suffix=""
+j=1; for i in ali.*; do tar -czvf ${i%.*}.$j.gz $i; ((j++)); rm $i; done
