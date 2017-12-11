@@ -40,13 +40,13 @@ output=np.concatenate((uttIDs,predictions), axis=1)
 
 alignments={}
 for row in output:
-    print(row[0])
     if row[0] in alignments:
         alignments[row[0]] = str(alignments[row[0]]) +" "+ str(row[1])
     else:
         alignments[row[0]] = str(row[1])
-        
+        print("Formatting " + str(row[0]))
 
+        
 
 
 fout = "new_alignments.txt"
