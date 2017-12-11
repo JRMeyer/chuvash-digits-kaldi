@@ -16,8 +16,6 @@ fi
 
 data=$1
 
-echo "$0: getting num_frames from $data"
-
 if [ ! -f $data/utt2dur ]; then
     utils/data/get_utt2dur.sh $data 1>&2 || exit 1
 fi
