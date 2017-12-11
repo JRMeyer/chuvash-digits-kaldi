@@ -5,15 +5,15 @@
 # returns <trans-id> <frame feats data>\n
 ./extract_trans_ali.sh exp_org/triphones_aligned/ali.1.gz plp_org/raw_plp_train.1.ark
 
-
 # same output as above, but fewer <trans-ids>
 ./get_rand_subset_data.sh labeled_frames.txt 500
+
 
 # FORMAT PREDICT DATA
 
 # returns <utt-id> <frame feats data> in sequence
 # so that we can reconstruct ali.ark
-./reformat_feats_ark.sh feats.ark new_txt_feats
+./reformat_feats.sh plp_org/raw_plp_train.1.ark
 
 
 # TRAIN and RUN FOREST
