@@ -64,7 +64,7 @@ args=("$@")
 echo "$num_lang"
 echo "${args[@]}"
 
-if [ ${#args[@]} != $[$num_lang*3] ]; then
+if [ ${#args[@]} != $[$num_lang*4] ]; then
     echo "$0: num of input dirs provided for all langs is not compatible with num-langs in input." && exit 1;
 fi
 
@@ -73,8 +73,10 @@ for l in `seq 0 $[$num_lang-1]`; do
     multi_data_dirs[$l]=${args[$l]}
     multi_ali_dirs[$l]=${args[$l+$num_lang]}
     multi_egs_dirs[$l]=${args[$l+2*$num_lang]}
+    num_targets_list[$l]=${args[$l+3*$num_lang]}
 done
 
+echo "$0: num_targets_list= (${num_targets_list[@]})"
 echo "$0: Generate separate egs directory per language for multilingual training."
 online_multi_ivector_dirs=(${online_multi_ivector_dirs[@]})
 
@@ -83,6 +85,7 @@ for lang_index in `seq 0 $[$num_lang-1]`; do
     ali_dir=${multi_ali_dirs[$lang_index]}
     egs_dir=${multi_egs_dirs[$lang_index]}
     online_ivector_dir=
+    num_targets=${num_targets_list[$lang_index]}
     
     if [ ! -z "${online_multi_ivector_dirs[$lang_index]}" ]; then
         online_ivector_dir=${online_multi_ivector_dirs[$lang_index]}
@@ -91,7 +94,7 @@ for lang_index in `seq 0 $[$num_lang-1]`; do
 
     if [ ! -d "$egs_dir" ]; then
 
-        echo "$0: Generate egs for ${lang_list[$lang_index]}"
+        echo "$0: Generate egs for $ali_dir"
         
         extra_opts=()
         [ ! -z "$cmvn_opts" ] && extra_opts+=(--cmvn-opts "$cmvn_opts")
@@ -103,6 +106,7 @@ for lang_index in `seq 0 $[$num_lang-1]`; do
         
         steps/nnet3/get_egs.sh \
             $egs_opts "${extra_opts[@]}" \
+            --num-targets $num_targets \
             --samples-per-iter $samples_per_iter \
             --stage $stage \
             --cmd "$cmd" \
