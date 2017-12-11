@@ -46,11 +46,11 @@ for row in output:
 
 
 
-fout = "new_alignmentts.txt"
+fout = "new_alignments.txt"
 fo = open(fout, "w")
 
 for k, v in alignments.items():
-    fo.write(str(k) + str(v) + '\n')
+    fo.write(str(k) + " " + str(v) + '\n')
     
 fo.close()
             
