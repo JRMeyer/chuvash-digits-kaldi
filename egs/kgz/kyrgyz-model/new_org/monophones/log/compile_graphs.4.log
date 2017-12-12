@@ -1,0 +1,29 @@
+# compile-train-graphs exp_org/monophones/tree exp_org/monophones/0.mdl data_org/lang/L.fst "ark:sym2int.pl --map-oov 2 -f 2- data_org/lang/words.txt < data_org/train/split8/4/text|" "ark:|gzip -c >exp_org/monophones/fsts.4.gz" 
+# Started at Mon Dec 11 18:08:31 UTC 2017
+#
+compile-train-graphs exp_org/monophones/tree exp_org/monophones/0.mdl data_org/lang/L.fst 'ark:sym2int.pl --map-oov 2 -f 2- data_org/lang/words.txt < data_org/train/split8/4/text|' 'ark:|gzip -c >exp_org/monophones/fsts.4.gz' 
+sym2int.pl: replacing акмакка with 2
+sym2int.pl: replacing кечир with 2
+sym2int.pl: replacing издейин with 2
+sym2int.pl: replacing кечтим with 2
+sym2int.pl: replacing даремети with 2
+sym2int.pl: replacing кыйшайды with 2
+sym2int.pl: replacing сунала with 2
+sym2int.pl: replacing көккашаттын with 2
+sym2int.pl: replacing арыктын with 2
+sym2int.pl: replacing соройгон with 2
+sym2int.pl: replacing сагызгандын with 2
+sym2int.pl: replacing канатындай with 2
+sym2int.pl: replacing алабула with 2
+sym2int.pl: replacing бастырмалуу with 2
+sym2int.pl: replacing ынтымактуулугун with 2
+sym2int.pl: replacing энчилештигин with 2
+sym2int.pl: replacing абеилденин with 2
+sym2int.pl: replacing султаналы with 2
+sym2int.pl: replacing огонбай with 2
+sym2int.pl: replacing огонбай with 2
+sym2int.pl: not warning for OOVs any more times
+** Replaced 255 instances of OOVs with 2
+LOG (compile-train-graphs[5.3.101~2-5c219]:main():compile-train-graphs.cc:147) compile-train-graphs: succeeded for 69 graphs, failed for 0
+# Accounting: time=4 threads=1
+# Ended (code 0) at Mon Dec 11 18:08:35 UTC 2017, elapsed time 4 seconds
