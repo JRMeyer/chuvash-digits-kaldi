@@ -1,2 +1,0 @@
-sum-tree-stats exp_org/triphones/treeacc exp_org/triphones/1.treeacc exp_org/triphones/2.treeacc exp_org/triphones/3.treeacc exp_org/triphones/4.treeacc exp_org/triphones/5.treeacc exp_org/triphones/6.treeacc exp_org/triphones/7.treeacc exp_org/triphones/8.treeacc 
-LOG (sum-tree-stats[5.3.101~2-5c219]:main():sum-tree-stats.cc:88) Wrote summed accs ( 12968 individual stats)
