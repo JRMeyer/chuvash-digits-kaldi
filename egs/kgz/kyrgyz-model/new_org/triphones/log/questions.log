@@ -1,2 +1,0 @@
-cluster-phones exp_org/triphones/treeacc data_org/lang/phones/sets.int exp_org/triphones/questions.int 
-LOG (cluster-phones[5.3.101~2-5c219]:main():cluster-phones.cc:129) Wrote questions to exp_org/triphones/questions.int
