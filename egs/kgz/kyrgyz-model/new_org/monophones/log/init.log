@@ -1,0 +1,9 @@
+# gmm-init-mono --shared-phones=data_org/lang/phones/sets.int "--train-feats=ark,s,cs:apply-cmvn --norm-vars=true  --utt2spk=ark:data_org/train/split8/1/utt2spk scp:data_org/train/split8/1/cmvn.scp scp:data_org/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- | subset-feats --n=10 ark:- ark:-|" data_org/lang/topo 39 exp_org/monophones/0.mdl exp_org/monophones/tree 
+# Started at Mon Dec 11 18:08:31 UTC 2017
+#
+gmm-init-mono --shared-phones=data_org/lang/phones/sets.int '--train-feats=ark,s,cs:apply-cmvn --norm-vars=true  --utt2spk=ark:data_org/train/split8/1/utt2spk scp:data_org/train/split8/1/cmvn.scp scp:data_org/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- | subset-feats --n=10 ark:- ark:-|' data_org/lang/topo 39 exp_org/monophones/0.mdl exp_org/monophones/tree 
+add-deltas ark:- ark:- 
+apply-cmvn --norm-vars=true --utt2spk=ark:data_org/train/split8/1/utt2spk scp:data_org/train/split8/1/cmvn.scp scp:data_org/train/split8/1/feats.scp ark:- 
+subset-feats --n=10 ark:- ark:- 
+# Accounting: time=0 threads=1
+# Ended (code 0) at Mon Dec 11 18:08:31 UTC 2017, elapsed time 0 seconds
