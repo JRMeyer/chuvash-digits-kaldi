@@ -1,0 +1,7 @@
+# convert-ali exp_org/monophones_aligned/final.mdl exp_org/triphones/1.mdl exp_org/triphones/tree "ark:gunzip -c exp_org/monophones_aligned/ali.4.gz|" "ark:|gzip -c >exp_org/triphones/ali.4.gz" 
+# Started at Mon Dec 11 18:12:17 UTC 2017
+#
+convert-ali exp_org/monophones_aligned/final.mdl exp_org/triphones/1.mdl exp_org/triphones/tree 'ark:gunzip -c exp_org/monophones_aligned/ali.4.gz|' 'ark:|gzip -c >exp_org/triphones/ali.4.gz' 
+LOG (convert-ali[5.3.101~2-5c219]:main():convert-ali.cc:120) Succeeded converting alignments for 69 files, failed for 0
+# Accounting: time=0 threads=1
+# Ended (code 0) at Mon Dec 11 18:12:17 UTC 2017, elapsed time 0 seconds
