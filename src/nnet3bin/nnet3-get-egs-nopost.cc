@@ -33,18 +33,14 @@ namespace nnet3 {
 static bool ProcessFile(const GeneralMatrix &feats,
                         const MatrixBase<BaseFloat> *ivector_feats,
                         int32 ivector_period,
-                        const Posterior &pdf_post,
                         const std::string &utt_id,
                         bool compress,
                         int32 num_pdfs,
                         int32 length_tolerance,
                         UtteranceSplitter *utt_splitter,
                         NnetExampleWriter *example_writer) {
+
   int32 num_input_frames = feats.NumRows();
-  if (!utt_splitter->LengthsMatch(utt_id, num_input_frames,
-                                  static_cast<int32>(pdf_post.size()),
-                                  length_tolerance))
-    return false;  // LengthsMatch() will have printed a warning.
 
   std::vector<ChunkTimeInfo> chunks;
 
@@ -59,20 +55,15 @@ static bool ProcessFile(const GeneralMatrix &feats,
   // 'frame_subsampling_factor' is not used in any recipes at the time of
   // writing, this is being supported to unify the code with the 'chain' recipes
   // and in case we need it for some reason in future.
-  int32 frame_subsampling_factor =
-      utt_splitter->Config().frame_subsampling_factor;
+  int32 frame_subsampling_factor = utt_splitter->Config().frame_subsampling_factor;
 
   for (size_t c = 0; c < chunks.size(); c++) {
+
     const ChunkTimeInfo &chunk = chunks[c];
-
-    int32 tot_input_frames = chunk.left_context + chunk.num_frames +
-        chunk.right_context;
-
+    int32 tot_input_frames = chunk.left_context + chunk.num_frames + chunk.right_context;
     int32 start_frame = chunk.first_frame - chunk.left_context;
-
     GeneralMatrix input_frames;
-    ExtractRowRangeWithPadding(feats, start_frame, tot_input_frames,
-                               &input_frames);
+    ExtractRowRangeWithPadding(feats, start_frame, tot_input_frames, &input_frames);
 
     // 'input_frames' now stores the relevant rows (maybe with padding) from the
     // original Matrix or (more likely) CompressedMatrix.  If a CompressedMatrix,
@@ -111,9 +102,7 @@ static bool ProcessFile(const GeneralMatrix &feats,
     // don't want to add such an option if experiments show that it is not
     // helpful.
     for (int32 i = 0; i < num_frames_subsampled; i++) {
-      int32 t = i + start_frame_subsampled;
-      if (t < pdf_post.size())
-        labels[i] = pdf_post[t];
+      labels[i] = 1;
       for (std::vector<std::pair<int32, BaseFloat> >::iterator
                iter = labels[i].begin(); iter != labels[i].end(); ++iter)
         iter->second *= chunk.output_weights[i];
@@ -165,9 +154,7 @@ int main(int argc, char *argv[]) {
 
 
     bool compress = true;
-    int32 num_pdfs = -1, length_tolerance = 100,
-        targets_length_tolerance = 2,  
-        online_ivector_period = 1;
+    int32 num_pdfs = -1, length_tolerance = 100, targets_length_tolerance = 2, online_ivector_period = 1;
 
     ExampleGenerationConfig eg_config;  // controls num-frames,
                                         // left/right-context, etc.
@@ -200,7 +187,7 @@ int main(int argc, char *argv[]) {
 
     po.Read(argc, argv);
 
-    if (po.NumArgs() != 3) {
+    if (po.NumArgs() != 2) {
       po.PrintUsage();
       exit(1);
     }
@@ -211,16 +198,14 @@ int main(int argc, char *argv[]) {
     eg_config.ComputeDerived();
     UtteranceSplitter utt_splitter(eg_config);
 
-    std::string feature_rspecifier = po.GetArg(1),
-        pdf_post_rspecifier = po.GetArg(2),
-        examples_wspecifier = po.GetArg(3);
+    // Get args from stdin
+    std::string feature_rspecifier = po.GetArg(1), examples_wspecifier = po.GetArg(2);
 
     // SequentialGeneralMatrixReader can read either a Matrix or
     // CompressedMatrix (or SparseMatrix, but not as relevant here),
     // and it retains the type.  This way, we can generate parts of
     // the feature matrices without uncompressing and re-compressing.
     SequentialGeneralMatrixReader feat_reader(feature_rspecifier);
-    RandomAccessPosteriorReader pdf_post_reader(pdf_post_rspecifier);
     NnetExampleWriter example_writer(examples_wspecifier);
     RandomAccessBaseFloatMatrixReader online_ivector_reader(
         online_ivector_rspecifier);
@@ -230,49 +215,44 @@ int main(int argc, char *argv[]) {
     for (; !feat_reader.Done(); feat_reader.Next()) {
       std::string key = feat_reader.Key();
       const GeneralMatrix &feats = feat_reader.Value();
-      if (!pdf_post_reader.HasKey(key)) {
-        KALDI_WARN << "No pdf-level posterior for key " << key;
-        num_err++;
-      } else {
-        const Posterior &pdf_post = pdf_post_reader.Value(key);
-        const Matrix<BaseFloat> *online_ivector_feats = NULL;
-        if (!online_ivector_rspecifier.empty()) {
-          if (!online_ivector_reader.HasKey(key)) {
-            KALDI_WARN << "No iVectors for utterance " << key;
-            num_err++;
-            continue;
-          } else {
-            // this address will be valid until we call HasKey() or Value()
-            // again.
-            online_ivector_feats = &(online_ivector_reader.Value(key));
-          }
-        }
-
-        if (online_ivector_feats != NULL &&
-            (abs(feats.NumRows() - (online_ivector_feats->NumRows() *
-                                    online_ivector_period)) > length_tolerance
-             || online_ivector_feats->NumRows() == 0)) {
-          KALDI_WARN << "Length difference between feats " << feats.NumRows()
-                     << " and iVectors " << online_ivector_feats->NumRows()
-                     << "exceeds tolerance " << length_tolerance;
+      const Matrix<BaseFloat> *online_ivector_feats = NULL;
+      if (!online_ivector_rspecifier.empty()) {
+        if (!online_ivector_reader.HasKey(key)) {
+          KALDI_WARN << "No iVectors for utterance " << key;
           num_err++;
           continue;
+        } else {
+          // this address will be valid until we call HasKey() or Value()
+          // again.
+          online_ivector_feats = &(online_ivector_reader.Value(key));
         }
-
-        if (!ProcessFile(feats, online_ivector_feats, online_ivector_period,
-                         pdf_post, key, compress, num_pdfs, 
-                         targets_length_tolerance,
-                         &utt_splitter, &example_writer))
-          num_err++;
       }
+      
+      if (online_ivector_feats != NULL &&
+          (abs(feats.NumRows() - (online_ivector_feats->NumRows() *
+                                  online_ivector_period)) > length_tolerance
+           || online_ivector_feats->NumRows() == 0)) {
+        KALDI_WARN << "Length difference between feats " << feats.NumRows()
+                   << " and iVectors " << online_ivector_feats->NumRows()
+                   << "exceeds tolerance " << length_tolerance;
+        num_err++;
+        continue;
+      }
+      
+      if (!ProcessFile(feats, online_ivector_feats, online_ivector_period,
+                       key, compress, num_pdfs, 
+                       targets_length_tolerance,
+                       &utt_splitter, &example_writer))
+        num_err++;
     }
-    if (num_err > 0)
-      KALDI_WARN << num_err << " utterances had errors and could "
-          "not be processed.";
-    // utt_splitter prints stats in its destructor.
-    return utt_splitter.ExitStatus();
-  } catch(const std::exception &e) {
-    std::cerr << e.what() << '\n';
-    return -1;
   }
+  if (num_err > 0)
+    KALDI_WARN << num_err << " utterances had errors and could "
+      "not be processed.";
+  // utt_splitter prints stats in its destructor.
+  return utt_splitter.ExitStatus();
+} catch(const std::exception &e) {
+  std::cerr << e.what() << '\n';
+  return -1;
+ }
 }
