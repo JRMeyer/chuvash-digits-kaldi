@@ -1,0 +1,13 @@
+# gmm-acc-stats-ali exp_org/monophones/45.mdl "ark,s,cs:apply-cmvn --norm-vars=true  --utt2spk=ark:data_org/train/split8/3/utt2spk scp:data_org/train/split8/3/cmvn.scp scp:data_org/train/split8/3/feats.scp ark:- | add-deltas ark:- ark:- |" "ark:gunzip -c exp_org/monophones/ali.3.gz|" exp_org/monophones/45.3.acc 
+# Started at Mon Dec 11 18:12:00 UTC 2017
+#
+gmm-acc-stats-ali exp_org/monophones/45.mdl 'ark,s,cs:apply-cmvn --norm-vars=true  --utt2spk=ark:data_org/train/split8/3/utt2spk scp:data_org/train/split8/3/cmvn.scp scp:data_org/train/split8/3/feats.scp ark:- | add-deltas ark:- ark:- |' 'ark:gunzip -c exp_org/monophones/ali.3.gz|' exp_org/monophones/45.3.acc 
+apply-cmvn --norm-vars=true --utt2spk=ark:data_org/train/split8/3/utt2spk scp:data_org/train/split8/3/cmvn.scp scp:data_org/train/split8/3/feats.scp ark:- 
+add-deltas ark:- ark:- 
+LOG (gmm-acc-stats-ali[5.3.101~2-5c219]:main():gmm-acc-stats-ali.cc:105) Processed 50 utterances; for utterance org_atai_279 avg. like is 2.98547 over 591 frames.
+LOG (apply-cmvn[5.3.101~2-5c219]:main():apply-cmvn.cc:159) Applied cepstral mean and variance normalization to 68 utterances, errors on 0
+LOG (gmm-acc-stats-ali[5.3.101~2-5c219]:main():gmm-acc-stats-ali.cc:112) Done 68 files, 0 with errors.
+LOG (gmm-acc-stats-ali[5.3.101~2-5c219]:main():gmm-acc-stats-ali.cc:115) Overall avg like per frame (Gaussian only) = 2.85825 over 54606 frames.
+LOG (gmm-acc-stats-ali[5.3.101~2-5c219]:main():gmm-acc-stats-ali.cc:123) Written accs.
+# Accounting: time=1 threads=1
+# Ended (code 0) at Mon Dec 11 18:12:01 UTC 2017, elapsed time 1 seconds
