@@ -1,0 +1,14 @@
+# gmm-acc-stats-ali exp_org/triphones/24.mdl "ark,s,cs:apply-cmvn  --utt2spk=ark:data_org/train/split8/8/utt2spk scp:data_org/train/split8/8/cmvn.scp scp:data_org/train/split8/8/feats.scp ark:- | add-deltas ark:- ark:- |" "ark,s,cs:gunzip -c exp_org/triphones/ali.8.gz|" exp_org/triphones/24.8.acc 
+# Started at Mon Dec 11 18:12:47 UTC 2017
+#
+gmm-acc-stats-ali exp_org/triphones/24.mdl 'ark,s,cs:apply-cmvn  --utt2spk=ark:data_org/train/split8/8/utt2spk scp:data_org/train/split8/8/cmvn.scp scp:data_org/train/split8/8/feats.scp ark:- | add-deltas ark:- ark:- |' 'ark,s,cs:gunzip -c exp_org/triphones/ali.8.gz|' exp_org/triphones/24.8.acc 
+add-deltas ark:- ark:- 
+apply-cmvn --utt2spk=ark:data_org/train/split8/8/utt2spk scp:data_org/train/split8/8/cmvn.scp scp:data_org/train/split8/8/feats.scp ark:- 
+WARNING (gmm-acc-stats-ali[5.3.101~2-5c219]:main():gmm-acc-stats-ali.cc:79) No alignment for utterance org_atai_608
+LOG (gmm-acc-stats-ali[5.3.101~2-5c219]:main():gmm-acc-stats-ali.cc:105) Processed 50 utterances; for utterance org_atai_79 avg. like is 18.605 over 210 frames.
+LOG (apply-cmvn[5.3.101~2-5c219]:main():apply-cmvn.cc:162) Applied cepstral mean normalization to 68 utterances, errors on 0
+LOG (gmm-acc-stats-ali[5.3.101~2-5c219]:main():gmm-acc-stats-ali.cc:112) Done 67 files, 1 with errors.
+LOG (gmm-acc-stats-ali[5.3.101~2-5c219]:main():gmm-acc-stats-ali.cc:115) Overall avg like per frame (Gaussian only) = 16.0895 over 54691 frames.
+LOG (gmm-acc-stats-ali[5.3.101~2-5c219]:main():gmm-acc-stats-ali.cc:123) Written accs.
+# Accounting: time=1 threads=1
+# Ended (code 0) at Mon Dec 11 18:12:48 UTC 2017, elapsed time 1 seconds
