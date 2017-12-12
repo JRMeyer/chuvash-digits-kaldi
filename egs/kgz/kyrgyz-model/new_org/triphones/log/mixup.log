@@ -1,3 +1,0 @@
-gmm-mixup --mix-up=1000 exp_org/triphones/1.mdl exp_org/triphones/1.occs exp_org/triphones/1.mdl 
-LOG (gmm-mixup[5.3.101~2-5c219]:SplitByCount():am-diag-gmm.cc:116) Split 770 states with target = 1000, power = 0.2, perturb_factor = 0.01 and min_count = 20, split #Gauss from 770 to 1000
-LOG (gmm-mixup[5.3.101~2-5c219]:main():gmm-mixup.cc:103) Written model to exp_org/triphones/1.mdl
