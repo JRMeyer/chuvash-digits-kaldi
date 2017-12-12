@@ -279,64 +279,64 @@ fi
 echo "$0: num_pdfs= $num_pdfs"
 
 if [ $stage -le 3 ]; then
-  echo "$0: Getting validation and training subset examples."
-  rm $dir/.error 2>/dev/null
-  echo "$0: ... extracting validation and training-subset alignments."
-
-
-  # do the filtering just once, as ali.scp may be long.
-  utils/filter_scp.pl <(cat $dir/valid_uttlist $dir/train_subset_uttlist) \
-    <$dir/ali.scp >$dir/ali_special.scp
-
-  $cmd $dir/log/create_valid_subset.log \
-    utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
-    ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
-    ali-to-post ark:- ark:- \| \
-    nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$valid_feats" \
-      ark,s,cs:- "ark:$dir/valid_all.egs" || touch $dir/.error &
-  $cmd $dir/log/create_train_subset.log \
-    utils/filter_scp.pl $dir/train_subset_uttlist $dir/ali_special.scp \| \
-    ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
-    ali-to-post ark:- ark:- \| \
-    nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$train_subset_feats" \
-      ark,s,cs:- "ark:$dir/train_subset_all.egs" || touch $dir/.error &
-  wait;
-  [ -f $dir/.error ] && echo "Error detected while creating train/valid egs" && exit 1
-  echo "... Getting subsets of validation examples for diagnostics and combination."
-  if $generate_egs_scp; then
-    valid_diagnostic_output="ark,scp:$dir/valid_diagnostic.egs,$dir/valid_diagnostic.scp"
-    train_diagnostic_output="ark,scp:$dir/train_diagnostic.egs,$dir/train_diagnostic.scp"
-  else
-    valid_diagnostic_output="ark:$dir/valid_diagnostic.egs"
-    train_diagnostic_output="ark:$dir/train_diagnostic.egs"
-  fi
-  $cmd $dir/log/create_valid_subset_combine.log \
-    nnet3-subset-egs --n=$[$num_valid_frames_combine/$frames_per_eg_principal] ark:$dir/valid_all.egs \
-      ark:$dir/valid_combine.egs || touch $dir/.error &
-  $cmd $dir/log/create_valid_subset_diagnostic.log \
-    nnet3-subset-egs --n=$[$num_frames_diagnostic/$frames_per_eg_principal] ark:$dir/valid_all.egs \
-    $valid_diagnostic_output || touch $dir/.error &
-
-  $cmd $dir/log/create_train_subset_combine.log \
-    nnet3-subset-egs --n=$[$num_train_frames_combine/$frames_per_eg_principal] ark:$dir/train_subset_all.egs \
-      ark:$dir/train_combine.egs || touch $dir/.error &
-  $cmd $dir/log/create_train_subset_diagnostic.log \
-    nnet3-subset-egs --n=$[$num_frames_diagnostic/$frames_per_eg_principal] ark:$dir/train_subset_all.egs \
-    $train_diagnostic_output || touch $dir/.error &
-  wait
-  sleep 5  # wait for file system to sync.
-  cat $dir/valid_combine.egs $dir/train_combine.egs > $dir/combine.egs
-  if $generate_egs_scp; then
-    cat $dir/valid_combine.egs $dir/train_combine.egs  | \
-    nnet3-copy-egs ark:- ark,scp:$dir/combine.egs,$dir/combine.scp
-    rm $dir/{train,valid}_combine.scp
-  else
+    echo "$0: Getting validation and training subset examples."
+    rm $dir/.error 2>/dev/null
+    echo "$0: ... extracting validation and training-subset alignments."
+    
+    
+    # do the filtering just once, as ali.scp may be long.
+    utils/filter_scp.pl <(cat $dir/valid_uttlist $dir/train_subset_uttlist) \
+                        <$dir/ali.scp >$dir/ali_special.scp
+    
+    $cmd $dir/log/create_valid_subset.log \
+         utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
+         ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
+         ali-to-post ark:- ark:- \| \
+         nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$valid_feats" \
+         ark,s,cs:- "ark:$dir/valid_all.egs" || touch $dir/.error &
+    $cmd $dir/log/create_train_subset.log \
+         utils/filter_scp.pl $dir/train_subset_uttlist $dir/ali_special.scp \| \
+         ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
+         ali-to-post ark:- ark:- \| \
+         nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$train_subset_feats" \
+         ark,s,cs:- "ark:$dir/train_subset_all.egs" || touch $dir/.error &
+    wait;
+    [ -f $dir/.error ] && echo "Error detected while creating train/valid egs" && exit 1
+    echo "... Getting subsets of validation examples for diagnostics and combination."
+    if $generate_egs_scp; then
+        valid_diagnostic_output="ark,scp:$dir/valid_diagnostic.egs,$dir/valid_diagnostic.scp"
+        train_diagnostic_output="ark,scp:$dir/train_diagnostic.egs,$dir/train_diagnostic.scp"
+    else
+        valid_diagnostic_output="ark:$dir/valid_diagnostic.egs"
+        train_diagnostic_output="ark:$dir/train_diagnostic.egs"
+    fi
+    $cmd $dir/log/create_valid_subset_combine.log \
+         nnet3-subset-egs --n=$[$num_valid_frames_combine/$frames_per_eg_principal] ark:$dir/valid_all.egs \
+         ark:$dir/valid_combine.egs || touch $dir/.error &
+    $cmd $dir/log/create_valid_subset_diagnostic.log \
+         nnet3-subset-egs --n=$[$num_frames_diagnostic/$frames_per_eg_principal] ark:$dir/valid_all.egs \
+         $valid_diagnostic_output || touch $dir/.error &
+    
+    $cmd $dir/log/create_train_subset_combine.log \
+         nnet3-subset-egs --n=$[$num_train_frames_combine/$frames_per_eg_principal] ark:$dir/train_subset_all.egs \
+         ark:$dir/train_combine.egs || touch $dir/.error &
+    $cmd $dir/log/create_train_subset_diagnostic.log \
+         nnet3-subset-egs --n=$[$num_frames_diagnostic/$frames_per_eg_principal] ark:$dir/train_subset_all.egs \
+         $train_diagnostic_output || touch $dir/.error &
+    wait
+    sleep 5  # wait for file system to sync.
     cat $dir/valid_combine.egs $dir/train_combine.egs > $dir/combine.egs
-  fi
-  for f in $dir/{combine,train_diagnostic,valid_diagnostic}.egs; do
-    [ ! -s $f ] && echo "No examples in file $f" && exit 1;
-  done
-  rm $dir/valid_all.egs $dir/train_subset_all.egs $dir/{train,valid}_combine.egs
+    if $generate_egs_scp; then
+        cat $dir/valid_combine.egs $dir/train_combine.egs  | \
+            nnet3-copy-egs ark:- ark,scp:$dir/combine.egs,$dir/combine.scp
+        rm $dir/{train,valid}_combine.scp
+    else
+        cat $dir/valid_combine.egs $dir/train_combine.egs > $dir/combine.egs
+    fi
+    for f in $dir/{combine,train_diagnostic,valid_diagnostic}.egs; do
+        [ ! -s $f ] && echo "No examples in file $f" && exit 1;
+    done
+    rm $dir/valid_all.egs $dir/train_subset_all.egs $dir/{train,valid}_combine.egs
 fi
 
 if [ $stage -le 4 ]; then
