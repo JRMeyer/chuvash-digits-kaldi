@@ -1,0 +1,1 @@
+/data/kyr-wiki-data/lexicon.txt

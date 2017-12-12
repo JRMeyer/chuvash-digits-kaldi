@@ -1,0 +1,29 @@
+# compile-train-graphs exp_org/triphones/tree exp_org/triphones/1.mdl data_org/lang/L.fst "ark:utils/sym2int.pl --map-oov 2 -f 2- data_org/lang/words.txt < data_org/train/split8/1/text |" "ark:|gzip -c >exp_org/triphones/fsts.1.gz" 
+# Started at Mon Dec 11 18:12:17 UTC 2017
+#
+compile-train-graphs exp_org/triphones/tree exp_org/triphones/1.mdl data_org/lang/L.fst 'ark:utils/sym2int.pl --map-oov 2 -f 2- data_org/lang/words.txt < data_org/train/split8/1/text |' 'ark:|gzip -c >exp_org/triphones/fsts.1.gz' 
+sym2int.pl: replacing мобу with 2
+sym2int.pl: replacing тактайдай with 2
+sym2int.pl: replacing тептегиз with 2
+sym2int.pl: replacing жепирекей with 2
+sym2int.pl: replacing дөңсөөнүн with 2
+sym2int.pl: replacing көккашат with 2
+sym2int.pl: replacing билишпес with 2
+sym2int.pl: replacing жаздымында with 2
+sym2int.pl: replacing маңдайлаш with 2
+sym2int.pl: replacing кеңколдун with 2
+sym2int.pl: replacing дарбазадай with 2
+sym2int.pl: replacing күбөсүнө with 2
+sym2int.pl: replacing күкүктөп with 2
+sym2int.pl: replacing жалына with 2
+sym2int.pl: replacing дүпүйүп with 2
+sym2int.pl: replacing күңгөйтескей with 2
+sym2int.pl: replacing азуусундай with 2
+sym2int.pl: replacing тасырайып with 2
+sym2int.pl: replacing жомокко with 2
+sym2int.pl: replacing тепкедей with 2
+sym2int.pl: not warning for OOVs any more times
+** Replaced 245 instances of OOVs with 2
+LOG (compile-train-graphs[5.3.101~2-5c219]:main():compile-train-graphs.cc:147) compile-train-graphs: succeeded for 69 graphs, failed for 0
+# Accounting: time=5 threads=1
+# Ended (code 0) at Mon Dec 11 18:12:22 UTC 2017, elapsed time 5 seconds
