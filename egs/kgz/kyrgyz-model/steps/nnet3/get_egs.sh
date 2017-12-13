@@ -287,6 +287,15 @@ if [ $stage -le 3 ]; then
     # do the filtering just once, as ali.scp may be long.
     utils/filter_scp.pl <(cat $dir/valid_uttlist $dir/train_subset_uttlist) \
                         <$dir/ali.scp >$dir/ali_special.scp
+
+
+    $cmd $dir/log/create_valid_subset.log \
+         utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
+         ali-to-pdf $alidir/final.mdl scp:- ark,t:$dir/output.stuff0
+    $cmd $dir/log/create_valid_subset.log \
+         utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
+         ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
+         ali-to-post ark:- ark,t:$dir/output.stuff1
     
     $cmd $dir/log/create_valid_subset.log \
          utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
