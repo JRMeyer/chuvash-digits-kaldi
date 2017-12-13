@@ -1,4 +1,4 @@
-// nnet3bin/nnet3-get-egs.cc
+// nnet3bin/nnet3-get-egs-nopost.cc
 
 // Copyright 2012-2015  Johns Hopkins University (author:  Daniel Povey)
 //                2014  Vimal Manohar
