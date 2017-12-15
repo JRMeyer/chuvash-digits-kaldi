@@ -235,7 +235,6 @@ while [ $[$num_archives_intermediate+4] -gt $max_open_filehandles ]; do
 done
 # now make sure num_archives is an exact multiple of archives_multiple.
 num_archives=$[$archives_multiple*$num_archives_intermediate]
-
 echo $num_archives >$dir/info/num_archives
 echo $frames_per_eg >$dir/info/frames_per_eg
 # Work out the number of egs per archive
@@ -271,6 +270,19 @@ if [ $stage -le 2 ]; then
         || exit 1;
 fi
 
+
+
+## DEBUGGING
+if [ $stage -le 2 ]; then
+    echo "$0: copying all train data alignments into $dir/ali.scp"
+    for id in $(seq $num_ali_jobs); do gunzip -c $alidir/ali.$id.gz; done | \
+        copy-int-vector ark:- ark,t:$dir/ali.ark.txt \
+        || exit 1;
+fi
+
+
+
+
 egs_opts="--left-context=$left_context --right-context=$right_context --compress=$compress --num-frames=$frames_per_eg"
 [ $left_context_initial -ge 0 ] && egs_opts="$egs_opts --left-context-initial=$left_context_initial"
 [ $right_context_final -ge 0 ] && egs_opts="$egs_opts --right-context-final=$right_context_final"
@@ -300,43 +312,51 @@ if [ $stage -le 3 ]; then
     utils/filter_scp.pl <(cat $dir/valid_uttlist $dir/train_uttlist) \
                         <$dir/ali.scp >$dir/ali_special.scp
 
+    if [ "$num_targets" == "tree" ]; then
 
-    ### DEBUGGIN ###
-    echo "### OUTPUTTING debug info files to $dir ###"
-    $cmd $dir/log/create_valid_subset.log \
-         utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp > $dir/valid_subset_new.scp
+        
+        # print to file for debugging
+        copy-feats "$train_feats" ark,t:$dir/train_feats.txt
+        $cmd $dir/log/create_valid_subset.log \
+             utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
+             ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
+             ali-to-post ark:- ark,t:$dir/ali-to-post.txt
 
-    $cmd $dir/log/create_valid_subset.log \
-         utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
-         ali-to-pdf $alidir/final.mdl scp:- ark,t:$dir/output.ali-to-pdf.stuff1
+        
+        # Filtered scps --> filtered alis --> filtered alis w/ posteriors 
+        $cmd $dir/log/create_valid_subset.log \
+             utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
+             ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
+             ali-to-post ark:- ark:- \| \
+             nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$valid_feats" \
+             ark,s,cs:- "ark:$dir/valid_all.egs" || touch $dir/.error &
+        $cmd $dir/log/create_train.log \
+             utils/filter_scp.pl $dir/train_uttlist $dir/ali_special.scp \| \
+             ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
+             ali-to-post ark:- ark:- \| \
+             nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$train_feats" \
+             ark,s,cs:- "ark:$dir/train_all.egs" || touch $dir/.error &
+        wait;
+    else
+        # Filtered scps --> filtered alis --> filtered alis w/ posteriors 
+
+        echo "$0: creating examples without final.mdl information"
+
+        # print to file for debugging
+        copy-feats "$train_feats" ark,t:$dir/train_feats.txt
+        ali-to-post ark:$dir/ali.ark ark,t:$dir/ali-to-post.txt
+        
+        $cmd $dir/log/create_valid_subset.log \
+             ali-to-post ark:$dir/ali.ark ark:- \| \
+             nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$valid_feats" \
+             ark,s,cs:- "ark:$dir/valid_all.egs" || touch $dir/.error &
+        $cmd $dir/log/create_train.log \
+             ali-to-post ark:$dir/ali.ark ark:- \| \
+             nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$train_feats" \
+             ark,s,cs:- "ark:$dir/train_all.egs" || touch $dir/.error &
+        wait;
+    fi
     
-    $cmd $dir/log/create_valid_subset.log \
-         utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
-         ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
-         ali-to-post ark:- ark,t:$dir/output.ali-to-post.stuff2
-    
-    $cmd $dir/log/create_valid_subset.log \
-         utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
-         ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
-         ali-to-post ark:- ark:- \| \
-         nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$valid_feats" \
-         ark,s,cs:- "ark,t:$dir/valid_all.egs.txt" || touch $dir/.error &
-    ### DEBUGGIN ###
-
-    # Filtered scps --> filtered alis --> filtered alis w/ posteriors 
-    $cmd $dir/log/create_valid_subset.log \
-         utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
-         ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
-         ali-to-post ark:- ark:- \| \
-         nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$valid_feats" \
-         ark,s,cs:- "ark:$dir/valid_all.egs" || touch $dir/.error &
-    $cmd $dir/log/create_train.log \
-         utils/filter_scp.pl $dir/train_uttlist $dir/ali_special.scp \| \
-         ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
-         ali-to-post ark:- ark:- \| \
-         nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$train_feats" \
-         ark,s,cs:- "ark:$dir/train_all.egs" || touch $dir/.error &
-    wait;
     [ -f $dir/.error ] && echo "Error detected while creating train/valid egs" && exit 1
     echo "... Getting subsets of validation examples for diagnostics and combination."
     if $generate_egs_scp; then
