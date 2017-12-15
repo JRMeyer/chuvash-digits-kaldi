@@ -289,13 +289,21 @@ if [ $stage -le 3 ]; then
                         <$dir/ali.scp >$dir/ali_special.scp
 
 
+
+    ### DEBUGGIN ###
+    echo "### OUTPUTTING debug info files to $dir ###"
+    $cmd $dir/log/create_valid_subset.log \
+         utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp > $dir/output.filter_scp.stuff0
+
     $cmd $dir/log/create_valid_subset.log \
          utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
-         ali-to-pdf $alidir/final.mdl scp:- ark,t:$dir/output.stuff0
+         ali-to-pdf $alidir/final.mdl scp:- ark,t:$dir/output.ali-to-pdf.stuff1
+    
     $cmd $dir/log/create_valid_subset.log \
          utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
          ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
-         ali-to-post ark:- ark,t:$dir/output.stuff1
+         ali-to-post ark:- ark,t:$dir/output.ali-to-post.stuff2
+    ### DEBUGGIN ###
     
     $cmd $dir/log/create_valid_subset.log \
          utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
