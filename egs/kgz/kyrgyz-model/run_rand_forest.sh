@@ -23,7 +23,7 @@ cat plp_new/raw_plp_train.*.ark > raw_plp_train.all.ark
 
 # TRAIN and RUN FOREST
 
-./run_forest.py sub_500_data sub_500_labels reformatted_raw_plp_train.1.ark
+./run_forest.py sub_frames_labels reformatted_raw_plp_train.1.ark
 
 # reformat python output so it looks like original ali.ark
 ./reformat_tree_classes.sh
