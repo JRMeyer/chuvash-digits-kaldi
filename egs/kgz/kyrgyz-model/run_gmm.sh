@@ -66,11 +66,11 @@ decode_test=1
 ### HYPER-PARAMETERS
 ##
 #
-tot_gauss_mono=1000
-num_leaves_tri=1000
-tot_gauss_tri=2000
-num_iters_mono=50
-num_iters_tri=50
+tot_gauss_mono=500
+num_leaves_tri=500
+tot_gauss_tri=1000
+num_iters_mono=25
+num_iters_tri=25
 #
 ##
 ###
@@ -115,6 +115,15 @@ if [ "$prep_train_audio" -eq "1" ]; then
 
     cwd=`pwd`
     cd $input_dir/audio
+
+    if [ "$(ls -A $input_dir/audio)" ]; then
+        echo "You already have audio files in $input_dir/audio...remove them!"
+        exit 0;
+    else
+        echo ""
+    fi
+    
+    
     for i in /data/downsampled/train/*.wav; do
         ln -s $i ${corpus_name}_${i##*/};
     done
