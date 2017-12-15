@@ -19,11 +19,26 @@ predict_uttIDs = predict.iloc[:,0]
 predict_frames = predict.iloc[:,1:].as_matrix()
 
 
+for i in np.array_split(predict_frames,8, axis=0):
+    print(i.shape)
+
+print(predict_frames.shape)
+
+
+exit()
 
 # ### TRAINING ###
 
-print("Training Random Forest")
-clf = RandomForestClassifier()
+print("Training Random Forest on 8 CPUs")
+clf = RandomForestClassifier(n_jobs=8,
+                             n_estimators=2,
+                             criterion='entropy',
+                             max_depth=None,
+                             min_samples_split=20,
+                             min_samples_leaf=10,
+                             bootstrap=True,
+                             verbose=2)
+
 clf.fit(train_frames, train_labels)
 
 
