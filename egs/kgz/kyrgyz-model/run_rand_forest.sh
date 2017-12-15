@@ -1,9 +1,14 @@
 
 
+
 # FORMAT TRAIN DATA
 
+# concatenate all transitions and feats (separately)
+cat exp_new/triphones_aligned/ali.* > ali.all.gz
+cat plp_new/raw_plp_train.*.ark > raw_plp_train.all.ark
+
 # returns <trans-id> <frame feats data>\n
-./extract_trans_ali.sh exp_org/triphones_aligned/ali.1.gz plp_org/raw_plp_train.1.ark
+./extract_trans_ali.sh ali.all.gz raw_plp_train.all.ark
 
 # same output as above, but fewer <trans-ids>
 ./get_rand_subset_data.sh labeled_frames.txt 500
@@ -13,7 +18,7 @@
 
 # returns <utt-id> <frame feats data> in sequence
 # so that we can reconstruct ali.ark
-./reformat_feats.sh plp_org/raw_plp_train.1.ark
+./reformat_feats.sh raw_plp_train.all.ark
 
 
 # TRAIN and RUN FOREST
