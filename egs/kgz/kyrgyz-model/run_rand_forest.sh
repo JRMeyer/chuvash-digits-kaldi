@@ -36,3 +36,6 @@ j=1; for i in ali.*; do tar -czvf ${i%.*}.$j.gz $i; ((j++)); rm $i; done
 cut -d" " -f2- new_alignments > alis_only
 # count unique ids
 grep -o -E '\w+' alis_only | sort -u | wc
+
+# format needed for nnet3 egs
+copy-int-vector ark,t:new_alignments.txt ark,scp:ali.ark,ali.scp
