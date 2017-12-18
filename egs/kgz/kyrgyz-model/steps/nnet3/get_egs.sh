@@ -267,11 +267,21 @@ if [ -e $dir/storage ]; then
 fi
 
 if [ $stage -le 2 ]; then
+
+    if [ "$num_targets" == "tree"]; then
     echo "$0: copying all train data alignments into $dir/ali.scp"
-    echo "$0: assuming the alignment arks are in txt, not binary"
     for id in $(seq $num_ali_jobs); do gunzip -c $ali_dir/ali.$id.gz; done | \
-        copy-int-vector ark,t:- ark,scp:$dir/ali.ark,$dir/ali.scp \
+        copy-int-vector ark:- ark,scp:$dir/ali.ark,$dir/ali.scp \
         || exit 1;
+    else
+        echo "$0: assuming you've already got the ali.ark file in the right place"
+        if [ ! -f $dir/ali.ark ]; then
+            echo "$0: didn't find $dir/ali.ark!"
+            exit 1;
+        fi
+
+    fi
+    
 fi
 
 
