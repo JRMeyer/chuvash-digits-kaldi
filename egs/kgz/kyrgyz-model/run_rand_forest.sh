@@ -25,29 +25,14 @@ cat plp_new/raw_plp_train.*.ark > raw_plp_train.all.ark
 
 ./run_forest.py sub_frames_labels reformatted_raw_plp_train.1.ark
 
-# reformat python output so it looks like original ali.ark
-./reformat_tree_classes.sh
-
-
 
 # REPLICATE ORIGINAL ALI FORMAT
 # split into num_jobs as before (8) and tar them up
-split -da 1 -l $((wc -l < new_alignments.txt/8 + 1)) new_alignments.txt ali. --additional-suffix=""
+split -da 1 -l $((`wc -l < new_alignments.txt`/8 + 1)) new_alignments.txt ali. --additional-suffix=""
 j=1; for i in ali.*; do tar -czvf ${i%.*}.$j.gz $i; ((j++)); rm $i; done
 
-
-
-# copy and rename data dirs to be used in NNET training
-cp -r data_org data_new
-find ./data_new/ -type f -exec sed -i 's/org_atai/new_atai/g' {} +
-
-cp -r exp_org exp_new
-find ./exp_new/ -type f -exec sed -i 's/org_atai/new_atai/g' {} +
-
-cp -r plp_org plp_new
-find ./plp_new/ -type f -exec sed -i 's/org_atai/new_atai/g' {} +
-
-cp -r input_org input_new
-find ./input_new/ -type f -exec sed -i 's/org_atai/new_atai/g' {} +
-cd input_new/audio
-for i in *.wav; do mv $i `echo $i | sed s/org_atai/new_atai/g`; done
+# count number of leaves you get from new alignments:
+# remove uttid from file (first col)
+cut -d" " -f2- new_alignments > alis_only
+# count unique ids
+grep -o -E '\w+' alis_only | sort -u | wc
