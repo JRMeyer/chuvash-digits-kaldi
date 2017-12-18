@@ -39,7 +39,7 @@ samples_per_iter=400000 # this is the target number of egs in each archive of eg
                         # a number that divides the number of samples in the
                         # entire data.
 
-transform_dir=     # If supplied, overrides alidir as the place to find fMLLR transforms
+transform_dir=     # If supplied, overrides ali_dir as the place to find fMLLR transforms
 
 stage=0
 nj=6         # This should be set to the maximum number of jobs you are
@@ -88,30 +88,33 @@ if [ $# != 3 ]; then
   exit 1;
 fi
 
-data=$1
-alidir=$2
+data_dir=$1
+ali_dir=$2
 dir=$3
 
+echo "$0 $@"
 echo "$0: num_targets = $num_targets" 
 
 # Check some files.
 [ ! -z "$online_ivector_dir" ] && \
     extra_files="$online_ivector_dir/ivector_online.scp $online_ivector_dir/ivector_period"
 
-for f in $data/feats.scp $alidir/ali.1.gz $alidir/final.mdl $alidir/tree $extra_files; do
+for f in $data_dir/feats.scp $ali_dir/ali.1.gz $ali_dir/final.mdl $ali_dir/tree $extra_files; do
     [ ! -f $f ] && echo "$0: no such file $f" && exit 1;
 done
 
-sdata=$data/split$nj
-utils/split_data.sh $data $nj
+sdata=$data_dir/split$nj
+utils/split_data.sh $data_dir $nj
 
 mkdir -p $dir/log $dir/info
-cp $alidir/tree $dir
+cp $ali_dir/tree $dir
 
-num_ali_jobs=$(cat $alidir/num_jobs) || exit 1;
+num_ali_jobs=$(cat $ali_dir/num_jobs) || exit 1;
 
 
-num_utts=$(cat $data/utt2spk | wc -l)
+num_utts=$(cat $data_dir/utt2spk | wc -l)
+echo "$0: Found $num_utts utterances in $data_dir/utt2spk"
+
 if ! [ $num_utts -gt $[$num_utts_subset*4] ]; then
     echo "$0: number of utterances $num_utts in your training data is too small versus --num-utts-subset=$num_utts_subset"
     echo "... you probably have so little data that it doesn't make sense to train a neural net."
@@ -119,33 +122,33 @@ if ! [ $num_utts -gt $[$num_utts_subset*4] ]; then
 fi
 
 echo "$0: save list of validation utterances to $dir/valid_uttlist"
-awk '{print $1}' $data/utt2spk | \
+awk '{print $1}' $data_dir/utt2spk | \
     utils/shuffle_list.pl | \
     head -$num_utts_subset \
     > $dir/valid_uttlist || exit 1;
 
-if [ -f $data/utt2uniq ]; then  # this matters if you use data augmentation.
-    echo "File $data/utt2uniq exists, so augmenting valid_uttlist to"
+if [ -f $data_dir/utt2uniq ]; then  # this matters if you use data augmentation.
+    echo "File $data_dir/utt2uniq exists, so augmenting valid_uttlist to"
     echo "include all perturbed versions of the same 'real' utterances."
     mv $dir/valid_uttlist $dir/valid_uttlist.tmp
-    utils/utt2spk_to_spk2utt.pl $data/utt2uniq > $dir/uniq2utt
-    cat $dir/valid_uttlist.tmp | utils/apply_map.pl $data/utt2uniq | \
+    utils/utt2spk_to_spk2utt.pl $data_dir/utt2uniq > $dir/uniq2utt
+    cat $dir/valid_uttlist.tmp | utils/apply_map.pl $data_dir/utt2uniq | \
         sort | uniq | utils/apply_map.pl $dir/uniq2utt | \
         awk '{for(n=1;n<=NF;n++) print $n;}' | sort  > $dir/valid_uttlist
     rm $dir/uniq2utt $dir/valid_uttlist.tmp
 fi
 
 echo "$0: save list of train utterances to $dir/train_uttlist"
-awk '{print $1}' $data/utt2spk | \
+awk '{print $1}' $data_dir/utt2spk | \
     utils/filter_scp.pl --exclude $dir/valid_uttlist | \
     utils/shuffle_list.pl | \
     head -$num_utts_subset \
          > $dir/train_uttlist \
     || exit 1;
 
-[ -z "$transform_dir" ] && transform_dir=$alidir
+[ -z "$transform_dir" ] && transform_dir=$ali_dir
 
-# because we'll need the features with a different number of jobs than $alidir,
+# because we'll need the features with a different number of jobs than $ali_dir,
 # copy to ark,scp.
 if [ -f $transform_dir/raw_trans.1 ]; then
     echo "$0: using raw transforms from $transform_dir"
@@ -162,17 +165,17 @@ echo "$0: feature type is raw"
 # Define feature types
 feats="ark,s,cs:utils/filter_scp.pl --exclude $dir/valid_uttlist $sdata/JOB/feats.scp |"
 feats="$feats apply-cmvn $cmvn_opts --utt2spk=ark:$sdata/JOB/utt2spk scp:$sdata/JOB/cmvn.scp scp:- ark:- |"
-valid_feats="ark,s,cs:utils/filter_scp.pl $dir/valid_uttlist $data/feats.scp |"
-valid_feats="$valid_feats apply-cmvn $cmvn_opts --utt2spk=ark:$data/utt2spk scp:$data/cmvn.scp scp:- ark:- |"
-train_feats="ark,s,cs:utils/filter_scp.pl $dir/train_uttlist $data/feats.scp |"
-train_feats="$train_feats apply-cmvn $cmvn_opts --utt2spk=ark:$data/utt2spk scp:$data/cmvn.scp scp:- ark:- |"
+valid_feats="ark,s,cs:utils/filter_scp.pl $dir/valid_uttlist $data_dir/feats.scp |"
+valid_feats="$valid_feats apply-cmvn $cmvn_opts --utt2spk=ark:$data_dir/utt2spk scp:$data_dir/cmvn.scp scp:- ark:- |"
+train_feats="ark,s,cs:utils/filter_scp.pl $dir/train_uttlist $data_dir/feats.scp |"
+train_feats="$train_feats apply-cmvn $cmvn_opts --utt2spk=ark:$data_dir/utt2spk scp:$data_dir/cmvn.scp scp:- ark:- |"
 echo $cmvn_opts >$dir/cmvn_opts
 
 
 if [ -f $dir/trans.scp ]; then
     feats="$feats transform-feats --utt2spk=ark:$sdata/JOB/utt2spk scp:$dir/trans.scp ark:- ark:- |"
-    valid_feats="$valid_feats transform-feats --utt2spk=ark:$data/utt2spk scp:$dir/trans.scp ark:- ark:- |"
-    train_feats="$train_feats transform-feats --utt2spk=ark:$data/utt2spk scp:$dir/trans.scp ark:- ark:- |"
+    valid_feats="$valid_feats transform-feats --utt2spk=ark:$data_dir/utt2spk scp:$dir/trans.scp ark:- ark:- |"
+    train_feats="$train_feats transform-feats --utt2spk=ark:$data_dir/utt2spk scp:$dir/trans.scp ark:- ark:- |"
 fi
 
 if [ ! -z "$online_ivector_dir" ]; then
@@ -187,8 +190,8 @@ else
 fi
 
 if [ $stage -le 1 ]; then
-    echo "$0: working out number of frames of training data in $data"
-    num_frames=$(steps/nnet2/get_num_frames.sh $data)
+    echo "$0: working out number of frames of training data in $data_dir"
+    num_frames=$(steps/nnet2/get_num_frames.sh $data_dir)
     echo "#### ERROR HERE! ####"
     echo $num_frames > $dir/info/num_frames
     echo "$0: found $num_frames frames of training data"
@@ -265,7 +268,7 @@ fi
 
 if [ $stage -le 2 ]; then
     echo "$0: copying all train data alignments into $dir/ali.scp"
-    for id in $(seq $num_ali_jobs); do gunzip -c $alidir/ali.$id.gz; done | \
+    for id in $(seq $num_ali_jobs); do gunzip -c $ali_dir/ali.$id.gz; done | \
         copy-int-vector ark:- ark,scp:$dir/ali.ark,$dir/ali.scp \
         || exit 1;
 fi
@@ -275,7 +278,7 @@ fi
 ## DEBUGGING
 if [ $stage -le 2 ]; then
     echo "$0: copying all train data alignments into $dir/ali.scp"
-    for id in $(seq $num_ali_jobs); do gunzip -c $alidir/ali.$id.gz; done | \
+    for id in $(seq $num_ali_jobs); do gunzip -c $ali_dir/ali.$id.gz; done | \
         copy-int-vector ark:- ark,t:$dir/ali.ark.txt \
         || exit 1;
 fi
@@ -294,7 +297,7 @@ echo $right_context_final > $dir/info/right_context_final
 
 
 if [ "$num_targets" == "tree" ]; then
-    num_pdfs=$(tree-info --print-args=false $alidir/tree | grep num-pdfs | awk '{print $2}')
+    num_pdfs=$(tree-info --print-args=false $ali_dir/tree | grep num-pdfs | awk '{print $2}')
 else
     num_pdfs=$num_targets
 fi
@@ -319,20 +322,20 @@ if [ $stage -le 3 ]; then
         copy-feats "$train_feats" ark,t:$dir/train_feats.txt
         $cmd $dir/log/create_valid_subset.log \
              utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
-             ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
+             ali-to-pdf $ali_dir/final.mdl scp:- ark:- \| \
              ali-to-post ark:- ark,t:$dir/ali-to-post.txt
 
         
         # Filtered scps --> filtered alis --> filtered alis w/ posteriors 
         $cmd $dir/log/create_valid_subset.log \
              utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
-             ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
+             ali-to-pdf $ali_dir/final.mdl scp:- ark:- \| \
              ali-to-post ark:- ark:- \| \
              nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$valid_feats" \
              ark,s,cs:- "ark:$dir/valid_all.egs" || touch $dir/.error &
         $cmd $dir/log/create_train.log \
              utils/filter_scp.pl $dir/train_uttlist $dir/ali_special.scp \| \
-             ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
+             ali-to-pdf $ali_dir/final.mdl scp:- ark:- \| \
              ali-to-post ark:- ark:- \| \
              nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$train_feats" \
              ark,s,cs:- "ark:$dir/train_all.egs" || touch $dir/.error &
@@ -407,7 +410,7 @@ if [ $stage -le 4 ]; then
   # The examples will go round-robin to egs_list.
   $cmd JOB=1:$nj $dir/log/get_egs.JOB.log \
     nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$feats" \
-    "ark,s,cs:filter_scp.pl $sdata/JOB/utt2spk $dir/ali.scp | ali-to-pdf $alidir/final.mdl scp:- ark:- | ali-to-post ark:- ark:- |" ark:- \| \
+    "ark,s,cs:filter_scp.pl $sdata/JOB/utt2spk $dir/ali.scp | ali-to-pdf $ali_dir/final.mdl scp:- ark:- | ali-to-post ark:- ark:- |" ark:- \| \
     nnet3-copy-egs --random=true --srand=\$[JOB+$srand] ark:- $egs_list || exit 1;
 fi
 
