@@ -14,11 +14,14 @@ if [ $# -ne 1 ]; then
   ) 1>&2
 fi
 
+echo $0 $@
+
 data=$1
 
 if [ ! -f $data/utt2dur ]; then
     utils/data/get_utt2dur.sh $data 1>&2 || exit 1
 fi
+
 
 frame_shift=$(utils/data/get_frame_shift.sh $data) || exit 1
 
