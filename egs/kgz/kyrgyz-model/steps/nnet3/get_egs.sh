@@ -251,19 +251,19 @@ echo $egs_per_archive > $dir/info/egs_per_archive
 echo "$0: creating $num_archives archives, each with $egs_per_archive egs, with"
 echo "$0:   $frames_per_eg labels per example, and (left,right) context = ($left_context,$right_context)"
 if [ $left_context_initial -ge 0 ] || [ $right_context_final -ge 0 ]; then
-  echo "$0:   ... and (left-context-initial,right-context-final) = ($left_context_initial,$right_context_final)"
+    echo "$0:   ... and (left-context-initial,right-context-final) = ($left_context_initial,$right_context_final)"
 fi
 
 
 
 if [ -e $dir/storage ]; then
-  # Make soft links to storage directories, if distributing this way..  See
-  # utils/create_split_dir.pl.
-  echo "$0: creating data links"
-  utils/create_data_link.pl $(for x in $(seq $num_archives); do echo $dir/egs.$x.ark; done)
-  for x in $(seq $num_archives_intermediate); do
-    utils/create_data_link.pl $(for y in $(seq $nj); do echo $dir/egs_orig.$y.$x.ark; done)
-  done
+    # Make soft links to storage directories, if distributing this way..  See
+    # utils/create_split_dir.pl.
+    echo "$0: creating data links"
+    utils/create_data_link.pl $(for x in $(seq $num_archives); do echo $dir/egs.$x.ark; done)
+    for x in $(seq $num_archives_intermediate); do
+        utils/create_data_link.pl $(for y in $(seq $nj); do echo $dir/egs_orig.$y.$x.ark; done)
+    done
 fi
 
 if [ $stage -le 2 ]; then
@@ -274,12 +274,8 @@ if [ $stage -le 2 ]; then
         copy-int-vector ark:- ark,scp:$dir/ali.ark,$dir/ali.scp \
         || exit 1;
     else
-        echo "$0: assuming you've already got the ali.ark file in the right place"
-        if [ ! -f $dir/ali.ark ]; then
-            echo "$0: didn't find $dir/ali.ark!"
-            exit 1;
-        fi
-
+        echo "$0: copying new_alignments from exp_new/triphones_aligned/new_alignments.txt"
+        copy-int-vector ark,t:exp_new/triphones_aligned/new_alignments.txt ark,scp:$dir/ali.ark,$dir/ali.scp
     fi
     
 fi
