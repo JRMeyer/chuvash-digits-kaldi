@@ -8,8 +8,9 @@ predict_XY=sys.argv[2]
 
 
 
-print("Assuming input data is a CSV, space-delimited, no header")
 # READ in training and testing data
+
+print("Assuming input data is a CSV, space-delimited, no header")
 train=pd.read_csv(train_XY, sep=" ", header=None)
 train_labels = np.array( [ str(i) for i in train.iloc[:,0] ] )
 train_frames = train.iloc[:,1:].as_matrix()
@@ -18,14 +19,7 @@ predict=pd.read_csv(predict_XY, sep=" ", header=None)
 predict_uttIDs = predict.iloc[:,0]
 predict_frames = predict.iloc[:,1:].as_matrix()
 
-
-for i in np.array_split(predict_frames,8, axis=0):
-    print(i.shape)
-
-print(predict_frames.shape)
-
-
-exit()
+print(type(predict_frames))
 
 # ### TRAINING ###
 
@@ -45,12 +39,22 @@ clf.fit(train_frames, train_labels)
 
 # ### PREDICTION ###
 
-
 print("Prediction on data with Random Forest")
-prediction=clf.predict(predict_frames)
 
-uttIDs = np.array(predict_uttIDs).reshape(-1,1)
+# the multiprocessing is already in the definition of the classifier!
+# no need to redefine here
+
+prediction = clf.predict(predict_frames)
+
+
+
+
+
+
+# ### PRINT NEW ALIGNMENTS TO DISK ###
+
 predictions = prediction.reshape(-1,1)
+uttIDs = np.array(predict_uttIDs).reshape(-1,1)
 output=np.concatenate((uttIDs,predictions), axis=1)
 
 alignments={}
@@ -60,9 +64,6 @@ for row in output:
     else:
         alignments[row[0]] = str(row[1])
         print("Formatting " + str(row[0]))
-
-        
-
 
 fout = "new_alignments.txt"
 fo = open(fout, "w")
