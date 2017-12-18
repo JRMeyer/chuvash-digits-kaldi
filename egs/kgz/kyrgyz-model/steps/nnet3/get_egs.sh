@@ -268,18 +268,9 @@ fi
 
 if [ $stage -le 2 ]; then
     echo "$0: copying all train data alignments into $dir/ali.scp"
+    echo "$0: assuming the alignment arks are in txt, not binary"
     for id in $(seq $num_ali_jobs); do gunzip -c $ali_dir/ali.$id.gz; done | \
-        copy-int-vector ark:- ark,scp:$dir/ali.ark,$dir/ali.scp \
-        || exit 1;
-fi
-
-
-
-## DEBUGGING
-if [ $stage -le 2 ]; then
-    echo "$0: copying all train data alignments into $dir/ali.scp"
-    for id in $(seq $num_ali_jobs); do gunzip -c $ali_dir/ali.$id.gz; done | \
-        copy-int-vector ark:- ark,t:$dir/ali.ark.txt \
+        copy-int-vector ark,t:- ark,scp:$dir/ali.ark,$dir/ali.scp \
         || exit 1;
 fi
 
