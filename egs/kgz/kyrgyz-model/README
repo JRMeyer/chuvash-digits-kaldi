@@ -1,0 +1,7 @@
+This is my main research repo, which I decided to make public.
+
+I'm working on Multi-task learning using the Babel scripts as a starting point.
+
+None of the utils or scripts link back to WSJ, they're all self contained in this egs script.
+
+-Josh
