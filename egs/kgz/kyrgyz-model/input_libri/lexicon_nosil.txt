@@ -1,1 +1,1 @@
-/data/miniLibri/miniLexicon_nosil.txt
+/data/librispeech/lexicon/lexicon_nosil.txt
