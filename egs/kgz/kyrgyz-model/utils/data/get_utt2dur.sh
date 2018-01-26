@@ -26,18 +26,18 @@ data=$1
 
 
 if [ -f $data/segments ]; then
-  echo "$0: working out $data/utt2dur from $data/segments"
-  cat $data/segments | awk '{len=$4-$3; print $1, len;}' > $data/utt2dur
+    echo "$0: working out $data/utt2dur from $data/segments"
+    cat $data/segments | awk '{len=$4-$3; print $1, len;}' > $data/utt2dur
 else
-  echo "$0: segments file does not exist so getting durations from wave files"
-  if [ ! -f $data/wav.scp ]; then
-    echo "$0: Expected $data/wav.scp or $data/segments to exist"
-    exit 1
-  fi
-
-  # if the wav.scp contains only lines of the form
-  # utt1  /foo/bar/sph2pipe -f wav /baz/foo.sph |
-  if cat $data/wav.scp | perl -e '
+    echo "$0: segments file does not exist so getting durations from wave files"
+    if [ ! -f $data/wav.scp ]; then
+        echo "$0: Expected $data/wav.scp or $data/segments to exist"
+        exit 1
+    fi
+    
+    # if the wav.scp contains only lines of the form
+    # utt1  /foo/bar/sph2pipe -f wav /baz/foo.sph |
+    if cat $data/wav.scp | perl -e '
      while (<>) { s/\|\s*$/ |/;  # make sure final | is preceded by space.
              @A = split; if (!($#A == 5 && $A[1] =~ m/sph2pipe$/ &&
                                $A[2] eq "-f" && $A[3] eq "wav" && $A[5] eq "|")) { exit(1); }
@@ -57,25 +57,25 @@ else
              $duration = $sample_count * 1.0 / $sample_rate;
              print "$utt $duration\n";
      } ' > $data/utt2dur; then
-    echo "$0: successfully obtained utterance lengths from sphere-file headers"
-  else
-    echo "$0: could not get utterance lengths from sphere-file headers, using wav-to-duration"
-    if ! command -v wav-to-duration >/dev/null; then
-      echo  "$0: wav-to-duration is not on your path"
-      exit 1;
+        echo "$0: successfully obtained utterance lengths from sphere-file headers"
+    else
+        echo "$0: could not get utterance lengths from sphere-file headers, using wav-to-duration"
+        if ! command -v wav-to-duration >/dev/null; then
+            echo  "$0: wav-to-duration is not on your path"
+            exit 1;
+        fi
+        if ! wav-to-duration scp:$data/wav.scp ark,t:$data/utt2dur 2>&1 | grep -v 'nonzero return status'; then
+            echo "$0: there was a problem getting the durations; moving $data/utt2dur to $data/.backup/"
+            mkdir -p $data/.backup/
+            mv $data/utt2dur $data/.backup/
+        fi
     fi
-    if ! wav-to-duration scp:$data/wav.scp ark,t:$data/utt2dur 2>&1 | grep -v 'nonzero return status'; then
-      echo "$0: there was a problem getting the durations; moving $data/utt2dur to $data/.backup/"
-      mkdir -p $data/.backup/
-      mv $data/utt2dur $data/.backup/
-    fi
-  fi
 fi
 
 len1=$(cat $data/utt2spk | wc -l)
 len2=$(cat $data/utt2dur | wc -l)
 if [ "$len1" != "$len2" ]; then
-  echo "$0: warning: length of utt2dur does not equal that of utt2spk, $len2 != $len1"
+    echo "$0: warning: length of utt2dur does not equal that of utt2spk, $len2 != $len1"
 fi
 
 echo "$0: computed $data/utt2dur"
