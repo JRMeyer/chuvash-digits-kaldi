@@ -1,1 +1,0 @@
-/data/miniLibri/phones.txt
