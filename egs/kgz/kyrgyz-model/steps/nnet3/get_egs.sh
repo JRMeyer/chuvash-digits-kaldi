@@ -39,7 +39,7 @@ samples_per_iter=400000 # this is the target number of egs in each archive of eg
                         # a number that divides the number of samples in the
                         # entire data.
 
-transform_dir=     # If supplied, overrides alidir as the place to find fMLLR transforms
+transform_dir=     # If supplied, overrides ali_dir as the place to find fMLLR transforms
 
 stage=0
 nj=6         # This should be set to the maximum number of jobs you are
@@ -51,6 +51,7 @@ cmvn_opts=  # can be used for specifying CMVN options, if feature type is not ld
             # it doesn't make sense to use different options than were used as input to the
             # LDA transform).  This is used to turn off CMVN in the online-nnet experiments.
 generate_egs_scp=false # If true, it will generate egs.JOB.*.scp per egs archive
+num_targets='tree'
 
 echo "$0 $@"  # Print the command line for logging
 
@@ -87,105 +88,127 @@ if [ $# != 3 ]; then
   exit 1;
 fi
 
-data=$1
-alidir=$2
+data_dir=$1
+ali_dir=$2
 dir=$3
+
+echo "$0 $@"
+echo "$0: num_targets = $num_targets" 
 
 # Check some files.
 [ ! -z "$online_ivector_dir" ] && \
-  extra_files="$online_ivector_dir/ivector_online.scp $online_ivector_dir/ivector_period"
+    extra_files="$online_ivector_dir/ivector_online.scp $online_ivector_dir/ivector_period"
 
-for f in $data/feats.scp $alidir/ali.1.gz $alidir/final.mdl $alidir/tree $extra_files; do
-  [ ! -f $f ] && echo "$0: no such file $f" && exit 1;
+for f in $data_dir/feats.scp $ali_dir/ali.1.gz $ali_dir/final.mdl $ali_dir/tree $extra_files; do
+    [ ! -f $f ] && echo "$0: no such file $f" && exit 1;
 done
 
-sdata=$data/split$nj
-utils/split_data.sh $data $nj
+sdata=$data_dir/split$nj
+utils/split_data.sh $data_dir $nj
 
 mkdir -p $dir/log $dir/info
-cp $alidir/tree $dir
+cp $ali_dir/tree $dir
 
-num_ali_jobs=$(cat $alidir/num_jobs) || exit 1;
+num_ali_jobs=$(cat $ali_dir/num_jobs) || exit 1;
 
 
-num_utts=$(cat $data/utt2spk | wc -l)
+num_utts=$(cat $data_dir/utt2spk | wc -l)
+echo "$0: Found $num_utts utterances in $data_dir/utt2spk"
+
 if ! [ $num_utts -gt $[$num_utts_subset*4] ]; then
-  echo "$0: number of utterances $num_utts in your training data is too small versus --num-utts-subset=$num_utts_subset"
-  echo "... you probably have so little data that it doesn't make sense to train a neural net."
-  exit 1
+    echo "$0: number of utterances $num_utts in your training data is too small versus --num-utts-subset=$num_utts_subset"
+    echo "... you probably have so little data that it doesn't make sense to train a neural net."
+    exit 1
 fi
 
-# Get list of validation utterances.
-awk '{print $1}' $data/utt2spk | utils/shuffle_list.pl | head -$num_utts_subset \
+echo "$0: save list of validation utterances to $dir/valid_uttlist"
+awk '{print $1}' $data_dir/utt2spk | \
+    utils/shuffle_list.pl | \
+    head -$num_utts_subset \
     > $dir/valid_uttlist || exit 1;
 
-if [ -f $data/utt2uniq ]; then  # this matters if you use data augmentation.
-  echo "File $data/utt2uniq exists, so augmenting valid_uttlist to"
-  echo "include all perturbed versions of the same 'real' utterances."
-  mv $dir/valid_uttlist $dir/valid_uttlist.tmp
-  utils/utt2spk_to_spk2utt.pl $data/utt2uniq > $dir/uniq2utt
-  cat $dir/valid_uttlist.tmp | utils/apply_map.pl $data/utt2uniq | \
-    sort | uniq | utils/apply_map.pl $dir/uniq2utt | \
-    awk '{for(n=1;n<=NF;n++) print $n;}' | sort  > $dir/valid_uttlist
-  rm $dir/uniq2utt $dir/valid_uttlist.tmp
+if [ -f $data_dir/utt2uniq ]; then  # this matters if you use data augmentation.
+    echo "File $data_dir/utt2uniq exists, so augmenting valid_uttlist to"
+    echo "include all perturbed versions of the same 'real' utterances."
+    mv $dir/valid_uttlist $dir/valid_uttlist.tmp
+    utils/utt2spk_to_spk2utt.pl $data_dir/utt2uniq > $dir/uniq2utt
+    cat $dir/valid_uttlist.tmp | utils/apply_map.pl $data_dir/utt2uniq | \
+        sort | uniq | utils/apply_map.pl $dir/uniq2utt | \
+        awk '{for(n=1;n<=NF;n++) print $n;}' | sort  > $dir/valid_uttlist
+    rm $dir/uniq2utt $dir/valid_uttlist.tmp
 fi
 
-awk '{print $1}' $data/utt2spk | utils/filter_scp.pl --exclude $dir/valid_uttlist | \
-   utils/shuffle_list.pl | head -$num_utts_subset > $dir/train_subset_uttlist || exit 1;
+echo "$0: save list of train utterances to $dir/train_uttlist"
+awk '{print $1}' $data_dir/utt2spk | \
+    utils/filter_scp.pl --exclude $dir/valid_uttlist | \
+    utils/shuffle_list.pl | \
+    head -$num_utts_subset \
+         > $dir/train_uttlist \
+    || exit 1;
 
-[ -z "$transform_dir" ] && transform_dir=$alidir
+[ -z "$transform_dir" ] && transform_dir=$ali_dir
 
-# because we'll need the features with a different number of jobs than $alidir,
+# because we'll need the features with a different number of jobs than $ali_dir,
 # copy to ark,scp.
 if [ -f $transform_dir/raw_trans.1 ]; then
-  echo "$0: using raw transforms from $transform_dir"
-  if [ $stage -le 0 ]; then
-    $cmd $dir/log/copy_transforms.log \
-      copy-feats "ark:cat $transform_dir/raw_trans.* |" "ark,scp:$dir/trans.ark,$dir/trans.scp"
-  fi
+    echo "$0: using raw transforms from $transform_dir"
+    if [ $stage -le 0 ]; then
+        $cmd $dir/log/copy_transforms.log \
+             copy-feats "ark:cat $transform_dir/raw_trans.* |" \
+             "ark,scp:$dir/trans.ark,$dir/trans.scp"
+    fi
 fi
 
 ## Set up features.
 echo "$0: feature type is raw"
 
-feats="ark,s,cs:utils/filter_scp.pl --exclude $dir/valid_uttlist $sdata/JOB/feats.scp | apply-cmvn $cmvn_opts --utt2spk=ark:$sdata/JOB/utt2spk scp:$sdata/JOB/cmvn.scp scp:- ark:- |"
-valid_feats="ark,s,cs:utils/filter_scp.pl $dir/valid_uttlist $data/feats.scp | apply-cmvn $cmvn_opts --utt2spk=ark:$data/utt2spk scp:$data/cmvn.scp scp:- ark:- |"
-train_subset_feats="ark,s,cs:utils/filter_scp.pl $dir/train_subset_uttlist $data/feats.scp | apply-cmvn $cmvn_opts --utt2spk=ark:$data/utt2spk scp:$data/cmvn.scp scp:- ark:- |"
-echo $cmvn_opts >$dir/cmvn_opts # caution: the top-level nnet training script should copy this to its own dir now.
+# Define feature types
+feats="ark,s,cs:utils/filter_scp.pl --exclude $dir/valid_uttlist $sdata/JOB/feats.scp |"
+feats="$feats apply-cmvn $cmvn_opts --utt2spk=ark:$sdata/JOB/utt2spk scp:$sdata/JOB/cmvn.scp scp:- ark:- |"
+valid_feats="ark,s,cs:utils/filter_scp.pl $dir/valid_uttlist $data_dir/feats.scp |"
+valid_feats="$valid_feats apply-cmvn $cmvn_opts --utt2spk=ark:$data_dir/utt2spk scp:$data_dir/cmvn.scp scp:- ark:- |"
+train_feats="ark,s,cs:utils/filter_scp.pl $dir/train_uttlist $data_dir/feats.scp |"
+train_feats="$train_feats apply-cmvn $cmvn_opts --utt2spk=ark:$data_dir/utt2spk scp:$data_dir/cmvn.scp scp:- ark:- |"
+echo $cmvn_opts >$dir/cmvn_opts
+
 
 if [ -f $dir/trans.scp ]; then
-  feats="$feats transform-feats --utt2spk=ark:$sdata/JOB/utt2spk scp:$dir/trans.scp ark:- ark:- |"
-  valid_feats="$valid_feats transform-feats --utt2spk=ark:$data/utt2spk scp:$dir/trans.scp ark:- ark:- |"
-  train_subset_feats="$train_subset_feats transform-feats --utt2spk=ark:$data/utt2spk scp:$dir/trans.scp ark:- ark:- |"
+    feats="$feats transform-feats --utt2spk=ark:$sdata/JOB/utt2spk scp:$dir/trans.scp ark:- ark:- |"
+    valid_feats="$valid_feats transform-feats --utt2spk=ark:$data_dir/utt2spk scp:$dir/trans.scp ark:- ark:- |"
+    train_feats="$train_feats transform-feats --utt2spk=ark:$data_dir/utt2spk scp:$dir/trans.scp ark:- ark:- |"
 fi
 
 if [ ! -z "$online_ivector_dir" ]; then
-  ivector_dim=$(feat-to-dim scp:$online_ivector_dir/ivector_online.scp -) || exit 1;
-  echo $ivector_dim > $dir/info/ivector_dim
-  steps/nnet2/get_ivector_id.sh $online_ivector_dir > $dir/info/final.ie.id || exit 1
-  ivector_period=$(cat $online_ivector_dir/ivector_period) || exit 1;
-  ivector_opts="--online-ivectors=scp:$online_ivector_dir/ivector_online.scp --online-ivector-period=$ivector_period"
+    ivector_dim=$(feat-to-dim scp:$online_ivector_dir/ivector_online.scp -) || exit 1;
+    echo $ivector_dim > $dir/info/ivector_dim
+    steps/nnet2/get_ivector_id.sh $online_ivector_dir > $dir/info/final.ie.id || exit 1
+    ivector_period=$(cat $online_ivector_dir/ivector_period) || exit 1;
+    ivector_opts="--online-ivectors=scp:$online_ivector_dir/ivector_online.scp --online-ivector-period=$ivector_period"
 else
-  ivector_opts=""
-  echo 0 >$dir/info/ivector_dim
+    ivector_opts=""
+    echo 0 >$dir/info/ivector_dim
 fi
 
 if [ $stage -le 1 ]; then
-  echo "$0: working out number of frames of training data"
-  num_frames=$(steps/nnet2/get_num_frames.sh $data)
-  echo $num_frames > $dir/info/num_frames
-  echo "$0: working out feature dim"
-  feats_one="$(echo $feats | sed s/JOB/1/g)"
-  if feat_dim=$(feat-to-dim "$feats_one" - 2>/dev/null); then
-    echo $feat_dim > $dir/info/feat_dim
-  else # run without redirection to show the error.
-    feat-to-dim "$feats_one" -; exit 1
-  fi
+    echo "$0: working out number of frames of training data in $data_dir"
+    num_frames="$(steps/nnet2/get_num_frames.sh $data_dir)"
+    echo "#### ERROR HERE! ####"
+    echo $num_frames > $dir/info/num_frames
+    echo "$0: found $num_frames frames of training data"
+    echo "$0: working out feature dim"
+    feats_one="$(echo $feats | sed s/JOB/1/g)"
+    if feat_dim=$(feat-to-dim "$feats_one" - 2>/dev/null); then
+        echo $feat_dim > $dir/info/feat_dim
+    else # run without redirection to show the error.
+        feat-to-dim "$feats_one" -; exit 1
+    fi
 else
-  num_frames=$(cat $dir/info/num_frames) || exit 1;
-  feat_dim=$(cat $dir/info/feat_dim) || exit 1;
+    num_frames=$(cat $dir/info/num_frames) || exit 1;
+    feat_dim=$(cat $dir/info/feat_dim) || exit 1;
 fi
 
+echo "$0: found $num_frames frames in $dir/info/num_frames"
+echo "$0: found feat_dim=$feat_dim in $dir/info/feat_dim"
 
 # the first field in frames_per_eg (which is a comma-separated list of numbers)
 # is the 'principal' frames-per-eg, and for purposes of working out the number
@@ -215,7 +238,6 @@ while [ $[$num_archives_intermediate+4] -gt $max_open_filehandles ]; do
 done
 # now make sure num_archives is an exact multiple of archives_multiple.
 num_archives=$[$archives_multiple*$num_archives_intermediate]
-
 echo $num_archives >$dir/info/num_archives
 echo $frames_per_eg >$dir/info/frames_per_eg
 # Work out the number of egs per archive
@@ -229,26 +251,37 @@ echo $egs_per_archive > $dir/info/egs_per_archive
 echo "$0: creating $num_archives archives, each with $egs_per_archive egs, with"
 echo "$0:   $frames_per_eg labels per example, and (left,right) context = ($left_context,$right_context)"
 if [ $left_context_initial -ge 0 ] || [ $right_context_final -ge 0 ]; then
-  echo "$0:   ... and (left-context-initial,right-context-final) = ($left_context_initial,$right_context_final)"
+    echo "$0:   ... and (left-context-initial,right-context-final) = ($left_context_initial,$right_context_final)"
 fi
 
 
 
 if [ -e $dir/storage ]; then
-  # Make soft links to storage directories, if distributing this way..  See
-  # utils/create_split_dir.pl.
-  echo "$0: creating data links"
-  utils/create_data_link.pl $(for x in $(seq $num_archives); do echo $dir/egs.$x.ark; done)
-  for x in $(seq $num_archives_intermediate); do
-    utils/create_data_link.pl $(for y in $(seq $nj); do echo $dir/egs_orig.$y.$x.ark; done)
-  done
+    # Make soft links to storage directories, if distributing this way..  See
+    # utils/create_split_dir.pl.
+    echo "$0: creating data links"
+    utils/create_data_link.pl $(for x in $(seq $num_archives); do echo $dir/egs.$x.ark; done)
+    for x in $(seq $num_archives_intermediate); do
+        utils/create_data_link.pl $(for y in $(seq $nj); do echo $dir/egs_orig.$y.$x.ark; done)
+    done
 fi
 
 if [ $stage -le 2 ]; then
-  echo "$0: copying data alignments"
-  for id in $(seq $num_ali_jobs); do gunzip -c $alidir/ali.$id.gz; done | \
-    copy-int-vector ark:- ark,scp:$dir/ali.ark,$dir/ali.scp || exit 1;
+
+    if [ "$num_targets" == "tree"]; then
+    echo "$0: copying all train data alignments into $dir/ali.scp"
+    for id in $(seq $num_ali_jobs); do gunzip -c $ali_dir/ali.$id.gz; done | \
+        copy-int-vector ark:- ark,scp:$dir/ali.ark,$dir/ali.scp \
+        || exit 1;
+    else
+        echo "$0: copying new_alignments from exp_new/triphones_aligned/new_alignments.txt"
+        copy-int-vector ark,t:exp_new/triphones_aligned/new_alignments.txt ark,scp:$dir/ali.ark,$dir/ali.scp
+    fi
+    
 fi
+
+
+
 
 egs_opts="--left-context=$left_context --right-context=$right_context --compress=$compress --num-frames=$frames_per_eg"
 [ $left_context_initial -ge 0 ] && egs_opts="$egs_opts --left-context-initial=$left_context_initial"
@@ -260,66 +293,106 @@ echo $left_context_initial > $dir/info/left_context_initial
 echo $right_context_final > $dir/info/right_context_final
 
 
-num_pdfs=$(tree-info --print-args=false $alidir/tree | grep num-pdfs | awk '{print $2}')
+if [ "$num_targets" == "tree" ]; then
+    num_pdfs=$(tree-info --print-args=false $ali_dir/tree | grep num-pdfs | awk '{print $2}')
+else
+    num_pdfs=$num_targets
+fi
+
+echo "$0: num_pdfs= $num_pdfs"
+
+
 if [ $stage -le 3 ]; then
-  echo "$0: Getting validation and training subset examples."
-  rm $dir/.error 2>/dev/null
-  echo "$0: ... extracting validation and training-subset alignments."
+    echo "$0: Getting validation and training subset examples."
+    rm $dir/.error 2>/dev/null
+    echo "$0: ... extracting validation and training-subset alignments."
+    
+    
+    # do the filtering just once, as ali.scp may be long.
+    utils/filter_scp.pl <(cat $dir/valid_uttlist $dir/train_uttlist) \
+                        <$dir/ali.scp >$dir/ali_special.scp
 
+    if [ "$num_targets" == "tree" ]; then
 
-  # do the filtering just once, as ali.scp may be long.
-  utils/filter_scp.pl <(cat $dir/valid_uttlist $dir/train_subset_uttlist) \
-    <$dir/ali.scp >$dir/ali_special.scp
+        
+        # print to file for debugging
+        copy-feats "$train_feats" ark,t:$dir/train_feats.txt
+        $cmd $dir/log/create_valid_subset.log \
+             utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
+             ali-to-pdf $ali_dir/final.mdl scp:- ark:- \| \
+             ali-to-post ark:- ark,t:$dir/ali-to-post.txt
 
-  $cmd $dir/log/create_valid_subset.log \
-    utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
-    ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
-    ali-to-post ark:- ark:- \| \
-    nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$valid_feats" \
-      ark,s,cs:- "ark:$dir/valid_all.egs" || touch $dir/.error &
-  $cmd $dir/log/create_train_subset.log \
-    utils/filter_scp.pl $dir/train_subset_uttlist $dir/ali_special.scp \| \
-    ali-to-pdf $alidir/final.mdl scp:- ark:- \| \
-    ali-to-post ark:- ark:- \| \
-    nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$train_subset_feats" \
-      ark,s,cs:- "ark:$dir/train_subset_all.egs" || touch $dir/.error &
-  wait;
-  [ -f $dir/.error ] && echo "Error detected while creating train/valid egs" && exit 1
-  echo "... Getting subsets of validation examples for diagnostics and combination."
-  if $generate_egs_scp; then
-    valid_diagnostic_output="ark,scp:$dir/valid_diagnostic.egs,$dir/valid_diagnostic.scp"
-    train_diagnostic_output="ark,scp:$dir/train_diagnostic.egs,$dir/train_diagnostic.scp"
-  else
-    valid_diagnostic_output="ark:$dir/valid_diagnostic.egs"
-    train_diagnostic_output="ark:$dir/train_diagnostic.egs"
-  fi
-  $cmd $dir/log/create_valid_subset_combine.log \
-    nnet3-subset-egs --n=$[$num_valid_frames_combine/$frames_per_eg_principal] ark:$dir/valid_all.egs \
-      ark:$dir/valid_combine.egs || touch $dir/.error &
-  $cmd $dir/log/create_valid_subset_diagnostic.log \
-    nnet3-subset-egs --n=$[$num_frames_diagnostic/$frames_per_eg_principal] ark:$dir/valid_all.egs \
-    $valid_diagnostic_output || touch $dir/.error &
+        
+        # Filtered scps --> filtered alis --> filtered alis w/ posteriors 
+        $cmd $dir/log/create_valid_subset.log \
+             utils/filter_scp.pl $dir/valid_uttlist $dir/ali_special.scp \| \
+             ali-to-pdf $ali_dir/final.mdl scp:- ark:- \| \
+             ali-to-post ark:- ark:- \| \
+             nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$valid_feats" \
+             ark,s,cs:- "ark:$dir/valid_all.egs" || touch $dir/.error &
+        $cmd $dir/log/create_train.log \
+             utils/filter_scp.pl $dir/train_uttlist $dir/ali_special.scp \| \
+             ali-to-pdf $ali_dir/final.mdl scp:- ark:- \| \
+             ali-to-post ark:- ark:- \| \
+             nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$train_feats" \
+             ark,s,cs:- "ark:$dir/train_all.egs" || touch $dir/.error &
+        wait;
+    else
+        # Filtered scps --> filtered alis --> filtered alis w/ posteriors 
 
-  $cmd $dir/log/create_train_subset_combine.log \
-    nnet3-subset-egs --n=$[$num_train_frames_combine/$frames_per_eg_principal] ark:$dir/train_subset_all.egs \
-      ark:$dir/train_combine.egs || touch $dir/.error &
-  $cmd $dir/log/create_train_subset_diagnostic.log \
-    nnet3-subset-egs --n=$[$num_frames_diagnostic/$frames_per_eg_principal] ark:$dir/train_subset_all.egs \
-    $train_diagnostic_output || touch $dir/.error &
-  wait
-  sleep 5  # wait for file system to sync.
-  cat $dir/valid_combine.egs $dir/train_combine.egs > $dir/combine.egs
-  if $generate_egs_scp; then
-    cat $dir/valid_combine.egs $dir/train_combine.egs  | \
-    nnet3-copy-egs ark:- ark,scp:$dir/combine.egs,$dir/combine.scp
-    rm $dir/{train,valid}_combine.scp
-  else
+        echo "$0: creating examples without final.mdl information"
+
+        # print to file for debugging
+        copy-feats "$train_feats" ark,t:$dir/train_feats.txt
+        ali-to-post ark:$dir/ali.ark ark,t:$dir/ali-to-post.txt
+        
+        $cmd $dir/log/create_valid_subset.log \
+             ali-to-post ark:$dir/ali.ark ark:- \| \
+             nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$valid_feats" \
+             ark,s,cs:- "ark:$dir/valid_all.egs" || touch $dir/.error &
+        $cmd $dir/log/create_train.log \
+             ali-to-post ark:$dir/ali.ark ark:- \| \
+             nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$train_feats" \
+             ark,s,cs:- "ark:$dir/train_all.egs" || touch $dir/.error &
+        wait;
+    fi
+    
+    [ -f $dir/.error ] && echo "Error detected while creating train/valid egs" && exit 1
+    echo "... Getting subsets of validation examples for diagnostics and combination."
+    if $generate_egs_scp; then
+        valid_diagnostic_output="ark,scp:$dir/valid_diagnostic.egs,$dir/valid_diagnostic.scp"
+        train_diagnostic_output="ark,scp:$dir/train_diagnostic.egs,$dir/train_diagnostic.scp"
+    else
+        valid_diagnostic_output="ark:$dir/valid_diagnostic.egs"
+        train_diagnostic_output="ark:$dir/train_diagnostic.egs"
+    fi
+    $cmd $dir/log/create_valid_subset_combine.log \
+         nnet3-subset-egs --n=$[$num_valid_frames_combine/$frames_per_eg_principal] ark:$dir/valid_all.egs \
+         ark:$dir/valid_combine.egs || touch $dir/.error &
+    $cmd $dir/log/create_valid_subset_diagnostic.log \
+         nnet3-subset-egs --n=$[$num_frames_diagnostic/$frames_per_eg_principal] ark:$dir/valid_all.egs \
+         $valid_diagnostic_output || touch $dir/.error &
+    
+    $cmd $dir/log/create_train_combine.log \
+         nnet3-subset-egs --n=$[$num_train_frames_combine/$frames_per_eg_principal] ark:$dir/train_all.egs \
+         ark:$dir/train_combine.egs || touch $dir/.error &
+    $cmd $dir/log/create_train_diagnostic.log \
+         nnet3-subset-egs --n=$[$num_frames_diagnostic/$frames_per_eg_principal] ark:$dir/train_all.egs \
+         $train_diagnostic_output || touch $dir/.error &
+    wait
+    sleep 5  # wait for file system to sync.
     cat $dir/valid_combine.egs $dir/train_combine.egs > $dir/combine.egs
-  fi
-  for f in $dir/{combine,train_diagnostic,valid_diagnostic}.egs; do
-    [ ! -s $f ] && echo "No examples in file $f" && exit 1;
-  done
-  rm $dir/valid_all.egs $dir/train_subset_all.egs $dir/{train,valid}_combine.egs
+    if $generate_egs_scp; then
+        cat $dir/valid_combine.egs $dir/train_combine.egs  | \
+            nnet3-copy-egs ark:- ark,scp:$dir/combine.egs,$dir/combine.scp
+        rm $dir/{train,valid}_combine.scp
+    else
+        cat $dir/valid_combine.egs $dir/train_combine.egs > $dir/combine.egs
+    fi
+    for f in $dir/{combine,train_diagnostic,valid_diagnostic}.egs; do
+        [ ! -s $f ] && echo "No examples in file $f" && exit 1;
+    done
+    rm $dir/valid_all.egs $dir/train_all.egs $dir/{train,valid}_combine.egs
 fi
 
 if [ $stage -le 4 ]; then
@@ -334,7 +407,7 @@ if [ $stage -le 4 ]; then
   # The examples will go round-robin to egs_list.
   $cmd JOB=1:$nj $dir/log/get_egs.JOB.log \
     nnet3-get-egs --num-pdfs=$num_pdfs $ivector_opts $egs_opts "$feats" \
-    "ark,s,cs:filter_scp.pl $sdata/JOB/utt2spk $dir/ali.scp | ali-to-pdf $alidir/final.mdl scp:- ark:- | ali-to-post ark:- ark:- |" ark:- \| \
+    "ark,s,cs:filter_scp.pl $sdata/JOB/utt2spk $dir/ali.scp | ali-to-pdf $ali_dir/final.mdl scp:- ark:- | ali-to-post ark:- ark:- |" ark:- \| \
     nnet3-copy-egs --random=true --srand=\$[JOB+$srand] ark:- $egs_list || exit 1;
 fi
 
