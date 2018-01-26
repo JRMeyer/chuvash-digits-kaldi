@@ -50,11 +50,11 @@ fi
 ### STAGES
 ##
 #
-prep_train_audio=1
-extract_train_feats=1
-compile_Lfst=1
-train_gmm=1
-compile_graph=1
+prep_train_audio=0
+extract_train_feats=0
+compile_Lfst=0
+train_gmm=0
+compile_graph=0
 prep_test_audio=1
 extract_test_feats=1
 decode_test=1
@@ -66,11 +66,11 @@ decode_test=1
 ### HYPER-PARAMETERS
 ##
 #
-tot_gauss_mono=500
-num_leaves_tri=500
-tot_gauss_tri=1000
-num_iters_mono=25
-num_iters_tri=25
+tot_gauss_mono=100
+num_leaves_tri=100
+tot_gauss_tri=200
+num_iters_mono=2
+num_iters_tri=2
 #
 ##
 ###
@@ -84,6 +84,8 @@ unknown_word="<unk>"
 unknown_phone="SPOKEN_NOISE"
 silence_phone="SIL"
 input_dir=input_${corpus_name}
+train_data_dir=`cat $input_dir/train_audio_path`
+test_data_dir=`cat $input_dir/test_audio_path`
 config_dir=config
 cmd="utils/run.pl"
 #
@@ -113,28 +115,35 @@ if [ "$prep_train_audio" -eq "1" ]; then
     # since for multitask learning scripts, I can't have different labels
     # for one audio file path, I make softlinks here to audio files and
 
+    if [ -d "$input_dir/audio" ]; then
+        echo "You have an audio dir in $input_dir... remove or back it up!"
+
+        # clean up old generated files (which I assume exist given audio dir)
+        rm -f $input_dir/phones.txt $input_dir/transcripts
+        exit 0;
+    else
+        mkdir $input_dir/audio
+    fi
+    
+    ## BEGIN HACK
+    # this is my hack to make sure file names don't get mixed up in MTL training
+    
     cwd=`pwd`
     cd $input_dir/audio
 
-    if [ "$(ls -A $input_dir/audio)" ]; then
-        echo "You already have audio files in $input_dir/audio...remove them!"
-        exit 0;
-    else
-        echo ""
-    fi
+    echo "Assuming your train audio data is in ${train_data_dir}"
+    echo "making soflinks to original audio data with ${corpus_name}_ as prefix"
     
-    
-    for i in /data/downsampled/train/*.wav; do
+    for i in ${train_data_dir}/*.wav; do
         ln -s $i ${corpus_name}_${i##*/};
     done
+
     cd $cwd
-
     while read line; do
-        echo "${corpus_name}_$line" >> $input_dir/transcripts
-    done</data/downsampled/transcripts.train
-
-    #
-    #
+        echo "${corpus_name}_$line" >> $input_dir/transcripts 
+    done<$input_dir/transcripts.train
+    
+    ## END HACK
     
     local/prepare_audio_data.sh \
         $input_dir/audio\
@@ -221,8 +230,8 @@ if [ "$prep_test_audio" -eq "1" ]; then
     printf "####==========================####\n\n";
 
     local/prepare_audio_data.sh \
-        /data/downsampled/test \
-        /data/downsampled/transcripts.test \
+        $test_data_dir \
+        $input_dir/transcripts.test \
         $data_dir \
         test
 fi
