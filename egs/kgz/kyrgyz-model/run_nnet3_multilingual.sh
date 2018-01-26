@@ -58,6 +58,10 @@ lang2weight=$3
 hidden_dim=$4
 num_epochs=$5
 run=$6
+# because im making my own alignments, i want the option to define my own number
+# of output targets, as opposed to get it from the tree.
+# num_targets should either be a number or the string "tree"
+num_targets_list=($7)
 
 cmd="utils/run.pl"
 
@@ -93,7 +97,13 @@ if [ 1 ]; then
     done
     
     for i in `seq 0 $[$num_langs-1]`;do
-        num_targets=`tree-info ${multi_ali_dirs[$i]}/tree 2>/dev/null | grep num-pdfs | awk '{print $2}'` || exit 1;
+
+        num_targets=${num_targets_list[$i]}
+        if [ "$num_targets" == "tree" ]; then
+            num_targets=`tree-info ${multi_ali_dirs[$i]}/tree 2>/dev/null | grep num-pdfs | awk '{print $2}'` || exit 1;
+        else
+            num_targets=$num_targets
+        fi
         
         echo ""
         echo "###### BEGIN LANGUAGE INFO ######"
@@ -141,9 +151,15 @@ EOF
     # Create separate outptut layer and softmax for all languages.
     
     for i in `seq 0 $[$num_langs-1]`;do
-        
-        num_targets=`tree-info ${multi_ali_dirs[$i]}/tree 2>/dev/null | grep num-pdfs | awk '{print $2}'` || exit 1;
 
+        
+        num_targets=${num_targets_list[$i]}
+        if [ "$num_targets" == "tree" ]; then
+            num_targets=`tree-info ${multi_ali_dirs[$i]}/tree 2>/dev/null | grep num-pdfs | awk '{print $2}'` || exit 1;
+        else
+            num_targets=$num_targets
+        fi
+        
         echo " relu-renorm-layer name=prefinal-affine-lang-${i} input=tdnn5 dim=$hidden_dim"
         echo " output-layer name=output-${i} dim=$num_targets max-change=1.5"
         
@@ -176,6 +192,7 @@ if [ "$make_egs" -eq "1" ]; then
         ${multi_data_dirs[@]} \
         ${multi_ali_dirs[@]} \
         ${multi_egs_dirs[@]} \
+        ${num_targets_list[@]} \
         || exit 1;
 
     
@@ -334,7 +351,13 @@ if [ "$decode_test" -eq "1" ]; then
     
     
     for i in `seq 0 $[$num_langs-1]`;do
-        num_targets=`tree-info ${multi_ali_dirs[$i]}/tree 2>/dev/null | grep num-pdfs | awk '{print $2}'` || exit 1;
+        
+        num_targets=${num_targets_list[$i]}
+        if [ "$num_targets" == "tree" ]; then
+            num_targets=`tree-info ${multi_ali_dirs[$i]}/tree 2>/dev/null | grep num-pdfs | awk '{print $2}'` || exit 1;
+        else
+            num_targets=$num_targets
+        fi
         
         echo "
     ###### BEGIN LANGUAGE INFO ######
