@@ -1,7 +1,23 @@
+## Josh Meyer 2018
+## jrmeyer.github.io
+
+
 This is my main research repo, which I decided to make public.
 
 I'm working on Multi-task learning using the Babel scripts as a starting point.
 
 None of the utils or scripts link back to WSJ, they're all self contained in this egs script.
 
--Josh
+
+### Setting up for GMM
+
+(1) get the input_name dir in good order (all my files (except train_audio_path) are symbolic links to keep code / data separate)
+
+input_libri/
+├── lexicon_nosil.txt -> /data/librispeech/lexicon/lexicon_nosil.txt
+├── lexicon.txt -> /data/librispeech/lexicon/lexicon.txt
+├── task.arpabo -> /data/librispeech/lm/task.arpabo_2GRAM
+├── test_audio_path
+├── train_audio_path
+├── transcripts.test -> /data/librispeech/audio/transcripts.test
+└── transcripts.train -> /data/librispeech/audio/transcripts.train
