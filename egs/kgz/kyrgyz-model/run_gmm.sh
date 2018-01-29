@@ -50,11 +50,11 @@ fi
 ### STAGES
 ##
 #
-prep_train_audio=0
-extract_train_feats=0
-compile_Lfst=0
-train_gmm=0
-compile_graph=0
+prep_train_audio=1
+extract_train_feats=1
+compile_Lfst=1
+train_gmm=1
+compile_graph=1
 prep_test_audio=1
 extract_test_feats=1
 decode_test=1
@@ -113,7 +113,8 @@ if [ "$prep_train_audio" -eq "1" ]; then
     printf "####==========================####\n\n";
 
     # since for multitask learning scripts, I can't have different labels
-    # for one audio file path, I make softlinks here to audio files and
+    # for one audio file path, I make softlinks here to audio files and the
+    # softlinks have different filenames for each experiment
 
     if [ -d "$input_dir/audio" ]; then
         echo "You have an audio dir in $input_dir... remove or back it up!"
@@ -131,13 +132,16 @@ if [ "$prep_train_audio" -eq "1" ]; then
     cwd=`pwd`
     cd $input_dir/audio
 
-    echo "Assuming your train audio data is in ${train_data_dir}"
-    echo "making soflinks to original audio data with ${corpus_name}_ as prefix"
+    echo "$0: Assuming your train audio data is in ${train_data_dir}"
+    echo "$0: Making soflinks to original audio data with ${corpus_name}_ as prefix"
     
     for i in ${train_data_dir}/*.wav; do
         ln -s $i ${corpus_name}_${i##*/};
     done
 
+    # Now that we have new filenames, we need to update our transcripts file to
+    # reflect them
+    
     cd $cwd
     while read line; do
         echo "${corpus_name}_$line" >> $input_dir/transcripts 
