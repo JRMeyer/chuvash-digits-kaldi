@@ -268,7 +268,7 @@ fi
 
 if [ $stage -le 2 ]; then
 
-    if [ "$num_targets" == "tree"]; then
+    if [ "$num_targets" == "tree" ]; then
     echo "$0: copying all train data alignments into $dir/ali.scp"
     for id in $(seq $num_ali_jobs); do gunzip -c $ali_dir/ali.$id.gz; done | \
         copy-int-vector ark:- ark,scp:$dir/ali.ark,$dir/ali.scp \
