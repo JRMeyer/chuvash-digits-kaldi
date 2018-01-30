@@ -114,11 +114,12 @@ if [ 1 ]; then
         echo "egs_dir= ${multi_egs_dirs[$i]}"
         echo "###### END LANGUAGE INFO ######"
         echo ""
+
     done
 fi
 
 
-    
+
 if [ "$config_nnet" -eq "1" ]; then
 
     echo "### ============================ ###";
