@@ -118,14 +118,14 @@ if [ "$prep_train_audio" -eq "1" ]; then
 
     if [ -d "$input_dir/audio" ]; then
         echo "You have an audio dir in $input_dir... remove or back it up!"
-
-        # clean up old generated files (which I assume exist given audio dir)
-        rm -f $input_dir/phones.txt $input_dir/transcripts
         exit 0;
     else
         mkdir $input_dir/audio
     fi
-    
+
+    # clean up old generated files
+    rm -f $input_dir/phones.txt $input_dir/transcripts
+        
     ## BEGIN HACK
     # this is my hack to make sure file names don't get mixed up in MTL training
     
