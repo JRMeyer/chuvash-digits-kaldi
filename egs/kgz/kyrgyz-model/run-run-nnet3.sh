@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-dim=100
+dim=50
 num_epochs=1
 
 for run in {1..1}
