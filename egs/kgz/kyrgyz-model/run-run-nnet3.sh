@@ -21,4 +21,3 @@ do
 
 done
 
-sudo shutdown now
