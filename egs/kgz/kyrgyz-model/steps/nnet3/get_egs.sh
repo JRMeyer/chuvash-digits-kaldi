@@ -192,7 +192,6 @@ fi
 if [ $stage -le 1 ]; then
     echo "$0: working out number of frames of training data in $data_dir"
     num_frames="$(steps/nnet2/get_num_frames.sh $data_dir)"
-    echo "#### ERROR HERE! ####"
     echo $num_frames > $dir/info/num_frames
     echo "$0: found $num_frames frames of training data"
     echo "$0: working out feature dim"
