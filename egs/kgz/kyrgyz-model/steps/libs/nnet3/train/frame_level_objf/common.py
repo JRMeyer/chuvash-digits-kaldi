@@ -220,7 +220,9 @@ def train_one_iteration(dir, iter, srand, egs_dir,
     # Sets off some background jobs to compute train and
     # validation set objectives
     compute_train_cv_probabilities(
-        dir=dir, iter=iter, egs_dir=egs_dir,
+        dir=dir,
+        iter=iter,
+        egs_dir=egs_dir,
         run_opts=run_opts,
         get_raw_nnet_from_am=get_raw_nnet_from_am,
         use_multitask_egs=use_multitask_egs,
