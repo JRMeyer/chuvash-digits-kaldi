@@ -32,8 +32,9 @@
 ##
 #
 
-config_nnet=1
-make_egs=1
+config_nnet=0
+make_egs=0
+# stop here for bootstrap
 combine_egs=1
 train_nnet=1
 make_copies_nnet=1
@@ -204,8 +205,7 @@ fi
 
 
 
-if [ "combine_egs" -eq "1" ]; then
-
+if [ "$combine_egs" -eq "1" ]; then
 
     echo "### ====================================== ###"
     echo "### COMBINE ALL TASKS EGS INTO ONE BIG DIR ###"
