@@ -34,6 +34,7 @@
 
 config_nnet=1
 make_egs=1
+combine_egs=1
 train_nnet=1
 make_copies_nnet=1
 decode_test=1
@@ -120,6 +121,7 @@ fi
 
 
 
+
 if [ "$config_nnet" -eq "1" ]; then
 
     echo "### ============================ ###";
@@ -175,11 +177,12 @@ fi
 
 
 
+
 if [ "$make_egs" -eq "1" ]; then
         
-    echo "### ================== ###"
-    echo "### MAKE NNET3 EGS DIR ###"
-    echo "### ================== ###"
+    echo "### ====================================== ###"
+    echo "### MAKE INDIVIDUAL NNET3 EGS DIR per TASK ###"
+    echo "### ====================================== ###"
 
 
     echo "### MAKE SEPARATE EGS DIR PER LANGUAGE ###"
@@ -196,9 +199,18 @@ if [ "$make_egs" -eq "1" ]; then
         ${num_targets_list[@]} \
         || exit 1;
 
+fi
+
+
+
+
+if [ "combine_egs" -eq "1" ]; then
+
+
+    echo "### ====================================== ###"
+    echo "### COMBINE ALL TASKS EGS INTO ONE BIG DIR ###"
+    echo "### ====================================== ###"
     
-    echo "### MAKE ONE BIG MULTILING EGS DIR ###"
-        
     steps/nnet3/multilingual/combine_egs.sh \
         --cmd "$cmd" \
         --samples-per-iter 10000 \
