@@ -99,7 +99,11 @@ echo "$0: num_targets = $num_targets"
 [ ! -z "$online_ivector_dir" ] && \
     extra_files="$online_ivector_dir/ivector_online.scp $online_ivector_dir/ivector_period"
 
-for f in $data_dir/feats.scp $ali_dir/ali.1.gz $ali_dir/final.mdl $ali_dir/tree $extra_files; do
+for f in $data_dir/feats.scp \
+             $ali_dir/ali.1.gz \
+             $ali_dir/final.mdl \
+             $ali_dir/tree \
+             $extra_files; do
     [ ! -f $f ] && echo "$0: no such file $f" && exit 1;
 done
 
