@@ -32,8 +32,8 @@
 ##
 #
 
-config_nnet=0
-make_egs=0
+config_nnet=1
+make_egs=1
 # stop here for bootstrap
 combine_egs=1
 train_nnet=1
@@ -291,7 +291,7 @@ if [ "$make_copies_nnet" -eq "1" ]; then
         
         steps/nnet3/adjust_priors.sh \
             --cmd "$cmd" \
-            --use-gpu false \
+            --use-gpu true \
             --iter "final" \
             --use-raw-nnet false \
             $lang_dir ${multi_egs_dirs[$i]} \
