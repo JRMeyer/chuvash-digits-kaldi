@@ -32,8 +32,13 @@
 ##
 #
 
+<<<<<<< HEAD
 config_nnet=1
 make_egs=1
+=======
+config_nnet=0
+make_egs=0
+>>>>>>> 1bdf618b39b818781199c2b17f3db1e905f76c13
 # stop here for bootstrap
 combine_egs=1
 train_nnet=1
@@ -291,7 +296,11 @@ if [ "$make_copies_nnet" -eq "1" ]; then
         
         steps/nnet3/adjust_priors.sh \
             --cmd "$cmd" \
+<<<<<<< HEAD
             --use-gpu true \
+=======
+            --use-gpu false \
+>>>>>>> 1bdf618b39b818781199c2b17f3db1e905f76c13
             --iter "final" \
             --use-raw-nnet false \
             $lang_dir ${multi_egs_dirs[$i]} \
