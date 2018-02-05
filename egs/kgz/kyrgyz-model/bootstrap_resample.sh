@@ -9,18 +9,14 @@
 
 infile=$1
 outfile=$2
+percentage=$3
 
 num_egs=(`wc -l $infile`)
+# this math will round down to nearest integer
+float=( `echo "$percentage*$num_egs" | bc` )
+integer=${float%.*}
 
-proc_ids=()
-iter=0
-while [ $iter -lt $num_egs ]; do
-    ((iter++));
-    shuf $infile -n 1 >> $outfile &
-    proc_ids+=($!)
-done
-for proc_id in ${proc_ids[*]}; do wait $proc_id; done;
-
+shuf -n $integer $infile > $outfile
 
 LC_ALL=C sort $outfile -o $outfile
 
