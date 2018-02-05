@@ -5,7 +5,7 @@ dim=100
 num_epochs=5
 
 
-for run in {2..5}
+for run in {1..1}
 do
 
     # # 2 baselines 
@@ -36,8 +36,12 @@ do
     # ./run_nnet3_multilingual.sh "libri-org libri-mono libri-half libri-3Quarters" "tri mono tri tri" "0.5,0.5,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${run}" "tree tree tree tree"
 
     
-    # bootstrap1
-    ./run_nnet3_multilingual.sh "libri-org libri-boot" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_1" "tree tree"   
+    # # bootstrap1
+    # ./run_nnet3_multilingual.sh "libri-org libri-boot1Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_1" "tree tree"   
+    # bootstrap2
+    ./run_nnet3_multilingual.sh "libri-org libri-boot2Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_1" "tree tree"   
+    # # bootstrap3
+    # ./run_nnet3_multilingual.sh "libri-org libri-boot3Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_1" "tree tree"   
 done
 
 # sudo shutdown now
