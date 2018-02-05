@@ -1,6 +1,13 @@
 #!/bin/bash
 # Joshua Meyer 2018
 
+# USAGE:
+#
+#  ./bootstrap_resample.sh \
+#         exp/libri-boot/nnet3/egs/egs.scp \
+#         exp/libri-boot/nnet3/egs/egs.scp-boot \
+#         .5
+
 # input: egs.scp file output by prepare_multilingual_egs.sh (just get_egs.sh wrapper)
 # output: scp file of same length, but resampled with replacement
 #
