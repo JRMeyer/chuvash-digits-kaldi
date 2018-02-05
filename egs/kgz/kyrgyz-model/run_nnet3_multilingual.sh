@@ -32,13 +32,13 @@
 ##
 #
 
-config_nnet=0
-make_egs=0
+config_nnet=1
+make_egs=1
 # stop here for bootstrap
-combine_egs=1
-train_nnet=1
-make_copies_nnet=1
-decode_test=1
+combine_egs=0
+train_nnet=0
+make_copies_nnet=0
+decode_test=0
 
 #
 ##
