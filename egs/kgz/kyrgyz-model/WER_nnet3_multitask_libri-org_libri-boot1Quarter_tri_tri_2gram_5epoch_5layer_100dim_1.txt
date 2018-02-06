@@ -1,4 +1,4 @@
-%WER 12.73 [ 423 / 3324, 57 ins, 88 del, 278 sub ] exp/nnet3/multitask/decode/wer_11
+%WER 12.61 [ 419 / 3324, 67 ins, 78 del, 274 sub ] exp/nnet3/multitask/decode/wer_10
 test_data_dir=data_libri-org/test
 graph_dir=exp_libri-org/triphones/graph
 decode_dir=exp/nnet3/multitask/decode
@@ -14,10 +14,10 @@ final_model=exp/nnet3/multitask/libri-org/final_adj.mdl
     
 
     ###### BEGIN LANGUAGE INFO ######
-    lang= libri-boot
+    lang= libri-boot1Quarter
     num_targets= 832
-    data_dir= data/libri-boot/train
-    ali_dir= exp/libri-boot/tri_ali
-    egs_dir= exp/libri-boot/nnet3/egs
+    data_dir= data/libri-boot1Quarter/train
+    ali_dir= exp/libri-boot1Quarter/tri_ali
+    egs_dir= exp/libri-boot1Quarter/nnet3/egs
     ###### END LANGUAGE INFO ######
     
