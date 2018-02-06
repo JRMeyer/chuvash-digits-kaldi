@@ -32,8 +32,8 @@
 ##
 #
 
-config_nnet=0
-make_egs=0
+config_nnet=1
+make_egs=1
 # stop here for bootstrap
 combine_egs=1
 train_nnet=1
@@ -64,6 +64,7 @@ run=$6
 # of output targets, as opposed to get it from the tree.
 # num_targets should either be a number or the string "tree"
 num_targets_list=($7)
+bootstrap=$8
 
 cmd="utils/run.pl"
 
@@ -202,6 +203,25 @@ if [ "$make_egs" -eq "1" ]; then
 
 fi
 
+
+if [ "$bootstrap" -eq "1" ]; then
+    
+    echo "### ================== ###"
+    echo "### BOOTSTRAP RESAMPLE ###"
+    echo "### ================== ###"
+
+    echo "$0: defaulting to 25% bootstrap of second task"
+    
+    mv ${multi_egs_dirs[1]}/egs.scp ${multi_egs_dirs[1]}/egs.scp-org
+    ./bootstrap_resample.sh ${multi_egs_dirs[1]}/egs.scp-org ${multi_egs_dirs[1]}/egs.scp .25
+
+    num_boot_egs=( `wc -l ${multi_egs_dirs[1]}/egs.scp` )
+
+    echo "###"
+    echo "### $0: Bootstrapped $num_boot_egs examples into ${multi_egs_dirs[1]}/egs.scp"
+    echo "###"
+
+fi
 
 
 
