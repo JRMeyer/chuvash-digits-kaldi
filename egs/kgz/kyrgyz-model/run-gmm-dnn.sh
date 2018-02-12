@@ -1,42 +1,36 @@
 #!/bin/bash
 
-for run in {1..1}; do
+for gmm in {1..2}; do
 
-
-    echo "####################"
-    echo "### CLEAN UP GMM ###"
-    echo "####################"
-    
-    # clean up from last gmm run
-    rm -rf data_* exp_* plp_*
 
 
     echo "#####################"
     echo "### TRAIN NEW GMM ###"
     echo "#####################"
-    
-    for corpus in libri-org libri-boot1Quarter; do
+
+    # clean up from last gmm run
+    rm -rf data_* exp_* plp_*
+
+    for corpus in libri-org libri-boot1Quarter libri-boot2Quarter libri-boot3Quarter; do
         
         # clean up from last gmm run
         rm -rf input_$corpus/audio input_$corpus/phones.txt input_$corpus/transcripts
         
-        ./run_gmm.sh $corpus $run
+        ./run_gmm.sh $corpus $gmm
 
-    done 
-
-    echo "####################"
-    echo "### CLEAN UP DNN ###"
-    echo "####################"
+    done
     
-    # clean up from last dnn run
-    rm -rf exp data plp
 
+    
     echo "#####################"
     echo "### TRAIN NEW DNN ###"
     echo "#####################"
-    
-    ./setup_multitask.sh "libri-org libri-boot1Quarter"
 
-    ./run-run-nnet3.sh $run
+    # clean up from last dnn run
+    rm -rf exp data plp
+    
+    ./setup_multitask.sh "libri-org libri-boot1Quarter libri-boot2Quarter libri-boot3Quarter"
+
+    ./run-run-nnet3.sh $gmm
     
 done
