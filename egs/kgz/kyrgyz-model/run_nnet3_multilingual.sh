@@ -130,11 +130,11 @@ if [ "$config_nnet" -eq "1" ]; then
     echo "### CREATE CONFIG FILES FOR NNET ###";
     echo "### ============================ ###";
 
-    # Remove old generated files
-    rm -rf $exp_dir
-    for i in `seq 0 $[$num_langs-1]`; do
-        rm -rf exp/${lang_list[$i]}/nnet3
-    done
+    ## Remove old generated files
+    # rm -rf $exp_dir
+    # for i in `seq 0 $[$num_langs-1]`; do
+    #     rm -rf exp/${lang_list[$i]}/nnet3
+    # done
 
     mkdir -p $exp_dir/configs
 
@@ -205,22 +205,32 @@ fi
 
 
 if [ "$bootstrap" -eq "1" ]; then
+
     
     echo "### ================== ###"
     echo "### BOOTSTRAP RESAMPLE ###"
     echo "### ================== ###"
 
-    echo "$0: defaulting to 25% bootstrap of second task"
+    echo "$0: assuming text file ${multi_egs_dirs[1]}/per_boot exists for each model."
+    echo "$0: and assuming the BASELINE model is the first in the list."
+
     
-    mv ${multi_egs_dirs[1]}/egs.scp ${multi_egs_dirs[1]}/egs.scp-org
-    ./bootstrap_resample.sh ${multi_egs_dirs[1]}/egs.scp-org ${multi_egs_dirs[1]}/egs.scp .25
+    # loop over every dir except first
+    for i in `seq 1 $[$num_langs-1]`; do
 
-    num_boot_egs=( `wc -l ${multi_egs_dirs[1]}/egs.scp` )
+        per_boot=( `cat ${multi_egs_dirs[$i]}/per_boot` )
+        
+        mv ${multi_egs_dirs[$i]}/egs.scp ${multi_egs_dirs[$i]}/egs.scp-org
+        ./bootstrap_resample.sh ${multi_egs_dirs[$i]}/egs.scp-org ${multi_egs_dirs[$i]}/egs.scp .25
 
-    echo "###"
-    echo "### $0: Bootstrapped $num_boot_egs examples into ${multi_egs_dirs[1]}/egs.scp"
-    echo "###"
+        num_boot_egs=( `wc -l ${multi_egs_dirs[$i]}/egs.scp` )
 
+        echo "###"
+        echo "### $0: Bootstrapped $num_boot_egs examples into ${multi_egs_dirs[$i]}/egs.scp"
+        echo "###"
+
+    done
+    
 fi
 
 
