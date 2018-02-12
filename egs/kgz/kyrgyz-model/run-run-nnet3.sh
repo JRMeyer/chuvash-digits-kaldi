@@ -7,6 +7,11 @@ dim=100
 num_epochs=5
 
 
+
+
+    
+
+
 for dnn in {1..1}
 do
 
@@ -84,20 +89,10 @@ do
     ### BOOTSTRAP ###
     #################
 
-
-    
-    mkdir -p exp/libri-boot1Quarter/nnet3/egs/per_boot
-    mkdir -p exp/libri-boot2Quarter/nnet3/egs/per_boot
-    mkdir -p exp/libri-boot3Quarter/nnet3/egs/per_boot
-
-    echo ".25" >> exp/libri-boot1Quarter/nnet3/egs/per_boot
-    echo ".50" >> exp/libri-boot2Quarter/nnet3/egs/per_boot
-    echo ".75" >> exp/libri-boot3Quarter/nnet3/egs/per_boot
-
     
     ### A + B ###
     ## 25per
-    ./run_nnet3_multilingual.sh "libri-org libri-boot1Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "1"
+    ./run_nnet3_multilingual.sh "libri-org libri-boot1Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" ".25"
     # ## 50per
     # ./run_nnet3_multilingual.sh "libri-org libri-boot2Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "1"  
     # ## 75per
