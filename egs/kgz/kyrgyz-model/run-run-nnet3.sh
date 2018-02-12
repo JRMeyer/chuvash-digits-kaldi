@@ -12,7 +12,7 @@ num_epochs=5
     
 
 
-for dnn in {1..1}
+for dnn in {1..2}
 do
 
     ################
@@ -22,7 +22,7 @@ do
     
     ### A + B ###
     ## 2 baselines 
-    #./run_nnet3_multilingual.sh "libri-org libri-org" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "0"
+    ./run_nnet3_multilingual.sh "libri-org libri-org" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "0"
 
     ### A + B + C ###
     ## 3 baselines 
@@ -93,10 +93,10 @@ do
     ### A + B ###
     ## 25per
     ./run_nnet3_multilingual.sh "libri-org libri-boot1Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" ".25"
-    # ## 50per
-    # ./run_nnet3_multilingual.sh "libri-org libri-boot2Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "1"  
-    # ## 75per
-    # ./run_nnet3_multilingual.sh "libri-org libri-boot3Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "1"  
+    ## 50per
+    ./run_nnet3_multilingual.sh "libri-org libri-boot2Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" ".50"  
+    ## 75per
+    ./run_nnet3_multilingual.sh "libri-org libri-boot3Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" ".75"  
 
     # ### A + B + C ###
     # ## 25per + 50per
