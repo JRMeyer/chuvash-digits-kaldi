@@ -204,24 +204,20 @@ if [ "$make_egs" -eq "1" ]; then
 fi
 
 
-if [ "$bootstrap" -eq "1" ]; then
-
+if [ $( echo "${bootstrap}>0" | bc -l) == 1 ]; then
     
     echo "### ================== ###"
     echo "### BOOTSTRAP RESAMPLE ###"
     echo "### ================== ###"
 
-    echo "$0: assuming text file ${multi_egs_dirs[1]}/per_boot exists for each model."
     echo "$0: and assuming the BASELINE model is the first in the list."
 
     
     # loop over every dir except first
     for i in `seq 1 $[$num_langs-1]`; do
 
-        per_boot=( `cat ${multi_egs_dirs[$i]}/per_boot` )
-        
         mv ${multi_egs_dirs[$i]}/egs.scp ${multi_egs_dirs[$i]}/egs.scp-org
-        ./bootstrap_resample.sh ${multi_egs_dirs[$i]}/egs.scp-org ${multi_egs_dirs[$i]}/egs.scp .25
+        ./bootstrap_resample.sh ${multi_egs_dirs[$i]}/egs.scp-org ${multi_egs_dirs[$i]}/egs.scp $bootstrap
 
         num_boot_egs=( `wc -l ${multi_egs_dirs[$i]}/egs.scp` )
 
