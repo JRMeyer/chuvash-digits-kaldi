@@ -8,6 +8,8 @@ for gmm in {1..2}; do
     echo "### TRAIN NEW GMM ###"
     echo "#####################"
 
+    
+    
     # clean up from last gmm run
     rm -rf data_* exp_* plp_*
 
@@ -15,8 +17,9 @@ for gmm in {1..2}; do
         
         # clean up from last gmm run
         rm -rf input_$corpus/audio input_$corpus/phones.txt input_$corpus/transcripts
-        
-        ./run_gmm.sh $corpus $gmm
+
+        # use env -i to run script in clean environment
+        env -i ./run_gmm.sh $corpus $gmm
 
     done
     
@@ -31,9 +34,8 @@ for gmm in {1..2}; do
     
     ./setup_multitask.sh "libri-org libri-boot1Quarter libri-boot2Quarter libri-boot3Quarter"
 
-    ./run-run-nnet3.sh $gmm
+    env -i ./run-run-nnet3.sh $gmm
     
 done
 
 
-sudo shutdown now
