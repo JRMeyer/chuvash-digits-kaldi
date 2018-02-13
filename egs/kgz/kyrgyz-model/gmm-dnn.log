@@ -1,0 +1,2806 @@
+#####################
+### TRAIN NEW GMM ###
+#####################
+
+####==========================####
+#### TRAINING AUDIO DATA PREP ####
+####==========================####
+
+./run_gmm.sh: Assuming your train audio data is in /data/librispeech/audio/8k/train
+./run_gmm.sh: Making soflinks to original audio data with libri-org_ as prefix
+local/prepare_audio_data.sh: looking for audio data in input_libri-org/audio
+
+ 4.86 hours of audio for training 
+ in data_libri-org/train/wav.scp
+
+
+####==========================####
+#### TRAIN FEATURE EXTRACTION ####
+####==========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-org/train
+Destination feats dir: plp_libri-org
+Log dir: data_libri-org/train/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-org/train plp_libri-org/make_plp_log plp_libri-org
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for train
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-org/train/.backup
+
+Succeeded creating CMVN stats for train
+
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-org/train/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/8
+
+####==============####
+#### Create L.fst ####
+####==============####
+
+./compile_Lfst.sh: Looking for lexicon files in input_libri-org
+./compile_Lfst.sh: Extracting phonemes from input_libri-org/lexicon.txt and saving them to input_libri-org/phones.txt
+local/prepare_dict.sh: Creating data_libri-org/local/dict and moving lexicon files from input_libri-org into it.
+local/prepare_dict.sh: This script really is just copy-pasting, nothing new generated.
+Dictionary preparation succeeded
+
+Checking data_libri-org/local/dict/silence_phones.txt ...
+--> reading data_libri-org/local/dict/silence_phones.txt
+--> data_libri-org/local/dict/silence_phones.txt is OK
+
+Checking data_libri-org/local/dict/optional_silence.txt ...
+--> reading data_libri-org/local/dict/optional_silence.txt
+--> data_libri-org/local/dict/optional_silence.txt is OK
+
+Checking data_libri-org/local/dict/nonsilence_phones.txt ...
+--> reading data_libri-org/local/dict/nonsilence_phones.txt
+--> data_libri-org/local/dict/nonsilence_phones.txt is OK
+
+Checking disjoint: silence_phones.txt, nonsilence_phones.txt
+--> disjoint property is OK.
+
+Checking data_libri-org/local/dict/lexicon.txt
+--> reading data_libri-org/local/dict/lexicon.txt
+--> data_libri-org/local/dict/lexicon.txt is OK
+
+Checking data_libri-org/local/dict/extra_questions.txt ...
+--> data_libri-org/local/dict/extra_questions.txt is empty (this is OK)
+--> SUCCESS [validating dictionary directory data_libri-org/local/dict]
+
+**Creating data_libri-org/local/dict/lexiconp.txt from data_libri-org/local/dict/lexicon.txt
+fstaddselfloops 'echo 72 |' 'echo 7232 |' 
+Checking data_libri-org/lang/phones.txt ...
+--> data_libri-org/lang/phones.txt is OK
+
+Checking words.txt: #0 ...
+--> data_libri-org/lang/words.txt has "#0"
+--> data_libri-org/lang/words.txt is OK
+
+Checking disjoint: silence.txt, nonsilence.txt, disambig.txt ...
+--> silence.txt and nonsilence.txt are disjoint
+--> silence.txt and disambig.txt are disjoint
+--> disambig.txt and nonsilence.txt are disjoint
+--> disjoint property is OK
+
+Checking sumation: silence.txt, nonsilence.txt, disambig.txt ...
+--> summation property is OK
+
+Checking data_libri-org/lang/phones/context_indep.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-org/lang/phones/context_indep.txt
+--> data_libri-org/lang/phones/context_indep.int corresponds to data_libri-org/lang/phones/context_indep.txt
+--> data_libri-org/lang/phones/context_indep.csl corresponds to data_libri-org/lang/phones/context_indep.txt
+--> data_libri-org/lang/phones/context_indep.{txt, int, csl} are OK
+
+Checking data_libri-org/lang/phones/disambig.{txt, int, csl} ...
+--> 84 entry/entries in data_libri-org/lang/phones/disambig.txt
+--> data_libri-org/lang/phones/disambig.int corresponds to data_libri-org/lang/phones/disambig.txt
+--> data_libri-org/lang/phones/disambig.csl corresponds to data_libri-org/lang/phones/disambig.txt
+--> data_libri-org/lang/phones/disambig.{txt, int, csl} are OK
+
+Checking data_libri-org/lang/phones/nonsilence.{txt, int, csl} ...
+--> 70 entry/entries in data_libri-org/lang/phones/nonsilence.txt
+--> data_libri-org/lang/phones/nonsilence.int corresponds to data_libri-org/lang/phones/nonsilence.txt
+--> data_libri-org/lang/phones/nonsilence.csl corresponds to data_libri-org/lang/phones/nonsilence.txt
+--> data_libri-org/lang/phones/nonsilence.{txt, int, csl} are OK
+
+Checking data_libri-org/lang/phones/silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-org/lang/phones/silence.txt
+--> data_libri-org/lang/phones/silence.int corresponds to data_libri-org/lang/phones/silence.txt
+--> data_libri-org/lang/phones/silence.csl corresponds to data_libri-org/lang/phones/silence.txt
+--> data_libri-org/lang/phones/silence.{txt, int, csl} are OK
+
+Checking data_libri-org/lang/phones/optional_silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-org/lang/phones/optional_silence.txt
+--> data_libri-org/lang/phones/optional_silence.int corresponds to data_libri-org/lang/phones/optional_silence.txt
+--> data_libri-org/lang/phones/optional_silence.csl corresponds to data_libri-org/lang/phones/optional_silence.txt
+--> data_libri-org/lang/phones/optional_silence.{txt, int, csl} are OK
+
+Checking data_libri-org/lang/phones/roots.{txt, int} ...
+--> 71 entry/entries in data_libri-org/lang/phones/roots.txt
+--> data_libri-org/lang/phones/roots.int corresponds to data_libri-org/lang/phones/roots.txt
+--> data_libri-org/lang/phones/roots.{txt, int} are OK
+
+Checking data_libri-org/lang/phones/sets.{txt, int} ...
+--> 71 entry/entries in data_libri-org/lang/phones/sets.txt
+--> data_libri-org/lang/phones/sets.int corresponds to data_libri-org/lang/phones/sets.txt
+--> data_libri-org/lang/phones/sets.{txt, int} are OK
+
+Checking data_libri-org/lang/phones/extra_questions.{txt, int} ...
+--> WARNING: the optional data_libri-org/lang/phones/extra_questions.{txt, int} are empty!
+
+Checking optional_silence.txt ...
+--> reading data_libri-org/lang/phones/optional_silence.txt
+--> data_libri-org/lang/phones/optional_silence.txt is OK
+
+Checking disambiguation symbols: #0 and #1
+--> data_libri-org/lang/phones/disambig.txt has "#0" and "#1"
+--> data_libri-org/lang/phones/disambig.txt is OK
+
+Checking topo ...
+--> data_libri-org/lang/topo's nonsilence section is OK
+--> data_libri-org/lang/topo's silence section is OK
+--> data_libri-org/lang/topo is OK
+
+Checking data_libri-org/lang/oov.{txt, int} ...
+--> 1 entry/entries in data_libri-org/lang/oov.txt
+--> data_libri-org/lang/oov.int corresponds to data_libri-org/lang/oov.txt
+--> data_libri-org/lang/oov.{txt, int} are OK
+
+--> data_libri-org/lang/L.fst is olabel sorted
+--> data_libri-org/lang/L_disambig.fst is olabel sorted
+--> WARNING (check output above for warnings)
+
+####===============####
+#### TRAINING GMMs ####
+####===============####
+
+
+####===========================####
+#### BEGIN TRAINING MONOPHONES ####
+####===========================####
+
+#### Train Monophones ####
+### Define audio features ###
+feat-to-dim 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-org/train/split8/1/utt2spk scp:data_libri-org/train/split8/1/cmvn.scp scp:data_libri-org/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- |' - 
+apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-org/train/split8/1/utt2spk scp:data_libri-org/train/split8/1/cmvn.scp scp:data_libri-org/train/split8/1/feats.scp ark:- 
+add-deltas ark:- ark:- 
+WARNING (feat-to-dim[5.3.252~1-13318]:Close():kaldi-io.cc:512) Pipe apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-org/train/split8/1/utt2spk scp:data_libri-org/train/split8/1/cmvn.scp scp:data_libri-org/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- | had nonzero return status 36096
+steps/train_mono.sh: Initializing monophone system
+steps/train_mono.sh: Compiling monophone training graphs
+
+##########################################
+### BEGIN FLATSTART MONOPHONE TRAINING ###
+##########################################
+steps/train_mono.sh: Aligning data from flat start (pass 0)
+steps/train_mono.sh: Estimating model from flat start alignments
+
+########################################
+### BEGIN MAIN EM MONOPHONE TRAINING ###
+########################################
+cp: cannot stat 'exp_libri-org/monophones/1.occs': No such file or directory
+
+####
+#### ERROR: train_mono.sh 
+####
+
+../../../src/gmmbin/gmm-info exp_libri-org/monophones/final.mdl 
+number of phones 71
+number of pdfs 215
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 215
+#### Align Monophones ####
+cat: exp_libri-org/monophones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-org/monophones/splice_opts': No such file or directory
+cat: exp_libri-org/monophones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-org/monophones/delta_opts': No such file or directory
+cp: cannot stat 'exp_libri-org/monophones/final.occs': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-org/train using model from exp_libri-org/monophones putting alignments in exp_libri-org/monophones_aligned
+
+####===========================####
+#### END TRAINING MONOPHONES ####
+####===========================####
+
+
+####==========================####
+#### BEGIN TRAINING TRIPHONES ####
+####==========================####
+
+### Train Triphones ###
+steps/train_deltas.sh --cmd utils/run.pl --num-iters 1 --beam 10 100 200 data_libri-org/train data_libri-org/lang exp_libri-org/monophones_aligned exp_libri-org/triphones
+num_leaves = 100
+tot_gauss = 200
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+steps/train_deltas.sh: Initializing triphone model
+steps/train_deltas.sh: converting alignments from exp_libri-org/monophones_aligned to use current senomes
+steps/train_deltas.sh: compiling training graphs (HMMs) of transcripts
+
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp_libri-org/triphones
+
+../../../src/gmmbin/gmm-info exp_libri-org/triphones/final.mdl 
+number of phones 71
+number of pdfs 96
+number of transition-ids 442
+number of transition-states 217
+feature dimension 39
+number of gaussians 100
+### Align Triphones ###
+cat: exp_libri-org/triphones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-org/triphones/splice_opts': No such file or directory
+cat: exp_libri-org/triphones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-org/triphones/delta_opts': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-org/train using model from exp_libri-org/triphones putting alignments in exp_libri-org/triphones_aligned
+
+####========================####
+#### END TRAINING TRIPHONES ####
+####========================####
+
+
+####===================####
+#### GRAPH COMPILATION ####
+####===================####
+
+arpa2fst - 
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:94) Reading \data\ section.
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:149) Reading \1-grams: section.
+fstisstochastic data_libri-org/lang_decode/G.fst 
+8.74073e-05 8.74073e-05
+Succeeded in formatting data
+
+### compile LG.fst ###
+fsttablecompose data_libri-org/lang_decode/L_disambig.fst data_libri-org/lang_decode/G.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fstpushspecial 
+fstisstochastic data_libri-org/lang_decode/tmp/LG.fst 
+-0.0820979 -0.0829757
+[info]: LG not stochastic.
+### compile CLG.fst ###
+fstcomposecontext --context-size=3 --central-position=1 --read-disambig-syms=data_libri-org/lang_decode/phones/disambig.int --write-disambig-syms=data_libri-org/lang_decode/tmp/disambig_ilabels_3_1.int data_libri-org/lang_decode/tmp/ilabels_3_1 
+fstisstochastic data_libri-org/lang_decode/tmp/CLG_3_1.fst 
+0 -0.0829757
+[info]: CLG not stochastic.
+### compile Ha.fst ###
+make-h-transducer --disambig-syms-out=exp_libri-org/triphones/graph/disambig_tid.int --transition-scale=1.0 data_libri-org/lang_decode/tmp/ilabels_3_1 exp_libri-org/triphones/tree exp_libri-org/triphones/final.mdl 
+### compile HCLGa.fst ###
+fsttablecompose exp_libri-org/triphones/graph/Ha.fst data_libri-org/lang_decode/tmp/CLG_3_1.fst 
+fstrmepslocal 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fstrmsymbols exp_libri-org/triphones/graph/disambig_tid.int 
+fstisstochastic exp_libri-org/triphones/graph/HCLGa.fst 
+2.05226e-05 -0.207976
+HCLGa is not stochastic
+### compile HCLG.fst ###
+add-self-loops --self-loop-scale=0.1 --reorder=true exp_libri-org/triphones/final.mdl 
+
+####==========================####
+#### TESTING AUDIO DATA PREP ####
+####==========================####
+
+local/prepare_audio_data.sh: looking for audio data in /data/librispeech/audio/8k/test
+
+ .44 hours of audio for training 
+ in data_libri-org/test/wav.scp
+
+
+####=========================####
+#### TEST FEATURE EXTRACTION ####
+####=========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-org/test
+Destination feats dir: plp_libri-org
+Log dir: data_libri-org/test/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-org/test plp_libri-org/make_plp_log plp_libri-org
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for test
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-org/test/.backup
+
+Succeeded creating CMVN stats for test
+
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-org/test/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/8
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+ ### Decoding with 8 jobs  ### steps/decode.sh 6
+decode.sh: feature type is delta
+#### BEGIN CALCULATE WER ####
+
+####==============####
+#### END DECODING ####
+####==============####
+
+###
+###
+../../../src/gmmbin/gmm-info exp_libri-org/triphones/final.mdl 
+###
+
+####==========================####
+#### TRAINING AUDIO DATA PREP ####
+####==========================####
+
+./run_gmm.sh: Assuming your train audio data is in /data/librispeech/audio/8k/train
+./run_gmm.sh: Making soflinks to original audio data with libri-boot1Quarter_ as prefix
+local/prepare_audio_data.sh: looking for audio data in input_libri-boot1Quarter/audio
+
+ 4.86 hours of audio for training 
+ in data_libri-boot1Quarter/train/wav.scp
+
+
+####==========================####
+#### TRAIN FEATURE EXTRACTION ####
+####==========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot1Quarter/train
+Destination feats dir: plp_libri-boot1Quarter
+Log dir: data_libri-boot1Quarter/train/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot1Quarter/train plp_libri-boot1Quarter/make_plp_log plp_libri-boot1Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for train
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot1Quarter/train/.backup
+
+Succeeded creating CMVN stats for train
+
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot1Quarter/train/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/8
+
+####==============####
+#### Create L.fst ####
+####==============####
+
+./compile_Lfst.sh: Looking for lexicon files in input_libri-boot1Quarter
+./compile_Lfst.sh: Extracting phonemes from input_libri-boot1Quarter/lexicon.txt and saving them to input_libri-boot1Quarter/phones.txt
+local/prepare_dict.sh: Creating data_libri-boot1Quarter/local/dict and moving lexicon files from input_libri-boot1Quarter into it.
+local/prepare_dict.sh: This script really is just copy-pasting, nothing new generated.
+Dictionary preparation succeeded
+
+Checking data_libri-boot1Quarter/local/dict/silence_phones.txt ...
+--> reading data_libri-boot1Quarter/local/dict/silence_phones.txt
+--> data_libri-boot1Quarter/local/dict/silence_phones.txt is OK
+
+Checking data_libri-boot1Quarter/local/dict/optional_silence.txt ...
+--> reading data_libri-boot1Quarter/local/dict/optional_silence.txt
+--> data_libri-boot1Quarter/local/dict/optional_silence.txt is OK
+
+Checking data_libri-boot1Quarter/local/dict/nonsilence_phones.txt ...
+--> reading data_libri-boot1Quarter/local/dict/nonsilence_phones.txt
+--> data_libri-boot1Quarter/local/dict/nonsilence_phones.txt is OK
+
+Checking disjoint: silence_phones.txt, nonsilence_phones.txt
+--> disjoint property is OK.
+
+Checking data_libri-boot1Quarter/local/dict/lexicon.txt
+--> reading data_libri-boot1Quarter/local/dict/lexicon.txt
+--> data_libri-boot1Quarter/local/dict/lexicon.txt is OK
+
+Checking data_libri-boot1Quarter/local/dict/extra_questions.txt ...
+--> data_libri-boot1Quarter/local/dict/extra_questions.txt is empty (this is OK)
+--> SUCCESS [validating dictionary directory data_libri-boot1Quarter/local/dict]
+
+**Creating data_libri-boot1Quarter/local/dict/lexiconp.txt from data_libri-boot1Quarter/local/dict/lexicon.txt
+fstaddselfloops 'echo 72 |' 'echo 7232 |' 
+Checking data_libri-boot1Quarter/lang/phones.txt ...
+--> data_libri-boot1Quarter/lang/phones.txt is OK
+
+Checking words.txt: #0 ...
+--> data_libri-boot1Quarter/lang/words.txt has "#0"
+--> data_libri-boot1Quarter/lang/words.txt is OK
+
+Checking disjoint: silence.txt, nonsilence.txt, disambig.txt ...
+--> silence.txt and nonsilence.txt are disjoint
+--> silence.txt and disambig.txt are disjoint
+--> disambig.txt and nonsilence.txt are disjoint
+--> disjoint property is OK
+
+Checking sumation: silence.txt, nonsilence.txt, disambig.txt ...
+--> summation property is OK
+
+Checking data_libri-boot1Quarter/lang/phones/context_indep.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot1Quarter/lang/phones/context_indep.txt
+--> data_libri-boot1Quarter/lang/phones/context_indep.int corresponds to data_libri-boot1Quarter/lang/phones/context_indep.txt
+--> data_libri-boot1Quarter/lang/phones/context_indep.csl corresponds to data_libri-boot1Quarter/lang/phones/context_indep.txt
+--> data_libri-boot1Quarter/lang/phones/context_indep.{txt, int, csl} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/disambig.{txt, int, csl} ...
+--> 84 entry/entries in data_libri-boot1Quarter/lang/phones/disambig.txt
+--> data_libri-boot1Quarter/lang/phones/disambig.int corresponds to data_libri-boot1Quarter/lang/phones/disambig.txt
+--> data_libri-boot1Quarter/lang/phones/disambig.csl corresponds to data_libri-boot1Quarter/lang/phones/disambig.txt
+--> data_libri-boot1Quarter/lang/phones/disambig.{txt, int, csl} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/nonsilence.{txt, int, csl} ...
+--> 70 entry/entries in data_libri-boot1Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot1Quarter/lang/phones/nonsilence.int corresponds to data_libri-boot1Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot1Quarter/lang/phones/nonsilence.csl corresponds to data_libri-boot1Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot1Quarter/lang/phones/nonsilence.{txt, int, csl} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot1Quarter/lang/phones/silence.txt
+--> data_libri-boot1Quarter/lang/phones/silence.int corresponds to data_libri-boot1Quarter/lang/phones/silence.txt
+--> data_libri-boot1Quarter/lang/phones/silence.csl corresponds to data_libri-boot1Quarter/lang/phones/silence.txt
+--> data_libri-boot1Quarter/lang/phones/silence.{txt, int, csl} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/optional_silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot1Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot1Quarter/lang/phones/optional_silence.int corresponds to data_libri-boot1Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot1Quarter/lang/phones/optional_silence.csl corresponds to data_libri-boot1Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot1Quarter/lang/phones/optional_silence.{txt, int, csl} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/roots.{txt, int} ...
+--> 71 entry/entries in data_libri-boot1Quarter/lang/phones/roots.txt
+--> data_libri-boot1Quarter/lang/phones/roots.int corresponds to data_libri-boot1Quarter/lang/phones/roots.txt
+--> data_libri-boot1Quarter/lang/phones/roots.{txt, int} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/sets.{txt, int} ...
+--> 71 entry/entries in data_libri-boot1Quarter/lang/phones/sets.txt
+--> data_libri-boot1Quarter/lang/phones/sets.int corresponds to data_libri-boot1Quarter/lang/phones/sets.txt
+--> data_libri-boot1Quarter/lang/phones/sets.{txt, int} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/extra_questions.{txt, int} ...
+--> WARNING: the optional data_libri-boot1Quarter/lang/phones/extra_questions.{txt, int} are empty!
+
+Checking optional_silence.txt ...
+--> reading data_libri-boot1Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot1Quarter/lang/phones/optional_silence.txt is OK
+
+Checking disambiguation symbols: #0 and #1
+--> data_libri-boot1Quarter/lang/phones/disambig.txt has "#0" and "#1"
+--> data_libri-boot1Quarter/lang/phones/disambig.txt is OK
+
+Checking topo ...
+--> data_libri-boot1Quarter/lang/topo's nonsilence section is OK
+--> data_libri-boot1Quarter/lang/topo's silence section is OK
+--> data_libri-boot1Quarter/lang/topo is OK
+
+Checking data_libri-boot1Quarter/lang/oov.{txt, int} ...
+--> 1 entry/entries in data_libri-boot1Quarter/lang/oov.txt
+--> data_libri-boot1Quarter/lang/oov.int corresponds to data_libri-boot1Quarter/lang/oov.txt
+--> data_libri-boot1Quarter/lang/oov.{txt, int} are OK
+
+--> data_libri-boot1Quarter/lang/L.fst is olabel sorted
+--> data_libri-boot1Quarter/lang/L_disambig.fst is olabel sorted
+--> WARNING (check output above for warnings)
+
+####===============####
+#### TRAINING GMMs ####
+####===============####
+
+
+####===========================####
+#### BEGIN TRAINING MONOPHONES ####
+####===========================####
+
+#### Train Monophones ####
+### Define audio features ###
+feat-to-dim 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot1Quarter/train/split8/1/utt2spk scp:data_libri-boot1Quarter/train/split8/1/cmvn.scp scp:data_libri-boot1Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- |' - 
+apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot1Quarter/train/split8/1/utt2spk scp:data_libri-boot1Quarter/train/split8/1/cmvn.scp scp:data_libri-boot1Quarter/train/split8/1/feats.scp ark:- 
+add-deltas ark:- ark:- 
+WARNING (feat-to-dim[5.3.252~1-13318]:Close():kaldi-io.cc:512) Pipe apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot1Quarter/train/split8/1/utt2spk scp:data_libri-boot1Quarter/train/split8/1/cmvn.scp scp:data_libri-boot1Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- | had nonzero return status 36096
+steps/train_mono.sh: Initializing monophone system
+steps/train_mono.sh: Compiling monophone training graphs
+
+##########################################
+### BEGIN FLATSTART MONOPHONE TRAINING ###
+##########################################
+steps/train_mono.sh: Aligning data from flat start (pass 0)
+steps/train_mono.sh: Estimating model from flat start alignments
+
+########################################
+### BEGIN MAIN EM MONOPHONE TRAINING ###
+########################################
+cp: cannot stat 'exp_libri-boot1Quarter/monophones/1.occs': No such file or directory
+
+####
+#### ERROR: train_mono.sh 
+####
+
+../../../src/gmmbin/gmm-info exp_libri-boot1Quarter/monophones/final.mdl 
+number of phones 71
+number of pdfs 215
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 215
+#### Align Monophones ####
+cat: exp_libri-boot1Quarter/monophones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot1Quarter/monophones/splice_opts': No such file or directory
+cat: exp_libri-boot1Quarter/monophones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot1Quarter/monophones/delta_opts': No such file or directory
+cp: cannot stat 'exp_libri-boot1Quarter/monophones/final.occs': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot1Quarter/train using model from exp_libri-boot1Quarter/monophones putting alignments in exp_libri-boot1Quarter/monophones_aligned
+
+####===========================####
+#### END TRAINING MONOPHONES ####
+####===========================####
+
+
+####==========================####
+#### BEGIN TRAINING TRIPHONES ####
+####==========================####
+
+### Train Triphones ###
+steps/train_deltas.sh --cmd utils/run.pl --num-iters 1 --beam 10 100 200 data_libri-boot1Quarter/train data_libri-boot1Quarter/lang exp_libri-boot1Quarter/monophones_aligned exp_libri-boot1Quarter/triphones
+num_leaves = 100
+tot_gauss = 200
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+steps/train_deltas.sh: Initializing triphone model
+steps/train_deltas.sh: converting alignments from exp_libri-boot1Quarter/monophones_aligned to use current senomes
+steps/train_deltas.sh: compiling training graphs (HMMs) of transcripts
+
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp_libri-boot1Quarter/triphones
+
+../../../src/gmmbin/gmm-info exp_libri-boot1Quarter/triphones/final.mdl 
+number of phones 71
+number of pdfs 96
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 100
+### Align Triphones ###
+cat: exp_libri-boot1Quarter/triphones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot1Quarter/triphones/splice_opts': No such file or directory
+cat: exp_libri-boot1Quarter/triphones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot1Quarter/triphones/delta_opts': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot1Quarter/train using model from exp_libri-boot1Quarter/triphones putting alignments in exp_libri-boot1Quarter/triphones_aligned
+
+####========================####
+#### END TRAINING TRIPHONES ####
+####========================####
+
+
+####===================####
+#### GRAPH COMPILATION ####
+####===================####
+
+arpa2fst - 
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:94) Reading \data\ section.
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:149) Reading \1-grams: section.
+fstisstochastic data_libri-boot1Quarter/lang_decode/G.fst 
+8.74073e-05 8.74073e-05
+Succeeded in formatting data
+
+### compile LG.fst ###
+fstpushspecial 
+fstminimizeencoded 
+fsttablecompose data_libri-boot1Quarter/lang_decode/L_disambig.fst data_libri-boot1Quarter/lang_decode/G.fst 
+fstdeterminizestar --use-log=true 
+fstisstochastic data_libri-boot1Quarter/lang_decode/tmp/LG.fst 
+-0.0820979 -0.0829757
+[info]: LG not stochastic.
+### compile CLG.fst ###
+fstcomposecontext --context-size=3 --central-position=1 --read-disambig-syms=data_libri-boot1Quarter/lang_decode/phones/disambig.int --write-disambig-syms=data_libri-boot1Quarter/lang_decode/tmp/disambig_ilabels_3_1.int data_libri-boot1Quarter/lang_decode/tmp/ilabels_3_1 
+fstisstochastic data_libri-boot1Quarter/lang_decode/tmp/CLG_3_1.fst 
+0 -0.0829757
+[info]: CLG not stochastic.
+### compile Ha.fst ###
+make-h-transducer --disambig-syms-out=exp_libri-boot1Quarter/triphones/graph/disambig_tid.int --transition-scale=1.0 data_libri-boot1Quarter/lang_decode/tmp/ilabels_3_1 exp_libri-boot1Quarter/triphones/tree exp_libri-boot1Quarter/triphones/final.mdl 
+### compile HCLGa.fst ###
+fsttablecompose exp_libri-boot1Quarter/triphones/graph/Ha.fst data_libri-boot1Quarter/lang_decode/tmp/CLG_3_1.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fstrmepslocal 
+fstrmsymbols exp_libri-boot1Quarter/triphones/graph/disambig_tid.int 
+fstisstochastic exp_libri-boot1Quarter/triphones/graph/HCLGa.fst 
+2.05226e-05 -0.207976
+HCLGa is not stochastic
+### compile HCLG.fst ###
+add-self-loops --self-loop-scale=0.1 --reorder=true exp_libri-boot1Quarter/triphones/final.mdl 
+
+####==========================####
+#### TESTING AUDIO DATA PREP ####
+####==========================####
+
+local/prepare_audio_data.sh: looking for audio data in /data/librispeech/audio/8k/test
+
+ .44 hours of audio for training 
+ in data_libri-boot1Quarter/test/wav.scp
+
+
+####=========================####
+#### TEST FEATURE EXTRACTION ####
+####=========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot1Quarter/test
+Destination feats dir: plp_libri-boot1Quarter
+Log dir: data_libri-boot1Quarter/test/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot1Quarter/test plp_libri-boot1Quarter/make_plp_log plp_libri-boot1Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for test
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot1Quarter/test/.backup
+
+Succeeded creating CMVN stats for test
+
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot1Quarter/test/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/8
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+ ### Decoding with 8 jobs  ### steps/decode.sh 6
+decode.sh: feature type is delta
+#### BEGIN CALCULATE WER ####
+
+####==============####
+#### END DECODING ####
+####==============####
+
+###
+###
+../../../src/gmmbin/gmm-info exp_libri-boot1Quarter/triphones/final.mdl 
+###
+
+####==========================####
+#### TRAINING AUDIO DATA PREP ####
+####==========================####
+
+./run_gmm.sh: Assuming your train audio data is in /data/librispeech/audio/8k/train
+./run_gmm.sh: Making soflinks to original audio data with libri-boot2Quarter_ as prefix
+local/prepare_audio_data.sh: looking for audio data in input_libri-boot2Quarter/audio
+
+ 4.86 hours of audio for training 
+ in data_libri-boot2Quarter/train/wav.scp
+
+
+####==========================####
+#### TRAIN FEATURE EXTRACTION ####
+####==========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot2Quarter/train
+Destination feats dir: plp_libri-boot2Quarter
+Log dir: data_libri-boot2Quarter/train/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot2Quarter/train plp_libri-boot2Quarter/make_plp_log plp_libri-boot2Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for train
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot2Quarter/train/.backup
+
+Succeeded creating CMVN stats for train
+
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot2Quarter/train/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/8
+
+####==============####
+#### Create L.fst ####
+####==============####
+
+./compile_Lfst.sh: Looking for lexicon files in input_libri-boot2Quarter
+./compile_Lfst.sh: Extracting phonemes from input_libri-boot2Quarter/lexicon.txt and saving them to input_libri-boot2Quarter/phones.txt
+local/prepare_dict.sh: Creating data_libri-boot2Quarter/local/dict and moving lexicon files from input_libri-boot2Quarter into it.
+local/prepare_dict.sh: This script really is just copy-pasting, nothing new generated.
+Dictionary preparation succeeded
+
+Checking data_libri-boot2Quarter/local/dict/silence_phones.txt ...
+--> reading data_libri-boot2Quarter/local/dict/silence_phones.txt
+--> data_libri-boot2Quarter/local/dict/silence_phones.txt is OK
+
+Checking data_libri-boot2Quarter/local/dict/optional_silence.txt ...
+--> reading data_libri-boot2Quarter/local/dict/optional_silence.txt
+--> data_libri-boot2Quarter/local/dict/optional_silence.txt is OK
+
+Checking data_libri-boot2Quarter/local/dict/nonsilence_phones.txt ...
+--> reading data_libri-boot2Quarter/local/dict/nonsilence_phones.txt
+--> data_libri-boot2Quarter/local/dict/nonsilence_phones.txt is OK
+
+Checking disjoint: silence_phones.txt, nonsilence_phones.txt
+--> disjoint property is OK.
+
+Checking data_libri-boot2Quarter/local/dict/lexicon.txt
+--> reading data_libri-boot2Quarter/local/dict/lexicon.txt
+--> data_libri-boot2Quarter/local/dict/lexicon.txt is OK
+
+Checking data_libri-boot2Quarter/local/dict/extra_questions.txt ...
+--> data_libri-boot2Quarter/local/dict/extra_questions.txt is empty (this is OK)
+--> SUCCESS [validating dictionary directory data_libri-boot2Quarter/local/dict]
+
+**Creating data_libri-boot2Quarter/local/dict/lexiconp.txt from data_libri-boot2Quarter/local/dict/lexicon.txt
+fstaddselfloops 'echo 72 |' 'echo 7232 |' 
+Checking data_libri-boot2Quarter/lang/phones.txt ...
+--> data_libri-boot2Quarter/lang/phones.txt is OK
+
+Checking words.txt: #0 ...
+--> data_libri-boot2Quarter/lang/words.txt has "#0"
+--> data_libri-boot2Quarter/lang/words.txt is OK
+
+Checking disjoint: silence.txt, nonsilence.txt, disambig.txt ...
+--> silence.txt and nonsilence.txt are disjoint
+--> silence.txt and disambig.txt are disjoint
+--> disambig.txt and nonsilence.txt are disjoint
+--> disjoint property is OK
+
+Checking sumation: silence.txt, nonsilence.txt, disambig.txt ...
+--> summation property is OK
+
+Checking data_libri-boot2Quarter/lang/phones/context_indep.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot2Quarter/lang/phones/context_indep.txt
+--> data_libri-boot2Quarter/lang/phones/context_indep.int corresponds to data_libri-boot2Quarter/lang/phones/context_indep.txt
+--> data_libri-boot2Quarter/lang/phones/context_indep.csl corresponds to data_libri-boot2Quarter/lang/phones/context_indep.txt
+--> data_libri-boot2Quarter/lang/phones/context_indep.{txt, int, csl} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/disambig.{txt, int, csl} ...
+--> 84 entry/entries in data_libri-boot2Quarter/lang/phones/disambig.txt
+--> data_libri-boot2Quarter/lang/phones/disambig.int corresponds to data_libri-boot2Quarter/lang/phones/disambig.txt
+--> data_libri-boot2Quarter/lang/phones/disambig.csl corresponds to data_libri-boot2Quarter/lang/phones/disambig.txt
+--> data_libri-boot2Quarter/lang/phones/disambig.{txt, int, csl} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/nonsilence.{txt, int, csl} ...
+--> 70 entry/entries in data_libri-boot2Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot2Quarter/lang/phones/nonsilence.int corresponds to data_libri-boot2Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot2Quarter/lang/phones/nonsilence.csl corresponds to data_libri-boot2Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot2Quarter/lang/phones/nonsilence.{txt, int, csl} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot2Quarter/lang/phones/silence.txt
+--> data_libri-boot2Quarter/lang/phones/silence.int corresponds to data_libri-boot2Quarter/lang/phones/silence.txt
+--> data_libri-boot2Quarter/lang/phones/silence.csl corresponds to data_libri-boot2Quarter/lang/phones/silence.txt
+--> data_libri-boot2Quarter/lang/phones/silence.{txt, int, csl} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/optional_silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot2Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot2Quarter/lang/phones/optional_silence.int corresponds to data_libri-boot2Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot2Quarter/lang/phones/optional_silence.csl corresponds to data_libri-boot2Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot2Quarter/lang/phones/optional_silence.{txt, int, csl} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/roots.{txt, int} ...
+--> 71 entry/entries in data_libri-boot2Quarter/lang/phones/roots.txt
+--> data_libri-boot2Quarter/lang/phones/roots.int corresponds to data_libri-boot2Quarter/lang/phones/roots.txt
+--> data_libri-boot2Quarter/lang/phones/roots.{txt, int} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/sets.{txt, int} ...
+--> 71 entry/entries in data_libri-boot2Quarter/lang/phones/sets.txt
+--> data_libri-boot2Quarter/lang/phones/sets.int corresponds to data_libri-boot2Quarter/lang/phones/sets.txt
+--> data_libri-boot2Quarter/lang/phones/sets.{txt, int} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/extra_questions.{txt, int} ...
+--> WARNING: the optional data_libri-boot2Quarter/lang/phones/extra_questions.{txt, int} are empty!
+
+Checking optional_silence.txt ...
+--> reading data_libri-boot2Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot2Quarter/lang/phones/optional_silence.txt is OK
+
+Checking disambiguation symbols: #0 and #1
+--> data_libri-boot2Quarter/lang/phones/disambig.txt has "#0" and "#1"
+--> data_libri-boot2Quarter/lang/phones/disambig.txt is OK
+
+Checking topo ...
+--> data_libri-boot2Quarter/lang/topo's nonsilence section is OK
+--> data_libri-boot2Quarter/lang/topo's silence section is OK
+--> data_libri-boot2Quarter/lang/topo is OK
+
+Checking data_libri-boot2Quarter/lang/oov.{txt, int} ...
+--> 1 entry/entries in data_libri-boot2Quarter/lang/oov.txt
+--> data_libri-boot2Quarter/lang/oov.int corresponds to data_libri-boot2Quarter/lang/oov.txt
+--> data_libri-boot2Quarter/lang/oov.{txt, int} are OK
+
+--> data_libri-boot2Quarter/lang/L.fst is olabel sorted
+--> data_libri-boot2Quarter/lang/L_disambig.fst is olabel sorted
+--> WARNING (check output above for warnings)
+
+####===============####
+#### TRAINING GMMs ####
+####===============####
+
+
+####===========================####
+#### BEGIN TRAINING MONOPHONES ####
+####===========================####
+
+#### Train Monophones ####
+### Define audio features ###
+feat-to-dim 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot2Quarter/train/split8/1/utt2spk scp:data_libri-boot2Quarter/train/split8/1/cmvn.scp scp:data_libri-boot2Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- |' - 
+apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot2Quarter/train/split8/1/utt2spk scp:data_libri-boot2Quarter/train/split8/1/cmvn.scp scp:data_libri-boot2Quarter/train/split8/1/feats.scp ark:- 
+add-deltas ark:- ark:- 
+WARNING (feat-to-dim[5.3.252~1-13318]:Close():kaldi-io.cc:512) Pipe apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot2Quarter/train/split8/1/utt2spk scp:data_libri-boot2Quarter/train/split8/1/cmvn.scp scp:data_libri-boot2Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- | had nonzero return status 36096
+steps/train_mono.sh: Initializing monophone system
+steps/train_mono.sh: Compiling monophone training graphs
+
+##########################################
+### BEGIN FLATSTART MONOPHONE TRAINING ###
+##########################################
+steps/train_mono.sh: Aligning data from flat start (pass 0)
+steps/train_mono.sh: Estimating model from flat start alignments
+
+########################################
+### BEGIN MAIN EM MONOPHONE TRAINING ###
+########################################
+cp: cannot stat 'exp_libri-boot2Quarter/monophones/1.occs': No such file or directory
+
+####
+#### ERROR: train_mono.sh 
+####
+
+../../../src/gmmbin/gmm-info exp_libri-boot2Quarter/monophones/final.mdl 
+number of phones 71
+number of pdfs 215
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 215
+#### Align Monophones ####
+cat: exp_libri-boot2Quarter/monophones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot2Quarter/monophones/splice_opts': No such file or directory
+cat: exp_libri-boot2Quarter/monophones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot2Quarter/monophones/delta_opts': No such file or directory
+cp: cannot stat 'exp_libri-boot2Quarter/monophones/final.occs': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot2Quarter/train using model from exp_libri-boot2Quarter/monophones putting alignments in exp_libri-boot2Quarter/monophones_aligned
+
+####===========================####
+#### END TRAINING MONOPHONES ####
+####===========================####
+
+
+####==========================####
+#### BEGIN TRAINING TRIPHONES ####
+####==========================####
+
+### Train Triphones ###
+steps/train_deltas.sh --cmd utils/run.pl --num-iters 1 --beam 10 100 200 data_libri-boot2Quarter/train data_libri-boot2Quarter/lang exp_libri-boot2Quarter/monophones_aligned exp_libri-boot2Quarter/triphones
+num_leaves = 100
+tot_gauss = 200
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+steps/train_deltas.sh: Initializing triphone model
+steps/train_deltas.sh: converting alignments from exp_libri-boot2Quarter/monophones_aligned to use current senomes
+steps/train_deltas.sh: compiling training graphs (HMMs) of transcripts
+
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp_libri-boot2Quarter/triphones
+
+../../../src/gmmbin/gmm-info exp_libri-boot2Quarter/triphones/final.mdl 
+number of phones 71
+number of pdfs 96
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 100
+### Align Triphones ###
+cat: exp_libri-boot2Quarter/triphones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot2Quarter/triphones/splice_opts': No such file or directory
+cat: exp_libri-boot2Quarter/triphones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot2Quarter/triphones/delta_opts': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot2Quarter/train using model from exp_libri-boot2Quarter/triphones putting alignments in exp_libri-boot2Quarter/triphones_aligned
+
+####========================####
+#### END TRAINING TRIPHONES ####
+####========================####
+
+
+####===================####
+#### GRAPH COMPILATION ####
+####===================####
+
+arpa2fst - 
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:94) Reading \data\ section.
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:149) Reading \1-grams: section.
+fstisstochastic data_libri-boot2Quarter/lang_decode/G.fst 
+8.74073e-05 8.74073e-05
+Succeeded in formatting data
+
+### compile LG.fst ###
+fstpushspecial 
+fstminimizeencoded 
+fsttablecompose data_libri-boot2Quarter/lang_decode/L_disambig.fst data_libri-boot2Quarter/lang_decode/G.fst 
+fstdeterminizestar --use-log=true 
+fstisstochastic data_libri-boot2Quarter/lang_decode/tmp/LG.fst 
+-0.0820979 -0.0829757
+[info]: LG not stochastic.
+### compile CLG.fst ###
+fstcomposecontext --context-size=3 --central-position=1 --read-disambig-syms=data_libri-boot2Quarter/lang_decode/phones/disambig.int --write-disambig-syms=data_libri-boot2Quarter/lang_decode/tmp/disambig_ilabels_3_1.int data_libri-boot2Quarter/lang_decode/tmp/ilabels_3_1 
+fstisstochastic data_libri-boot2Quarter/lang_decode/tmp/CLG_3_1.fst 
+0 -0.0829757
+[info]: CLG not stochastic.
+### compile Ha.fst ###
+make-h-transducer --disambig-syms-out=exp_libri-boot2Quarter/triphones/graph/disambig_tid.int --transition-scale=1.0 data_libri-boot2Quarter/lang_decode/tmp/ilabels_3_1 exp_libri-boot2Quarter/triphones/tree exp_libri-boot2Quarter/triphones/final.mdl 
+### compile HCLGa.fst ###
+fsttablecompose exp_libri-boot2Quarter/triphones/graph/Ha.fst data_libri-boot2Quarter/lang_decode/tmp/CLG_3_1.fst 
+fstdeterminizestar --use-log=true 
+fstrmepslocal 
+fstminimizeencoded 
+fstrmsymbols exp_libri-boot2Quarter/triphones/graph/disambig_tid.int 
+fstisstochastic exp_libri-boot2Quarter/triphones/graph/HCLGa.fst 
+2.05226e-05 -0.207976
+HCLGa is not stochastic
+### compile HCLG.fst ###
+add-self-loops --self-loop-scale=0.1 --reorder=true exp_libri-boot2Quarter/triphones/final.mdl 
+
+####==========================####
+#### TESTING AUDIO DATA PREP ####
+####==========================####
+
+local/prepare_audio_data.sh: looking for audio data in /data/librispeech/audio/8k/test
+
+ .44 hours of audio for training 
+ in data_libri-boot2Quarter/test/wav.scp
+
+
+####=========================####
+#### TEST FEATURE EXTRACTION ####
+####=========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot2Quarter/test
+Destination feats dir: plp_libri-boot2Quarter
+Log dir: data_libri-boot2Quarter/test/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot2Quarter/test plp_libri-boot2Quarter/make_plp_log plp_libri-boot2Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for test
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot2Quarter/test/.backup
+
+Succeeded creating CMVN stats for test
+
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot2Quarter/test/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/8
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+ ### Decoding with 8 jobs  ### steps/decode.sh 6
+decode.sh: feature type is delta
+#### BEGIN CALCULATE WER ####
+
+####==============####
+#### END DECODING ####
+####==============####
+
+###
+###
+../../../src/gmmbin/gmm-info exp_libri-boot2Quarter/triphones/final.mdl 
+###
+
+####==========================####
+#### TRAINING AUDIO DATA PREP ####
+####==========================####
+
+./run_gmm.sh: Assuming your train audio data is in /data/librispeech/audio/8k/train
+./run_gmm.sh: Making soflinks to original audio data with libri-boot3Quarter_ as prefix
+local/prepare_audio_data.sh: looking for audio data in input_libri-boot3Quarter/audio
+
+ 4.86 hours of audio for training 
+ in data_libri-boot3Quarter/train/wav.scp
+
+
+####==========================####
+#### TRAIN FEATURE EXTRACTION ####
+####==========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot3Quarter/train
+Destination feats dir: plp_libri-boot3Quarter
+Log dir: data_libri-boot3Quarter/train/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot3Quarter/train plp_libri-boot3Quarter/make_plp_log plp_libri-boot3Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for train
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot3Quarter/train/.backup
+
+Succeeded creating CMVN stats for train
+
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot3Quarter/train/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/8
+
+####==============####
+#### Create L.fst ####
+####==============####
+
+./compile_Lfst.sh: Looking for lexicon files in input_libri-boot3Quarter
+./compile_Lfst.sh: Extracting phonemes from input_libri-boot3Quarter/lexicon.txt and saving them to input_libri-boot3Quarter/phones.txt
+local/prepare_dict.sh: Creating data_libri-boot3Quarter/local/dict and moving lexicon files from input_libri-boot3Quarter into it.
+local/prepare_dict.sh: This script really is just copy-pasting, nothing new generated.
+Dictionary preparation succeeded
+
+Checking data_libri-boot3Quarter/local/dict/silence_phones.txt ...
+--> reading data_libri-boot3Quarter/local/dict/silence_phones.txt
+--> data_libri-boot3Quarter/local/dict/silence_phones.txt is OK
+
+Checking data_libri-boot3Quarter/local/dict/optional_silence.txt ...
+--> reading data_libri-boot3Quarter/local/dict/optional_silence.txt
+--> data_libri-boot3Quarter/local/dict/optional_silence.txt is OK
+
+Checking data_libri-boot3Quarter/local/dict/nonsilence_phones.txt ...
+--> reading data_libri-boot3Quarter/local/dict/nonsilence_phones.txt
+--> data_libri-boot3Quarter/local/dict/nonsilence_phones.txt is OK
+
+Checking disjoint: silence_phones.txt, nonsilence_phones.txt
+--> disjoint property is OK.
+
+Checking data_libri-boot3Quarter/local/dict/lexicon.txt
+--> reading data_libri-boot3Quarter/local/dict/lexicon.txt
+--> data_libri-boot3Quarter/local/dict/lexicon.txt is OK
+
+Checking data_libri-boot3Quarter/local/dict/extra_questions.txt ...
+--> data_libri-boot3Quarter/local/dict/extra_questions.txt is empty (this is OK)
+--> SUCCESS [validating dictionary directory data_libri-boot3Quarter/local/dict]
+
+**Creating data_libri-boot3Quarter/local/dict/lexiconp.txt from data_libri-boot3Quarter/local/dict/lexicon.txt
+fstaddselfloops 'echo 72 |' 'echo 7232 |' 
+Checking data_libri-boot3Quarter/lang/phones.txt ...
+--> data_libri-boot3Quarter/lang/phones.txt is OK
+
+Checking words.txt: #0 ...
+--> data_libri-boot3Quarter/lang/words.txt has "#0"
+--> data_libri-boot3Quarter/lang/words.txt is OK
+
+Checking disjoint: silence.txt, nonsilence.txt, disambig.txt ...
+--> silence.txt and nonsilence.txt are disjoint
+--> silence.txt and disambig.txt are disjoint
+--> disambig.txt and nonsilence.txt are disjoint
+--> disjoint property is OK
+
+Checking sumation: silence.txt, nonsilence.txt, disambig.txt ...
+--> summation property is OK
+
+Checking data_libri-boot3Quarter/lang/phones/context_indep.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot3Quarter/lang/phones/context_indep.txt
+--> data_libri-boot3Quarter/lang/phones/context_indep.int corresponds to data_libri-boot3Quarter/lang/phones/context_indep.txt
+--> data_libri-boot3Quarter/lang/phones/context_indep.csl corresponds to data_libri-boot3Quarter/lang/phones/context_indep.txt
+--> data_libri-boot3Quarter/lang/phones/context_indep.{txt, int, csl} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/disambig.{txt, int, csl} ...
+--> 84 entry/entries in data_libri-boot3Quarter/lang/phones/disambig.txt
+--> data_libri-boot3Quarter/lang/phones/disambig.int corresponds to data_libri-boot3Quarter/lang/phones/disambig.txt
+--> data_libri-boot3Quarter/lang/phones/disambig.csl corresponds to data_libri-boot3Quarter/lang/phones/disambig.txt
+--> data_libri-boot3Quarter/lang/phones/disambig.{txt, int, csl} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/nonsilence.{txt, int, csl} ...
+--> 70 entry/entries in data_libri-boot3Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot3Quarter/lang/phones/nonsilence.int corresponds to data_libri-boot3Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot3Quarter/lang/phones/nonsilence.csl corresponds to data_libri-boot3Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot3Quarter/lang/phones/nonsilence.{txt, int, csl} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot3Quarter/lang/phones/silence.txt
+--> data_libri-boot3Quarter/lang/phones/silence.int corresponds to data_libri-boot3Quarter/lang/phones/silence.txt
+--> data_libri-boot3Quarter/lang/phones/silence.csl corresponds to data_libri-boot3Quarter/lang/phones/silence.txt
+--> data_libri-boot3Quarter/lang/phones/silence.{txt, int, csl} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/optional_silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot3Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot3Quarter/lang/phones/optional_silence.int corresponds to data_libri-boot3Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot3Quarter/lang/phones/optional_silence.csl corresponds to data_libri-boot3Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot3Quarter/lang/phones/optional_silence.{txt, int, csl} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/roots.{txt, int} ...
+--> 71 entry/entries in data_libri-boot3Quarter/lang/phones/roots.txt
+--> data_libri-boot3Quarter/lang/phones/roots.int corresponds to data_libri-boot3Quarter/lang/phones/roots.txt
+--> data_libri-boot3Quarter/lang/phones/roots.{txt, int} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/sets.{txt, int} ...
+--> 71 entry/entries in data_libri-boot3Quarter/lang/phones/sets.txt
+--> data_libri-boot3Quarter/lang/phones/sets.int corresponds to data_libri-boot3Quarter/lang/phones/sets.txt
+--> data_libri-boot3Quarter/lang/phones/sets.{txt, int} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/extra_questions.{txt, int} ...
+--> WARNING: the optional data_libri-boot3Quarter/lang/phones/extra_questions.{txt, int} are empty!
+
+Checking optional_silence.txt ...
+--> reading data_libri-boot3Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot3Quarter/lang/phones/optional_silence.txt is OK
+
+Checking disambiguation symbols: #0 and #1
+--> data_libri-boot3Quarter/lang/phones/disambig.txt has "#0" and "#1"
+--> data_libri-boot3Quarter/lang/phones/disambig.txt is OK
+
+Checking topo ...
+--> data_libri-boot3Quarter/lang/topo's nonsilence section is OK
+--> data_libri-boot3Quarter/lang/topo's silence section is OK
+--> data_libri-boot3Quarter/lang/topo is OK
+
+Checking data_libri-boot3Quarter/lang/oov.{txt, int} ...
+--> 1 entry/entries in data_libri-boot3Quarter/lang/oov.txt
+--> data_libri-boot3Quarter/lang/oov.int corresponds to data_libri-boot3Quarter/lang/oov.txt
+--> data_libri-boot3Quarter/lang/oov.{txt, int} are OK
+
+--> data_libri-boot3Quarter/lang/L.fst is olabel sorted
+--> data_libri-boot3Quarter/lang/L_disambig.fst is olabel sorted
+--> WARNING (check output above for warnings)
+
+####===============####
+#### TRAINING GMMs ####
+####===============####
+
+
+####===========================####
+#### BEGIN TRAINING MONOPHONES ####
+####===========================####
+
+#### Train Monophones ####
+### Define audio features ###
+feat-to-dim 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot3Quarter/train/split8/1/utt2spk scp:data_libri-boot3Quarter/train/split8/1/cmvn.scp scp:data_libri-boot3Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- |' - 
+apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot3Quarter/train/split8/1/utt2spk scp:data_libri-boot3Quarter/train/split8/1/cmvn.scp scp:data_libri-boot3Quarter/train/split8/1/feats.scp ark:- 
+add-deltas ark:- ark:- 
+WARNING (feat-to-dim[5.3.252~1-13318]:Close():kaldi-io.cc:512) Pipe apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot3Quarter/train/split8/1/utt2spk scp:data_libri-boot3Quarter/train/split8/1/cmvn.scp scp:data_libri-boot3Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- | had nonzero return status 36096
+steps/train_mono.sh: Initializing monophone system
+steps/train_mono.sh: Compiling monophone training graphs
+
+##########################################
+### BEGIN FLATSTART MONOPHONE TRAINING ###
+##########################################
+steps/train_mono.sh: Aligning data from flat start (pass 0)
+steps/train_mono.sh: Estimating model from flat start alignments
+
+########################################
+### BEGIN MAIN EM MONOPHONE TRAINING ###
+########################################
+cp: cannot stat 'exp_libri-boot3Quarter/monophones/1.occs': No such file or directory
+
+####
+#### ERROR: train_mono.sh 
+####
+
+../../../src/gmmbin/gmm-info exp_libri-boot3Quarter/monophones/final.mdl 
+number of phones 71
+number of pdfs 215
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 215
+#### Align Monophones ####
+cat: exp_libri-boot3Quarter/monophones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot3Quarter/monophones/splice_opts': No such file or directory
+cat: exp_libri-boot3Quarter/monophones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot3Quarter/monophones/delta_opts': No such file or directory
+cp: cannot stat 'exp_libri-boot3Quarter/monophones/final.occs': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot3Quarter/train using model from exp_libri-boot3Quarter/monophones putting alignments in exp_libri-boot3Quarter/monophones_aligned
+
+####===========================####
+#### END TRAINING MONOPHONES ####
+####===========================####
+
+
+####==========================####
+#### BEGIN TRAINING TRIPHONES ####
+####==========================####
+
+### Train Triphones ###
+steps/train_deltas.sh --cmd utils/run.pl --num-iters 1 --beam 10 100 200 data_libri-boot3Quarter/train data_libri-boot3Quarter/lang exp_libri-boot3Quarter/monophones_aligned exp_libri-boot3Quarter/triphones
+num_leaves = 100
+tot_gauss = 200
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+steps/train_deltas.sh: Initializing triphone model
+steps/train_deltas.sh: converting alignments from exp_libri-boot3Quarter/monophones_aligned to use current senomes
+steps/train_deltas.sh: compiling training graphs (HMMs) of transcripts
+
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp_libri-boot3Quarter/triphones
+
+../../../src/gmmbin/gmm-info exp_libri-boot3Quarter/triphones/final.mdl 
+number of phones 71
+number of pdfs 96
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 100
+### Align Triphones ###
+cat: exp_libri-boot3Quarter/triphones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot3Quarter/triphones/splice_opts': No such file or directory
+cat: exp_libri-boot3Quarter/triphones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot3Quarter/triphones/delta_opts': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot3Quarter/train using model from exp_libri-boot3Quarter/triphones putting alignments in exp_libri-boot3Quarter/triphones_aligned
+
+####========================####
+#### END TRAINING TRIPHONES ####
+####========================####
+
+
+####===================####
+#### GRAPH COMPILATION ####
+####===================####
+
+arpa2fst - 
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:94) Reading \data\ section.
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:149) Reading \1-grams: section.
+fstisstochastic data_libri-boot3Quarter/lang_decode/G.fst 
+8.74073e-05 8.74073e-05
+Succeeded in formatting data
+
+### compile LG.fst ###
+fsttablecompose data_libri-boot3Quarter/lang_decode/L_disambig.fst data_libri-boot3Quarter/lang_decode/G.fst 
+fstminimizeencoded 
+fstpushspecial 
+fstdeterminizestar --use-log=true 
+fstisstochastic data_libri-boot3Quarter/lang_decode/tmp/LG.fst 
+-0.0820979 -0.0829757
+[info]: LG not stochastic.
+### compile CLG.fst ###
+fstcomposecontext --context-size=3 --central-position=1 --read-disambig-syms=data_libri-boot3Quarter/lang_decode/phones/disambig.int --write-disambig-syms=data_libri-boot3Quarter/lang_decode/tmp/disambig_ilabels_3_1.int data_libri-boot3Quarter/lang_decode/tmp/ilabels_3_1 
+fstisstochastic data_libri-boot3Quarter/lang_decode/tmp/CLG_3_1.fst 
+0 -0.0829757
+[info]: CLG not stochastic.
+### compile Ha.fst ###
+make-h-transducer --disambig-syms-out=exp_libri-boot3Quarter/triphones/graph/disambig_tid.int --transition-scale=1.0 data_libri-boot3Quarter/lang_decode/tmp/ilabels_3_1 exp_libri-boot3Quarter/triphones/tree exp_libri-boot3Quarter/triphones/final.mdl 
+### compile HCLGa.fst ###
+fsttablecompose exp_libri-boot3Quarter/triphones/graph/Ha.fst data_libri-boot3Quarter/lang_decode/tmp/CLG_3_1.fst 
+fstminimizeencoded 
+fstrmsymbols exp_libri-boot3Quarter/triphones/graph/disambig_tid.int 
+fstrmepslocal 
+fstdeterminizestar --use-log=true 
+fstisstochastic exp_libri-boot3Quarter/triphones/graph/HCLGa.fst 
+2.05226e-05 -0.207976
+HCLGa is not stochastic
+### compile HCLG.fst ###
+add-self-loops --self-loop-scale=0.1 --reorder=true exp_libri-boot3Quarter/triphones/final.mdl 
+
+####==========================####
+#### TESTING AUDIO DATA PREP ####
+####==========================####
+
+local/prepare_audio_data.sh: looking for audio data in /data/librispeech/audio/8k/test
+
+ .44 hours of audio for training 
+ in data_libri-boot3Quarter/test/wav.scp
+
+
+####=========================####
+#### TEST FEATURE EXTRACTION ####
+####=========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot3Quarter/test
+Destination feats dir: plp_libri-boot3Quarter
+Log dir: data_libri-boot3Quarter/test/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot3Quarter/test plp_libri-boot3Quarter/make_plp_log plp_libri-boot3Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for test
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot3Quarter/test/.backup
+
+Succeeded creating CMVN stats for test
+
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot3Quarter/test/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/8
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+ ### Decoding with 8 jobs  ### steps/decode.sh 6
+decode.sh: feature type is delta
+#### BEGIN CALCULATE WER ####
+
+####==============####
+#### END DECODING ####
+####==============####
+
+###
+###
+../../../src/gmmbin/gmm-info exp_libri-boot3Quarter/triphones/final.mdl 
+###
+#####################
+### TRAIN NEW GMM ###
+#####################
+
+####==========================####
+#### TRAINING AUDIO DATA PREP ####
+####==========================####
+
+./run_gmm.sh: Assuming your train audio data is in /data/librispeech/audio/8k/train
+./run_gmm.sh: Making soflinks to original audio data with libri-org_ as prefix
+local/prepare_audio_data.sh: looking for audio data in input_libri-org/audio
+
+ 4.86 hours of audio for training 
+ in data_libri-org/train/wav.scp
+
+
+####==========================####
+#### TRAIN FEATURE EXTRACTION ####
+####==========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-org/train
+Destination feats dir: plp_libri-org
+Log dir: data_libri-org/train/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-org/train plp_libri-org/make_plp_log plp_libri-org
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for train
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-org/train/.backup
+
+Succeeded creating CMVN stats for train
+
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-org/train/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/train/split8/8
+
+####==============####
+#### Create L.fst ####
+####==============####
+
+./compile_Lfst.sh: Looking for lexicon files in input_libri-org
+./compile_Lfst.sh: Extracting phonemes from input_libri-org/lexicon.txt and saving them to input_libri-org/phones.txt
+local/prepare_dict.sh: Creating data_libri-org/local/dict and moving lexicon files from input_libri-org into it.
+local/prepare_dict.sh: This script really is just copy-pasting, nothing new generated.
+Dictionary preparation succeeded
+
+Checking data_libri-org/local/dict/silence_phones.txt ...
+--> reading data_libri-org/local/dict/silence_phones.txt
+--> data_libri-org/local/dict/silence_phones.txt is OK
+
+Checking data_libri-org/local/dict/optional_silence.txt ...
+--> reading data_libri-org/local/dict/optional_silence.txt
+--> data_libri-org/local/dict/optional_silence.txt is OK
+
+Checking data_libri-org/local/dict/nonsilence_phones.txt ...
+--> reading data_libri-org/local/dict/nonsilence_phones.txt
+--> data_libri-org/local/dict/nonsilence_phones.txt is OK
+
+Checking disjoint: silence_phones.txt, nonsilence_phones.txt
+--> disjoint property is OK.
+
+Checking data_libri-org/local/dict/lexicon.txt
+--> reading data_libri-org/local/dict/lexicon.txt
+--> data_libri-org/local/dict/lexicon.txt is OK
+
+Checking data_libri-org/local/dict/extra_questions.txt ...
+--> data_libri-org/local/dict/extra_questions.txt is empty (this is OK)
+--> SUCCESS [validating dictionary directory data_libri-org/local/dict]
+
+**Creating data_libri-org/local/dict/lexiconp.txt from data_libri-org/local/dict/lexicon.txt
+fstaddselfloops 'echo 72 |' 'echo 7232 |' 
+Checking data_libri-org/lang/phones.txt ...
+--> data_libri-org/lang/phones.txt is OK
+
+Checking words.txt: #0 ...
+--> data_libri-org/lang/words.txt has "#0"
+--> data_libri-org/lang/words.txt is OK
+
+Checking disjoint: silence.txt, nonsilence.txt, disambig.txt ...
+--> silence.txt and nonsilence.txt are disjoint
+--> silence.txt and disambig.txt are disjoint
+--> disambig.txt and nonsilence.txt are disjoint
+--> disjoint property is OK
+
+Checking sumation: silence.txt, nonsilence.txt, disambig.txt ...
+--> summation property is OK
+
+Checking data_libri-org/lang/phones/context_indep.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-org/lang/phones/context_indep.txt
+--> data_libri-org/lang/phones/context_indep.int corresponds to data_libri-org/lang/phones/context_indep.txt
+--> data_libri-org/lang/phones/context_indep.csl corresponds to data_libri-org/lang/phones/context_indep.txt
+--> data_libri-org/lang/phones/context_indep.{txt, int, csl} are OK
+
+Checking data_libri-org/lang/phones/disambig.{txt, int, csl} ...
+--> 84 entry/entries in data_libri-org/lang/phones/disambig.txt
+--> data_libri-org/lang/phones/disambig.int corresponds to data_libri-org/lang/phones/disambig.txt
+--> data_libri-org/lang/phones/disambig.csl corresponds to data_libri-org/lang/phones/disambig.txt
+--> data_libri-org/lang/phones/disambig.{txt, int, csl} are OK
+
+Checking data_libri-org/lang/phones/nonsilence.{txt, int, csl} ...
+--> 70 entry/entries in data_libri-org/lang/phones/nonsilence.txt
+--> data_libri-org/lang/phones/nonsilence.int corresponds to data_libri-org/lang/phones/nonsilence.txt
+--> data_libri-org/lang/phones/nonsilence.csl corresponds to data_libri-org/lang/phones/nonsilence.txt
+--> data_libri-org/lang/phones/nonsilence.{txt, int, csl} are OK
+
+Checking data_libri-org/lang/phones/silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-org/lang/phones/silence.txt
+--> data_libri-org/lang/phones/silence.int corresponds to data_libri-org/lang/phones/silence.txt
+--> data_libri-org/lang/phones/silence.csl corresponds to data_libri-org/lang/phones/silence.txt
+--> data_libri-org/lang/phones/silence.{txt, int, csl} are OK
+
+Checking data_libri-org/lang/phones/optional_silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-org/lang/phones/optional_silence.txt
+--> data_libri-org/lang/phones/optional_silence.int corresponds to data_libri-org/lang/phones/optional_silence.txt
+--> data_libri-org/lang/phones/optional_silence.csl corresponds to data_libri-org/lang/phones/optional_silence.txt
+--> data_libri-org/lang/phones/optional_silence.{txt, int, csl} are OK
+
+Checking data_libri-org/lang/phones/roots.{txt, int} ...
+--> 71 entry/entries in data_libri-org/lang/phones/roots.txt
+--> data_libri-org/lang/phones/roots.int corresponds to data_libri-org/lang/phones/roots.txt
+--> data_libri-org/lang/phones/roots.{txt, int} are OK
+
+Checking data_libri-org/lang/phones/sets.{txt, int} ...
+--> 71 entry/entries in data_libri-org/lang/phones/sets.txt
+--> data_libri-org/lang/phones/sets.int corresponds to data_libri-org/lang/phones/sets.txt
+--> data_libri-org/lang/phones/sets.{txt, int} are OK
+
+Checking data_libri-org/lang/phones/extra_questions.{txt, int} ...
+--> WARNING: the optional data_libri-org/lang/phones/extra_questions.{txt, int} are empty!
+
+Checking optional_silence.txt ...
+--> reading data_libri-org/lang/phones/optional_silence.txt
+--> data_libri-org/lang/phones/optional_silence.txt is OK
+
+Checking disambiguation symbols: #0 and #1
+--> data_libri-org/lang/phones/disambig.txt has "#0" and "#1"
+--> data_libri-org/lang/phones/disambig.txt is OK
+
+Checking topo ...
+--> data_libri-org/lang/topo's nonsilence section is OK
+--> data_libri-org/lang/topo's silence section is OK
+--> data_libri-org/lang/topo is OK
+
+Checking data_libri-org/lang/oov.{txt, int} ...
+--> 1 entry/entries in data_libri-org/lang/oov.txt
+--> data_libri-org/lang/oov.int corresponds to data_libri-org/lang/oov.txt
+--> data_libri-org/lang/oov.{txt, int} are OK
+
+--> data_libri-org/lang/L.fst is olabel sorted
+--> data_libri-org/lang/L_disambig.fst is olabel sorted
+--> WARNING (check output above for warnings)
+
+####===============####
+#### TRAINING GMMs ####
+####===============####
+
+
+####===========================####
+#### BEGIN TRAINING MONOPHONES ####
+####===========================####
+
+#### Train Monophones ####
+### Define audio features ###
+feat-to-dim 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-org/train/split8/1/utt2spk scp:data_libri-org/train/split8/1/cmvn.scp scp:data_libri-org/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- |' - 
+apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-org/train/split8/1/utt2spk scp:data_libri-org/train/split8/1/cmvn.scp scp:data_libri-org/train/split8/1/feats.scp ark:- 
+add-deltas ark:- ark:- 
+WARNING (feat-to-dim[5.3.252~1-13318]:Close():kaldi-io.cc:512) Pipe apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-org/train/split8/1/utt2spk scp:data_libri-org/train/split8/1/cmvn.scp scp:data_libri-org/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- | had nonzero return status 36096
+steps/train_mono.sh: Initializing monophone system
+steps/train_mono.sh: Compiling monophone training graphs
+
+##########################################
+### BEGIN FLATSTART MONOPHONE TRAINING ###
+##########################################
+steps/train_mono.sh: Aligning data from flat start (pass 0)
+steps/train_mono.sh: Estimating model from flat start alignments
+
+########################################
+### BEGIN MAIN EM MONOPHONE TRAINING ###
+########################################
+cp: cannot stat 'exp_libri-org/monophones/1.occs': No such file or directory
+
+####
+#### ERROR: train_mono.sh 
+####
+
+../../../src/gmmbin/gmm-info exp_libri-org/monophones/final.mdl 
+number of phones 71
+number of pdfs 215
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 215
+#### Align Monophones ####
+cat: exp_libri-org/monophones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-org/monophones/splice_opts': No such file or directory
+cat: exp_libri-org/monophones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-org/monophones/delta_opts': No such file or directory
+cp: cannot stat 'exp_libri-org/monophones/final.occs': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-org/train using model from exp_libri-org/monophones putting alignments in exp_libri-org/monophones_aligned
+
+####===========================####
+#### END TRAINING MONOPHONES ####
+####===========================####
+
+
+####==========================####
+#### BEGIN TRAINING TRIPHONES ####
+####==========================####
+
+### Train Triphones ###
+steps/train_deltas.sh --cmd utils/run.pl --num-iters 1 --beam 10 100 200 data_libri-org/train data_libri-org/lang exp_libri-org/monophones_aligned exp_libri-org/triphones
+num_leaves = 100
+tot_gauss = 200
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+steps/train_deltas.sh: Initializing triphone model
+steps/train_deltas.sh: converting alignments from exp_libri-org/monophones_aligned to use current senomes
+steps/train_deltas.sh: compiling training graphs (HMMs) of transcripts
+
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp_libri-org/triphones
+
+../../../src/gmmbin/gmm-info exp_libri-org/triphones/final.mdl 
+number of phones 71
+number of pdfs 96
+number of transition-ids 442
+number of transition-states 217
+feature dimension 39
+number of gaussians 100
+### Align Triphones ###
+cat: exp_libri-org/triphones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-org/triphones/splice_opts': No such file or directory
+cat: exp_libri-org/triphones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-org/triphones/delta_opts': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-org/train using model from exp_libri-org/triphones putting alignments in exp_libri-org/triphones_aligned
+
+####========================####
+#### END TRAINING TRIPHONES ####
+####========================####
+
+
+####===================####
+#### GRAPH COMPILATION ####
+####===================####
+
+arpa2fst - 
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:94) Reading \data\ section.
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:149) Reading \1-grams: section.
+fstisstochastic data_libri-org/lang_decode/G.fst 
+8.74073e-05 8.74073e-05
+Succeeded in formatting data
+
+### compile LG.fst ###
+fstpushspecial 
+fstminimizeencoded 
+fsttablecompose data_libri-org/lang_decode/L_disambig.fst data_libri-org/lang_decode/G.fst 
+fstdeterminizestar --use-log=true 
+fstisstochastic data_libri-org/lang_decode/tmp/LG.fst 
+-0.0820979 -0.0829757
+[info]: LG not stochastic.
+### compile CLG.fst ###
+fstcomposecontext --context-size=3 --central-position=1 --read-disambig-syms=data_libri-org/lang_decode/phones/disambig.int --write-disambig-syms=data_libri-org/lang_decode/tmp/disambig_ilabels_3_1.int data_libri-org/lang_decode/tmp/ilabels_3_1 
+fstisstochastic data_libri-org/lang_decode/tmp/CLG_3_1.fst 
+0 -0.0829757
+[info]: CLG not stochastic.
+### compile Ha.fst ###
+make-h-transducer --disambig-syms-out=exp_libri-org/triphones/graph/disambig_tid.int --transition-scale=1.0 data_libri-org/lang_decode/tmp/ilabels_3_1 exp_libri-org/triphones/tree exp_libri-org/triphones/final.mdl 
+### compile HCLGa.fst ###
+fsttablecompose exp_libri-org/triphones/graph/Ha.fst data_libri-org/lang_decode/tmp/CLG_3_1.fst 
+fstrmepslocal 
+fstrmsymbols exp_libri-org/triphones/graph/disambig_tid.int 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fstisstochastic exp_libri-org/triphones/graph/HCLGa.fst 
+2.05226e-05 -0.207976
+HCLGa is not stochastic
+### compile HCLG.fst ###
+add-self-loops --self-loop-scale=0.1 --reorder=true exp_libri-org/triphones/final.mdl 
+
+####==========================####
+#### TESTING AUDIO DATA PREP ####
+####==========================####
+
+local/prepare_audio_data.sh: looking for audio data in /data/librispeech/audio/8k/test
+
+ .44 hours of audio for training 
+ in data_libri-org/test/wav.scp
+
+
+####=========================####
+#### TEST FEATURE EXTRACTION ####
+####=========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-org/test
+Destination feats dir: plp_libri-org
+Log dir: data_libri-org/test/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-org/test plp_libri-org/make_plp_log plp_libri-org
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for test
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-org/test/.backup
+
+Succeeded creating CMVN stats for test
+
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-org/test/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-org/test/split8/8
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+ ### Decoding with 8 jobs  ### steps/decode.sh 6
+decode.sh: feature type is delta
+#### BEGIN CALCULATE WER ####
+
+####==============####
+#### END DECODING ####
+####==============####
+
+###
+###
+../../../src/gmmbin/gmm-info exp_libri-org/triphones/final.mdl 
+###
+
+####==========================####
+#### TRAINING AUDIO DATA PREP ####
+####==========================####
+
+./run_gmm.sh: Assuming your train audio data is in /data/librispeech/audio/8k/train
+./run_gmm.sh: Making soflinks to original audio data with libri-boot1Quarter_ as prefix
+local/prepare_audio_data.sh: looking for audio data in input_libri-boot1Quarter/audio
+
+ 4.86 hours of audio for training 
+ in data_libri-boot1Quarter/train/wav.scp
+
+
+####==========================####
+#### TRAIN FEATURE EXTRACTION ####
+####==========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot1Quarter/train
+Destination feats dir: plp_libri-boot1Quarter
+Log dir: data_libri-boot1Quarter/train/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot1Quarter/train plp_libri-boot1Quarter/make_plp_log plp_libri-boot1Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for train
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot1Quarter/train/.backup
+
+Succeeded creating CMVN stats for train
+
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot1Quarter/train/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/train/split8/8
+
+####==============####
+#### Create L.fst ####
+####==============####
+
+./compile_Lfst.sh: Looking for lexicon files in input_libri-boot1Quarter
+./compile_Lfst.sh: Extracting phonemes from input_libri-boot1Quarter/lexicon.txt and saving them to input_libri-boot1Quarter/phones.txt
+local/prepare_dict.sh: Creating data_libri-boot1Quarter/local/dict and moving lexicon files from input_libri-boot1Quarter into it.
+local/prepare_dict.sh: This script really is just copy-pasting, nothing new generated.
+Dictionary preparation succeeded
+
+Checking data_libri-boot1Quarter/local/dict/silence_phones.txt ...
+--> reading data_libri-boot1Quarter/local/dict/silence_phones.txt
+--> data_libri-boot1Quarter/local/dict/silence_phones.txt is OK
+
+Checking data_libri-boot1Quarter/local/dict/optional_silence.txt ...
+--> reading data_libri-boot1Quarter/local/dict/optional_silence.txt
+--> data_libri-boot1Quarter/local/dict/optional_silence.txt is OK
+
+Checking data_libri-boot1Quarter/local/dict/nonsilence_phones.txt ...
+--> reading data_libri-boot1Quarter/local/dict/nonsilence_phones.txt
+--> data_libri-boot1Quarter/local/dict/nonsilence_phones.txt is OK
+
+Checking disjoint: silence_phones.txt, nonsilence_phones.txt
+--> disjoint property is OK.
+
+Checking data_libri-boot1Quarter/local/dict/lexicon.txt
+--> reading data_libri-boot1Quarter/local/dict/lexicon.txt
+--> data_libri-boot1Quarter/local/dict/lexicon.txt is OK
+
+Checking data_libri-boot1Quarter/local/dict/extra_questions.txt ...
+--> data_libri-boot1Quarter/local/dict/extra_questions.txt is empty (this is OK)
+--> SUCCESS [validating dictionary directory data_libri-boot1Quarter/local/dict]
+
+**Creating data_libri-boot1Quarter/local/dict/lexiconp.txt from data_libri-boot1Quarter/local/dict/lexicon.txt
+fstaddselfloops 'echo 72 |' 'echo 7232 |' 
+Checking data_libri-boot1Quarter/lang/phones.txt ...
+--> data_libri-boot1Quarter/lang/phones.txt is OK
+
+Checking words.txt: #0 ...
+--> data_libri-boot1Quarter/lang/words.txt has "#0"
+--> data_libri-boot1Quarter/lang/words.txt is OK
+
+Checking disjoint: silence.txt, nonsilence.txt, disambig.txt ...
+--> silence.txt and nonsilence.txt are disjoint
+--> silence.txt and disambig.txt are disjoint
+--> disambig.txt and nonsilence.txt are disjoint
+--> disjoint property is OK
+
+Checking sumation: silence.txt, nonsilence.txt, disambig.txt ...
+--> summation property is OK
+
+Checking data_libri-boot1Quarter/lang/phones/context_indep.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot1Quarter/lang/phones/context_indep.txt
+--> data_libri-boot1Quarter/lang/phones/context_indep.int corresponds to data_libri-boot1Quarter/lang/phones/context_indep.txt
+--> data_libri-boot1Quarter/lang/phones/context_indep.csl corresponds to data_libri-boot1Quarter/lang/phones/context_indep.txt
+--> data_libri-boot1Quarter/lang/phones/context_indep.{txt, int, csl} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/disambig.{txt, int, csl} ...
+--> 84 entry/entries in data_libri-boot1Quarter/lang/phones/disambig.txt
+--> data_libri-boot1Quarter/lang/phones/disambig.int corresponds to data_libri-boot1Quarter/lang/phones/disambig.txt
+--> data_libri-boot1Quarter/lang/phones/disambig.csl corresponds to data_libri-boot1Quarter/lang/phones/disambig.txt
+--> data_libri-boot1Quarter/lang/phones/disambig.{txt, int, csl} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/nonsilence.{txt, int, csl} ...
+--> 70 entry/entries in data_libri-boot1Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot1Quarter/lang/phones/nonsilence.int corresponds to data_libri-boot1Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot1Quarter/lang/phones/nonsilence.csl corresponds to data_libri-boot1Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot1Quarter/lang/phones/nonsilence.{txt, int, csl} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot1Quarter/lang/phones/silence.txt
+--> data_libri-boot1Quarter/lang/phones/silence.int corresponds to data_libri-boot1Quarter/lang/phones/silence.txt
+--> data_libri-boot1Quarter/lang/phones/silence.csl corresponds to data_libri-boot1Quarter/lang/phones/silence.txt
+--> data_libri-boot1Quarter/lang/phones/silence.{txt, int, csl} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/optional_silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot1Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot1Quarter/lang/phones/optional_silence.int corresponds to data_libri-boot1Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot1Quarter/lang/phones/optional_silence.csl corresponds to data_libri-boot1Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot1Quarter/lang/phones/optional_silence.{txt, int, csl} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/roots.{txt, int} ...
+--> 71 entry/entries in data_libri-boot1Quarter/lang/phones/roots.txt
+--> data_libri-boot1Quarter/lang/phones/roots.int corresponds to data_libri-boot1Quarter/lang/phones/roots.txt
+--> data_libri-boot1Quarter/lang/phones/roots.{txt, int} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/sets.{txt, int} ...
+--> 71 entry/entries in data_libri-boot1Quarter/lang/phones/sets.txt
+--> data_libri-boot1Quarter/lang/phones/sets.int corresponds to data_libri-boot1Quarter/lang/phones/sets.txt
+--> data_libri-boot1Quarter/lang/phones/sets.{txt, int} are OK
+
+Checking data_libri-boot1Quarter/lang/phones/extra_questions.{txt, int} ...
+--> WARNING: the optional data_libri-boot1Quarter/lang/phones/extra_questions.{txt, int} are empty!
+
+Checking optional_silence.txt ...
+--> reading data_libri-boot1Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot1Quarter/lang/phones/optional_silence.txt is OK
+
+Checking disambiguation symbols: #0 and #1
+--> data_libri-boot1Quarter/lang/phones/disambig.txt has "#0" and "#1"
+--> data_libri-boot1Quarter/lang/phones/disambig.txt is OK
+
+Checking topo ...
+--> data_libri-boot1Quarter/lang/topo's nonsilence section is OK
+--> data_libri-boot1Quarter/lang/topo's silence section is OK
+--> data_libri-boot1Quarter/lang/topo is OK
+
+Checking data_libri-boot1Quarter/lang/oov.{txt, int} ...
+--> 1 entry/entries in data_libri-boot1Quarter/lang/oov.txt
+--> data_libri-boot1Quarter/lang/oov.int corresponds to data_libri-boot1Quarter/lang/oov.txt
+--> data_libri-boot1Quarter/lang/oov.{txt, int} are OK
+
+--> data_libri-boot1Quarter/lang/L.fst is olabel sorted
+--> data_libri-boot1Quarter/lang/L_disambig.fst is olabel sorted
+--> WARNING (check output above for warnings)
+
+####===============####
+#### TRAINING GMMs ####
+####===============####
+
+
+####===========================####
+#### BEGIN TRAINING MONOPHONES ####
+####===========================####
+
+#### Train Monophones ####
+### Define audio features ###
+feat-to-dim 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot1Quarter/train/split8/1/utt2spk scp:data_libri-boot1Quarter/train/split8/1/cmvn.scp scp:data_libri-boot1Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- |' - 
+apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot1Quarter/train/split8/1/utt2spk scp:data_libri-boot1Quarter/train/split8/1/cmvn.scp scp:data_libri-boot1Quarter/train/split8/1/feats.scp ark:- 
+add-deltas ark:- ark:- 
+WARNING (feat-to-dim[5.3.252~1-13318]:Close():kaldi-io.cc:512) Pipe apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot1Quarter/train/split8/1/utt2spk scp:data_libri-boot1Quarter/train/split8/1/cmvn.scp scp:data_libri-boot1Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- | had nonzero return status 36096
+steps/train_mono.sh: Initializing monophone system
+steps/train_mono.sh: Compiling monophone training graphs
+
+##########################################
+### BEGIN FLATSTART MONOPHONE TRAINING ###
+##########################################
+steps/train_mono.sh: Aligning data from flat start (pass 0)
+steps/train_mono.sh: Estimating model from flat start alignments
+
+########################################
+### BEGIN MAIN EM MONOPHONE TRAINING ###
+########################################
+cp: cannot stat 'exp_libri-boot1Quarter/monophones/1.occs': No such file or directory
+
+####
+#### ERROR: train_mono.sh 
+####
+
+../../../src/gmmbin/gmm-info exp_libri-boot1Quarter/monophones/final.mdl 
+number of phones 71
+number of pdfs 215
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 215
+#### Align Monophones ####
+cat: exp_libri-boot1Quarter/monophones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot1Quarter/monophones/splice_opts': No such file or directory
+cat: exp_libri-boot1Quarter/monophones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot1Quarter/monophones/delta_opts': No such file or directory
+cp: cannot stat 'exp_libri-boot1Quarter/monophones/final.occs': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot1Quarter/train using model from exp_libri-boot1Quarter/monophones putting alignments in exp_libri-boot1Quarter/monophones_aligned
+
+####===========================####
+#### END TRAINING MONOPHONES ####
+####===========================####
+
+
+####==========================####
+#### BEGIN TRAINING TRIPHONES ####
+####==========================####
+
+### Train Triphones ###
+steps/train_deltas.sh --cmd utils/run.pl --num-iters 1 --beam 10 100 200 data_libri-boot1Quarter/train data_libri-boot1Quarter/lang exp_libri-boot1Quarter/monophones_aligned exp_libri-boot1Quarter/triphones
+num_leaves = 100
+tot_gauss = 200
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+steps/train_deltas.sh: Initializing triphone model
+steps/train_deltas.sh: converting alignments from exp_libri-boot1Quarter/monophones_aligned to use current senomes
+steps/train_deltas.sh: compiling training graphs (HMMs) of transcripts
+
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp_libri-boot1Quarter/triphones
+
+../../../src/gmmbin/gmm-info exp_libri-boot1Quarter/triphones/final.mdl 
+number of phones 71
+number of pdfs 96
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 100
+### Align Triphones ###
+cat: exp_libri-boot1Quarter/triphones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot1Quarter/triphones/splice_opts': No such file or directory
+cat: exp_libri-boot1Quarter/triphones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot1Quarter/triphones/delta_opts': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot1Quarter/train using model from exp_libri-boot1Quarter/triphones putting alignments in exp_libri-boot1Quarter/triphones_aligned
+
+####========================####
+#### END TRAINING TRIPHONES ####
+####========================####
+
+
+####===================####
+#### GRAPH COMPILATION ####
+####===================####
+
+arpa2fst - 
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:94) Reading \data\ section.
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:149) Reading \1-grams: section.
+fstisstochastic data_libri-boot1Quarter/lang_decode/G.fst 
+8.74073e-05 8.74073e-05
+Succeeded in formatting data
+
+### compile LG.fst ###
+fsttablecompose data_libri-boot1Quarter/lang_decode/L_disambig.fst data_libri-boot1Quarter/lang_decode/G.fst 
+fstpushspecial 
+fstdeterminizestar --use-log=true 
+fstminimizeencoded 
+fstisstochastic data_libri-boot1Quarter/lang_decode/tmp/LG.fst 
+-0.0820979 -0.0829757
+[info]: LG not stochastic.
+### compile CLG.fst ###
+fstcomposecontext --context-size=3 --central-position=1 --read-disambig-syms=data_libri-boot1Quarter/lang_decode/phones/disambig.int --write-disambig-syms=data_libri-boot1Quarter/lang_decode/tmp/disambig_ilabels_3_1.int data_libri-boot1Quarter/lang_decode/tmp/ilabels_3_1 
+fstisstochastic data_libri-boot1Quarter/lang_decode/tmp/CLG_3_1.fst 
+0 -0.0829757
+[info]: CLG not stochastic.
+### compile Ha.fst ###
+make-h-transducer --disambig-syms-out=exp_libri-boot1Quarter/triphones/graph/disambig_tid.int --transition-scale=1.0 data_libri-boot1Quarter/lang_decode/tmp/ilabels_3_1 exp_libri-boot1Quarter/triphones/tree exp_libri-boot1Quarter/triphones/final.mdl 
+### compile HCLGa.fst ###
+fsttablecompose exp_libri-boot1Quarter/triphones/graph/Ha.fst data_libri-boot1Quarter/lang_decode/tmp/CLG_3_1.fst 
+fstrmsymbols exp_libri-boot1Quarter/triphones/graph/disambig_tid.int 
+fstdeterminizestar --use-log=true 
+fstminimizeencoded 
+fstrmepslocal 
+fstisstochastic exp_libri-boot1Quarter/triphones/graph/HCLGa.fst 
+2.05226e-05 -0.207976
+HCLGa is not stochastic
+### compile HCLG.fst ###
+add-self-loops --self-loop-scale=0.1 --reorder=true exp_libri-boot1Quarter/triphones/final.mdl 
+
+####==========================####
+#### TESTING AUDIO DATA PREP ####
+####==========================####
+
+local/prepare_audio_data.sh: looking for audio data in /data/librispeech/audio/8k/test
+
+ .44 hours of audio for training 
+ in data_libri-boot1Quarter/test/wav.scp
+
+
+####=========================####
+#### TEST FEATURE EXTRACTION ####
+####=========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot1Quarter/test
+Destination feats dir: plp_libri-boot1Quarter
+Log dir: data_libri-boot1Quarter/test/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot1Quarter/test plp_libri-boot1Quarter/make_plp_log plp_libri-boot1Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for test
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot1Quarter/test/.backup
+
+Succeeded creating CMVN stats for test
+
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot1Quarter/test/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot1Quarter/test/split8/8
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+ ### Decoding with 8 jobs  ### steps/decode.sh 6
+decode.sh: feature type is delta
+#### BEGIN CALCULATE WER ####
+
+####==============####
+#### END DECODING ####
+####==============####
+
+###
+###
+../../../src/gmmbin/gmm-info exp_libri-boot1Quarter/triphones/final.mdl 
+###
+
+####==========================####
+#### TRAINING AUDIO DATA PREP ####
+####==========================####
+
+./run_gmm.sh: Assuming your train audio data is in /data/librispeech/audio/8k/train
+./run_gmm.sh: Making soflinks to original audio data with libri-boot2Quarter_ as prefix
+local/prepare_audio_data.sh: looking for audio data in input_libri-boot2Quarter/audio
+
+ 4.86 hours of audio for training 
+ in data_libri-boot2Quarter/train/wav.scp
+
+
+####==========================####
+#### TRAIN FEATURE EXTRACTION ####
+####==========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot2Quarter/train
+Destination feats dir: plp_libri-boot2Quarter
+Log dir: data_libri-boot2Quarter/train/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot2Quarter/train plp_libri-boot2Quarter/make_plp_log plp_libri-boot2Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for train
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot2Quarter/train/.backup
+
+Succeeded creating CMVN stats for train
+
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot2Quarter/train/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/train/split8/8
+
+####==============####
+#### Create L.fst ####
+####==============####
+
+./compile_Lfst.sh: Looking for lexicon files in input_libri-boot2Quarter
+./compile_Lfst.sh: Extracting phonemes from input_libri-boot2Quarter/lexicon.txt and saving them to input_libri-boot2Quarter/phones.txt
+local/prepare_dict.sh: Creating data_libri-boot2Quarter/local/dict and moving lexicon files from input_libri-boot2Quarter into it.
+local/prepare_dict.sh: This script really is just copy-pasting, nothing new generated.
+Dictionary preparation succeeded
+
+Checking data_libri-boot2Quarter/local/dict/silence_phones.txt ...
+--> reading data_libri-boot2Quarter/local/dict/silence_phones.txt
+--> data_libri-boot2Quarter/local/dict/silence_phones.txt is OK
+
+Checking data_libri-boot2Quarter/local/dict/optional_silence.txt ...
+--> reading data_libri-boot2Quarter/local/dict/optional_silence.txt
+--> data_libri-boot2Quarter/local/dict/optional_silence.txt is OK
+
+Checking data_libri-boot2Quarter/local/dict/nonsilence_phones.txt ...
+--> reading data_libri-boot2Quarter/local/dict/nonsilence_phones.txt
+--> data_libri-boot2Quarter/local/dict/nonsilence_phones.txt is OK
+
+Checking disjoint: silence_phones.txt, nonsilence_phones.txt
+--> disjoint property is OK.
+
+Checking data_libri-boot2Quarter/local/dict/lexicon.txt
+--> reading data_libri-boot2Quarter/local/dict/lexicon.txt
+--> data_libri-boot2Quarter/local/dict/lexicon.txt is OK
+
+Checking data_libri-boot2Quarter/local/dict/extra_questions.txt ...
+--> data_libri-boot2Quarter/local/dict/extra_questions.txt is empty (this is OK)
+--> SUCCESS [validating dictionary directory data_libri-boot2Quarter/local/dict]
+
+**Creating data_libri-boot2Quarter/local/dict/lexiconp.txt from data_libri-boot2Quarter/local/dict/lexicon.txt
+fstaddselfloops 'echo 72 |' 'echo 7232 |' 
+Checking data_libri-boot2Quarter/lang/phones.txt ...
+--> data_libri-boot2Quarter/lang/phones.txt is OK
+
+Checking words.txt: #0 ...
+--> data_libri-boot2Quarter/lang/words.txt has "#0"
+--> data_libri-boot2Quarter/lang/words.txt is OK
+
+Checking disjoint: silence.txt, nonsilence.txt, disambig.txt ...
+--> silence.txt and nonsilence.txt are disjoint
+--> silence.txt and disambig.txt are disjoint
+--> disambig.txt and nonsilence.txt are disjoint
+--> disjoint property is OK
+
+Checking sumation: silence.txt, nonsilence.txt, disambig.txt ...
+--> summation property is OK
+
+Checking data_libri-boot2Quarter/lang/phones/context_indep.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot2Quarter/lang/phones/context_indep.txt
+--> data_libri-boot2Quarter/lang/phones/context_indep.int corresponds to data_libri-boot2Quarter/lang/phones/context_indep.txt
+--> data_libri-boot2Quarter/lang/phones/context_indep.csl corresponds to data_libri-boot2Quarter/lang/phones/context_indep.txt
+--> data_libri-boot2Quarter/lang/phones/context_indep.{txt, int, csl} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/disambig.{txt, int, csl} ...
+--> 84 entry/entries in data_libri-boot2Quarter/lang/phones/disambig.txt
+--> data_libri-boot2Quarter/lang/phones/disambig.int corresponds to data_libri-boot2Quarter/lang/phones/disambig.txt
+--> data_libri-boot2Quarter/lang/phones/disambig.csl corresponds to data_libri-boot2Quarter/lang/phones/disambig.txt
+--> data_libri-boot2Quarter/lang/phones/disambig.{txt, int, csl} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/nonsilence.{txt, int, csl} ...
+--> 70 entry/entries in data_libri-boot2Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot2Quarter/lang/phones/nonsilence.int corresponds to data_libri-boot2Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot2Quarter/lang/phones/nonsilence.csl corresponds to data_libri-boot2Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot2Quarter/lang/phones/nonsilence.{txt, int, csl} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot2Quarter/lang/phones/silence.txt
+--> data_libri-boot2Quarter/lang/phones/silence.int corresponds to data_libri-boot2Quarter/lang/phones/silence.txt
+--> data_libri-boot2Quarter/lang/phones/silence.csl corresponds to data_libri-boot2Quarter/lang/phones/silence.txt
+--> data_libri-boot2Quarter/lang/phones/silence.{txt, int, csl} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/optional_silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot2Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot2Quarter/lang/phones/optional_silence.int corresponds to data_libri-boot2Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot2Quarter/lang/phones/optional_silence.csl corresponds to data_libri-boot2Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot2Quarter/lang/phones/optional_silence.{txt, int, csl} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/roots.{txt, int} ...
+--> 71 entry/entries in data_libri-boot2Quarter/lang/phones/roots.txt
+--> data_libri-boot2Quarter/lang/phones/roots.int corresponds to data_libri-boot2Quarter/lang/phones/roots.txt
+--> data_libri-boot2Quarter/lang/phones/roots.{txt, int} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/sets.{txt, int} ...
+--> 71 entry/entries in data_libri-boot2Quarter/lang/phones/sets.txt
+--> data_libri-boot2Quarter/lang/phones/sets.int corresponds to data_libri-boot2Quarter/lang/phones/sets.txt
+--> data_libri-boot2Quarter/lang/phones/sets.{txt, int} are OK
+
+Checking data_libri-boot2Quarter/lang/phones/extra_questions.{txt, int} ...
+--> WARNING: the optional data_libri-boot2Quarter/lang/phones/extra_questions.{txt, int} are empty!
+
+Checking optional_silence.txt ...
+--> reading data_libri-boot2Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot2Quarter/lang/phones/optional_silence.txt is OK
+
+Checking disambiguation symbols: #0 and #1
+--> data_libri-boot2Quarter/lang/phones/disambig.txt has "#0" and "#1"
+--> data_libri-boot2Quarter/lang/phones/disambig.txt is OK
+
+Checking topo ...
+--> data_libri-boot2Quarter/lang/topo's nonsilence section is OK
+--> data_libri-boot2Quarter/lang/topo's silence section is OK
+--> data_libri-boot2Quarter/lang/topo is OK
+
+Checking data_libri-boot2Quarter/lang/oov.{txt, int} ...
+--> 1 entry/entries in data_libri-boot2Quarter/lang/oov.txt
+--> data_libri-boot2Quarter/lang/oov.int corresponds to data_libri-boot2Quarter/lang/oov.txt
+--> data_libri-boot2Quarter/lang/oov.{txt, int} are OK
+
+--> data_libri-boot2Quarter/lang/L.fst is olabel sorted
+--> data_libri-boot2Quarter/lang/L_disambig.fst is olabel sorted
+--> WARNING (check output above for warnings)
+
+####===============####
+#### TRAINING GMMs ####
+####===============####
+
+
+####===========================####
+#### BEGIN TRAINING MONOPHONES ####
+####===========================####
+
+#### Train Monophones ####
+### Define audio features ###
+feat-to-dim 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot2Quarter/train/split8/1/utt2spk scp:data_libri-boot2Quarter/train/split8/1/cmvn.scp scp:data_libri-boot2Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- |' - 
+apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot2Quarter/train/split8/1/utt2spk scp:data_libri-boot2Quarter/train/split8/1/cmvn.scp scp:data_libri-boot2Quarter/train/split8/1/feats.scp ark:- 
+add-deltas ark:- ark:- 
+WARNING (feat-to-dim[5.3.252~1-13318]:Close():kaldi-io.cc:512) Pipe apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot2Quarter/train/split8/1/utt2spk scp:data_libri-boot2Quarter/train/split8/1/cmvn.scp scp:data_libri-boot2Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- | had nonzero return status 36096
+steps/train_mono.sh: Initializing monophone system
+steps/train_mono.sh: Compiling monophone training graphs
+
+##########################################
+### BEGIN FLATSTART MONOPHONE TRAINING ###
+##########################################
+steps/train_mono.sh: Aligning data from flat start (pass 0)
+steps/train_mono.sh: Estimating model from flat start alignments
+
+########################################
+### BEGIN MAIN EM MONOPHONE TRAINING ###
+########################################
+cp: cannot stat 'exp_libri-boot2Quarter/monophones/1.occs': No such file or directory
+
+####
+#### ERROR: train_mono.sh 
+####
+
+../../../src/gmmbin/gmm-info exp_libri-boot2Quarter/monophones/final.mdl 
+number of phones 71
+number of pdfs 215
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 215
+#### Align Monophones ####
+cat: exp_libri-boot2Quarter/monophones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot2Quarter/monophones/splice_opts': No such file or directory
+cat: exp_libri-boot2Quarter/monophones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot2Quarter/monophones/delta_opts': No such file or directory
+cp: cannot stat 'exp_libri-boot2Quarter/monophones/final.occs': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot2Quarter/train using model from exp_libri-boot2Quarter/monophones putting alignments in exp_libri-boot2Quarter/monophones_aligned
+
+####===========================####
+#### END TRAINING MONOPHONES ####
+####===========================####
+
+
+####==========================####
+#### BEGIN TRAINING TRIPHONES ####
+####==========================####
+
+### Train Triphones ###
+steps/train_deltas.sh --cmd utils/run.pl --num-iters 1 --beam 10 100 200 data_libri-boot2Quarter/train data_libri-boot2Quarter/lang exp_libri-boot2Quarter/monophones_aligned exp_libri-boot2Quarter/triphones
+num_leaves = 100
+tot_gauss = 200
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+steps/train_deltas.sh: Initializing triphone model
+steps/train_deltas.sh: converting alignments from exp_libri-boot2Quarter/monophones_aligned to use current senomes
+steps/train_deltas.sh: compiling training graphs (HMMs) of transcripts
+
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp_libri-boot2Quarter/triphones
+
+../../../src/gmmbin/gmm-info exp_libri-boot2Quarter/triphones/final.mdl 
+number of phones 71
+number of pdfs 96
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 100
+### Align Triphones ###
+cat: exp_libri-boot2Quarter/triphones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot2Quarter/triphones/splice_opts': No such file or directory
+cat: exp_libri-boot2Quarter/triphones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot2Quarter/triphones/delta_opts': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot2Quarter/train using model from exp_libri-boot2Quarter/triphones putting alignments in exp_libri-boot2Quarter/triphones_aligned
+
+####========================####
+#### END TRAINING TRIPHONES ####
+####========================####
+
+
+####===================####
+#### GRAPH COMPILATION ####
+####===================####
+
+arpa2fst - 
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:94) Reading \data\ section.
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:149) Reading \1-grams: section.
+fstisstochastic data_libri-boot2Quarter/lang_decode/G.fst 
+8.74073e-05 8.74073e-05
+Succeeded in formatting data
+
+### compile LG.fst ###
+fsttablecompose data_libri-boot2Quarter/lang_decode/L_disambig.fst data_libri-boot2Quarter/lang_decode/G.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fstpushspecial 
+fstisstochastic data_libri-boot2Quarter/lang_decode/tmp/LG.fst 
+-0.0820979 -0.0829757
+[info]: LG not stochastic.
+### compile CLG.fst ###
+fstcomposecontext --context-size=3 --central-position=1 --read-disambig-syms=data_libri-boot2Quarter/lang_decode/phones/disambig.int --write-disambig-syms=data_libri-boot2Quarter/lang_decode/tmp/disambig_ilabels_3_1.int data_libri-boot2Quarter/lang_decode/tmp/ilabels_3_1 
+fstisstochastic data_libri-boot2Quarter/lang_decode/tmp/CLG_3_1.fst 
+0 -0.0829757
+[info]: CLG not stochastic.
+### compile Ha.fst ###
+make-h-transducer --disambig-syms-out=exp_libri-boot2Quarter/triphones/graph/disambig_tid.int --transition-scale=1.0 data_libri-boot2Quarter/lang_decode/tmp/ilabels_3_1 exp_libri-boot2Quarter/triphones/tree exp_libri-boot2Quarter/triphones/final.mdl 
+### compile HCLGa.fst ###
+fstdeterminizestar --use-log=true 
+fsttablecompose exp_libri-boot2Quarter/triphones/graph/Ha.fst data_libri-boot2Quarter/lang_decode/tmp/CLG_3_1.fst 
+fstrmepslocal 
+fstrmsymbols exp_libri-boot2Quarter/triphones/graph/disambig_tid.int 
+fstminimizeencoded 
+fstisstochastic exp_libri-boot2Quarter/triphones/graph/HCLGa.fst 
+2.05226e-05 -0.207976
+HCLGa is not stochastic
+### compile HCLG.fst ###
+add-self-loops --self-loop-scale=0.1 --reorder=true exp_libri-boot2Quarter/triphones/final.mdl 
+
+####==========================####
+#### TESTING AUDIO DATA PREP ####
+####==========================####
+
+local/prepare_audio_data.sh: looking for audio data in /data/librispeech/audio/8k/test
+
+ .44 hours of audio for training 
+ in data_libri-boot2Quarter/test/wav.scp
+
+
+####=========================####
+#### TEST FEATURE EXTRACTION ####
+####=========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot2Quarter/test
+Destination feats dir: plp_libri-boot2Quarter
+Log dir: data_libri-boot2Quarter/test/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot2Quarter/test plp_libri-boot2Quarter/make_plp_log plp_libri-boot2Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for test
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot2Quarter/test/.backup
+
+Succeeded creating CMVN stats for test
+
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot2Quarter/test/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot2Quarter/test/split8/8
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+ ### Decoding with 8 jobs  ### steps/decode.sh 6
+decode.sh: feature type is delta
+#### BEGIN CALCULATE WER ####
+
+####==============####
+#### END DECODING ####
+####==============####
+
+###
+###
+../../../src/gmmbin/gmm-info exp_libri-boot2Quarter/triphones/final.mdl 
+###
+
+####==========================####
+#### TRAINING AUDIO DATA PREP ####
+####==========================####
+
+./run_gmm.sh: Assuming your train audio data is in /data/librispeech/audio/8k/train
+./run_gmm.sh: Making soflinks to original audio data with libri-boot3Quarter_ as prefix
+local/prepare_audio_data.sh: looking for audio data in input_libri-boot3Quarter/audio
+
+ 4.86 hours of audio for training 
+ in data_libri-boot3Quarter/train/wav.scp
+
+
+####==========================####
+#### TRAIN FEATURE EXTRACTION ####
+####==========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot3Quarter/train
+Destination feats dir: plp_libri-boot3Quarter
+Log dir: data_libri-boot3Quarter/train/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot3Quarter/train plp_libri-boot3Quarter/make_plp_log plp_libri-boot3Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for train
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot3Quarter/train/.backup
+
+Succeeded creating CMVN stats for train
+
+fix_data_dir.sh: kept all 1400 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot3Quarter/train/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/train/split8/8
+
+####==============####
+#### Create L.fst ####
+####==============####
+
+./compile_Lfst.sh: Looking for lexicon files in input_libri-boot3Quarter
+./compile_Lfst.sh: Extracting phonemes from input_libri-boot3Quarter/lexicon.txt and saving them to input_libri-boot3Quarter/phones.txt
+local/prepare_dict.sh: Creating data_libri-boot3Quarter/local/dict and moving lexicon files from input_libri-boot3Quarter into it.
+local/prepare_dict.sh: This script really is just copy-pasting, nothing new generated.
+Dictionary preparation succeeded
+
+Checking data_libri-boot3Quarter/local/dict/silence_phones.txt ...
+--> reading data_libri-boot3Quarter/local/dict/silence_phones.txt
+--> data_libri-boot3Quarter/local/dict/silence_phones.txt is OK
+
+Checking data_libri-boot3Quarter/local/dict/optional_silence.txt ...
+--> reading data_libri-boot3Quarter/local/dict/optional_silence.txt
+--> data_libri-boot3Quarter/local/dict/optional_silence.txt is OK
+
+Checking data_libri-boot3Quarter/local/dict/nonsilence_phones.txt ...
+--> reading data_libri-boot3Quarter/local/dict/nonsilence_phones.txt
+--> data_libri-boot3Quarter/local/dict/nonsilence_phones.txt is OK
+
+Checking disjoint: silence_phones.txt, nonsilence_phones.txt
+--> disjoint property is OK.
+
+Checking data_libri-boot3Quarter/local/dict/lexicon.txt
+--> reading data_libri-boot3Quarter/local/dict/lexicon.txt
+--> data_libri-boot3Quarter/local/dict/lexicon.txt is OK
+
+Checking data_libri-boot3Quarter/local/dict/extra_questions.txt ...
+--> data_libri-boot3Quarter/local/dict/extra_questions.txt is empty (this is OK)
+--> SUCCESS [validating dictionary directory data_libri-boot3Quarter/local/dict]
+
+**Creating data_libri-boot3Quarter/local/dict/lexiconp.txt from data_libri-boot3Quarter/local/dict/lexicon.txt
+fstaddselfloops 'echo 72 |' 'echo 7232 |' 
+Checking data_libri-boot3Quarter/lang/phones.txt ...
+--> data_libri-boot3Quarter/lang/phones.txt is OK
+
+Checking words.txt: #0 ...
+--> data_libri-boot3Quarter/lang/words.txt has "#0"
+--> data_libri-boot3Quarter/lang/words.txt is OK
+
+Checking disjoint: silence.txt, nonsilence.txt, disambig.txt ...
+--> silence.txt and nonsilence.txt are disjoint
+--> silence.txt and disambig.txt are disjoint
+--> disambig.txt and nonsilence.txt are disjoint
+--> disjoint property is OK
+
+Checking sumation: silence.txt, nonsilence.txt, disambig.txt ...
+--> summation property is OK
+
+Checking data_libri-boot3Quarter/lang/phones/context_indep.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot3Quarter/lang/phones/context_indep.txt
+--> data_libri-boot3Quarter/lang/phones/context_indep.int corresponds to data_libri-boot3Quarter/lang/phones/context_indep.txt
+--> data_libri-boot3Quarter/lang/phones/context_indep.csl corresponds to data_libri-boot3Quarter/lang/phones/context_indep.txt
+--> data_libri-boot3Quarter/lang/phones/context_indep.{txt, int, csl} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/disambig.{txt, int, csl} ...
+--> 84 entry/entries in data_libri-boot3Quarter/lang/phones/disambig.txt
+--> data_libri-boot3Quarter/lang/phones/disambig.int corresponds to data_libri-boot3Quarter/lang/phones/disambig.txt
+--> data_libri-boot3Quarter/lang/phones/disambig.csl corresponds to data_libri-boot3Quarter/lang/phones/disambig.txt
+--> data_libri-boot3Quarter/lang/phones/disambig.{txt, int, csl} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/nonsilence.{txt, int, csl} ...
+--> 70 entry/entries in data_libri-boot3Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot3Quarter/lang/phones/nonsilence.int corresponds to data_libri-boot3Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot3Quarter/lang/phones/nonsilence.csl corresponds to data_libri-boot3Quarter/lang/phones/nonsilence.txt
+--> data_libri-boot3Quarter/lang/phones/nonsilence.{txt, int, csl} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot3Quarter/lang/phones/silence.txt
+--> data_libri-boot3Quarter/lang/phones/silence.int corresponds to data_libri-boot3Quarter/lang/phones/silence.txt
+--> data_libri-boot3Quarter/lang/phones/silence.csl corresponds to data_libri-boot3Quarter/lang/phones/silence.txt
+--> data_libri-boot3Quarter/lang/phones/silence.{txt, int, csl} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/optional_silence.{txt, int, csl} ...
+--> 1 entry/entries in data_libri-boot3Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot3Quarter/lang/phones/optional_silence.int corresponds to data_libri-boot3Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot3Quarter/lang/phones/optional_silence.csl corresponds to data_libri-boot3Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot3Quarter/lang/phones/optional_silence.{txt, int, csl} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/roots.{txt, int} ...
+--> 71 entry/entries in data_libri-boot3Quarter/lang/phones/roots.txt
+--> data_libri-boot3Quarter/lang/phones/roots.int corresponds to data_libri-boot3Quarter/lang/phones/roots.txt
+--> data_libri-boot3Quarter/lang/phones/roots.{txt, int} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/sets.{txt, int} ...
+--> 71 entry/entries in data_libri-boot3Quarter/lang/phones/sets.txt
+--> data_libri-boot3Quarter/lang/phones/sets.int corresponds to data_libri-boot3Quarter/lang/phones/sets.txt
+--> data_libri-boot3Quarter/lang/phones/sets.{txt, int} are OK
+
+Checking data_libri-boot3Quarter/lang/phones/extra_questions.{txt, int} ...
+--> WARNING: the optional data_libri-boot3Quarter/lang/phones/extra_questions.{txt, int} are empty!
+
+Checking optional_silence.txt ...
+--> reading data_libri-boot3Quarter/lang/phones/optional_silence.txt
+--> data_libri-boot3Quarter/lang/phones/optional_silence.txt is OK
+
+Checking disambiguation symbols: #0 and #1
+--> data_libri-boot3Quarter/lang/phones/disambig.txt has "#0" and "#1"
+--> data_libri-boot3Quarter/lang/phones/disambig.txt is OK
+
+Checking topo ...
+--> data_libri-boot3Quarter/lang/topo's nonsilence section is OK
+--> data_libri-boot3Quarter/lang/topo's silence section is OK
+--> data_libri-boot3Quarter/lang/topo is OK
+
+Checking data_libri-boot3Quarter/lang/oov.{txt, int} ...
+--> 1 entry/entries in data_libri-boot3Quarter/lang/oov.txt
+--> data_libri-boot3Quarter/lang/oov.int corresponds to data_libri-boot3Quarter/lang/oov.txt
+--> data_libri-boot3Quarter/lang/oov.{txt, int} are OK
+
+--> data_libri-boot3Quarter/lang/L.fst is olabel sorted
+--> data_libri-boot3Quarter/lang/L_disambig.fst is olabel sorted
+--> WARNING (check output above for warnings)
+
+####===============####
+#### TRAINING GMMs ####
+####===============####
+
+
+####===========================####
+#### BEGIN TRAINING MONOPHONES ####
+####===========================####
+
+#### Train Monophones ####
+### Define audio features ###
+feat-to-dim 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot3Quarter/train/split8/1/utt2spk scp:data_libri-boot3Quarter/train/split8/1/cmvn.scp scp:data_libri-boot3Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- |' - 
+apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot3Quarter/train/split8/1/utt2spk scp:data_libri-boot3Quarter/train/split8/1/cmvn.scp scp:data_libri-boot3Quarter/train/split8/1/feats.scp ark:- 
+add-deltas ark:- ark:- 
+WARNING (feat-to-dim[5.3.252~1-13318]:Close():kaldi-io.cc:512) Pipe apply-cmvn --norm-vars=true --utt2spk=ark:data_libri-boot3Quarter/train/split8/1/utt2spk scp:data_libri-boot3Quarter/train/split8/1/cmvn.scp scp:data_libri-boot3Quarter/train/split8/1/feats.scp ark:- | add-deltas ark:- ark:- | had nonzero return status 36096
+steps/train_mono.sh: Initializing monophone system
+steps/train_mono.sh: Compiling monophone training graphs
+
+##########################################
+### BEGIN FLATSTART MONOPHONE TRAINING ###
+##########################################
+steps/train_mono.sh: Aligning data from flat start (pass 0)
+steps/train_mono.sh: Estimating model from flat start alignments
+
+########################################
+### BEGIN MAIN EM MONOPHONE TRAINING ###
+########################################
+cp: cannot stat 'exp_libri-boot3Quarter/monophones/1.occs': No such file or directory
+
+####
+#### ERROR: train_mono.sh 
+####
+
+../../../src/gmmbin/gmm-info exp_libri-boot3Quarter/monophones/final.mdl 
+number of phones 71
+number of pdfs 215
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 215
+#### Align Monophones ####
+cat: exp_libri-boot3Quarter/monophones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot3Quarter/monophones/splice_opts': No such file or directory
+cat: exp_libri-boot3Quarter/monophones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot3Quarter/monophones/delta_opts': No such file or directory
+cp: cannot stat 'exp_libri-boot3Quarter/monophones/final.occs': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot3Quarter/train using model from exp_libri-boot3Quarter/monophones putting alignments in exp_libri-boot3Quarter/monophones_aligned
+
+####===========================####
+#### END TRAINING MONOPHONES ####
+####===========================####
+
+
+####==========================####
+#### BEGIN TRAINING TRIPHONES ####
+####==========================####
+
+### Train Triphones ###
+steps/train_deltas.sh --cmd utils/run.pl --num-iters 1 --beam 10 100 200 data_libri-boot3Quarter/train data_libri-boot3Quarter/lang exp_libri-boot3Quarter/monophones_aligned exp_libri-boot3Quarter/triphones
+num_leaves = 100
+tot_gauss = 200
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+steps/train_deltas.sh: Initializing triphone model
+steps/train_deltas.sh: converting alignments from exp_libri-boot3Quarter/monophones_aligned to use current senomes
+steps/train_deltas.sh: compiling training graphs (HMMs) of transcripts
+
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp_libri-boot3Quarter/triphones
+
+../../../src/gmmbin/gmm-info exp_libri-boot3Quarter/triphones/final.mdl 
+number of phones 71
+number of pdfs 96
+number of transition-ids 438
+number of transition-states 215
+feature dimension 39
+number of gaussians 100
+### Align Triphones ###
+cat: exp_libri-boot3Quarter/triphones/splice_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot3Quarter/triphones/splice_opts': No such file or directory
+cat: exp_libri-boot3Quarter/triphones/delta_opts: No such file or directory
+cp: cannot stat 'exp_libri-boot3Quarter/triphones/delta_opts': No such file or directory
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: Aligning data in data_libri-boot3Quarter/train using model from exp_libri-boot3Quarter/triphones putting alignments in exp_libri-boot3Quarter/triphones_aligned
+
+####========================####
+#### END TRAINING TRIPHONES ####
+####========================####
+
+
+####===================####
+#### GRAPH COMPILATION ####
+####===================####
+
+arpa2fst - 
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:94) Reading \data\ section.
+LOG (arpa2fst[5.3.252~1-13318]:Read():arpa-file-parser.cc:149) Reading \1-grams: section.
+fstisstochastic data_libri-boot3Quarter/lang_decode/G.fst 
+8.74073e-05 8.74073e-05
+Succeeded in formatting data
+
+### compile LG.fst ###
+fstpushspecial 
+fsttablecompose data_libri-boot3Quarter/lang_decode/L_disambig.fst data_libri-boot3Quarter/lang_decode/G.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fstisstochastic data_libri-boot3Quarter/lang_decode/tmp/LG.fst 
+-0.0820979 -0.0829757
+[info]: LG not stochastic.
+### compile CLG.fst ###
+fstcomposecontext --context-size=3 --central-position=1 --read-disambig-syms=data_libri-boot3Quarter/lang_decode/phones/disambig.int --write-disambig-syms=data_libri-boot3Quarter/lang_decode/tmp/disambig_ilabels_3_1.int data_libri-boot3Quarter/lang_decode/tmp/ilabels_3_1 
+fstisstochastic data_libri-boot3Quarter/lang_decode/tmp/CLG_3_1.fst 
+0 -0.0829757
+[info]: CLG not stochastic.
+### compile Ha.fst ###
+make-h-transducer --disambig-syms-out=exp_libri-boot3Quarter/triphones/graph/disambig_tid.int --transition-scale=1.0 data_libri-boot3Quarter/lang_decode/tmp/ilabels_3_1 exp_libri-boot3Quarter/triphones/tree exp_libri-boot3Quarter/triphones/final.mdl 
+### compile HCLGa.fst ###
+fsttablecompose exp_libri-boot3Quarter/triphones/graph/Ha.fst data_libri-boot3Quarter/lang_decode/tmp/CLG_3_1.fst 
+fstminimizeencoded 
+fstrmepslocal 
+fstrmsymbols exp_libri-boot3Quarter/triphones/graph/disambig_tid.int 
+fstdeterminizestar --use-log=true 
+fstisstochastic exp_libri-boot3Quarter/triphones/graph/HCLGa.fst 
+2.05226e-05 -0.207976
+HCLGa is not stochastic
+### compile HCLG.fst ###
+add-self-loops --self-loop-scale=0.1 --reorder=true exp_libri-boot3Quarter/triphones/final.mdl 
+
+####==========================####
+#### TESTING AUDIO DATA PREP ####
+####==========================####
+
+local/prepare_audio_data.sh: looking for audio data in /data/librispeech/audio/8k/test
+
+ .44 hours of audio for training 
+ in data_libri-boot3Quarter/test/wav.scp
+
+
+####=========================####
+#### TEST FEATURE EXTRACTION ####
+####=========================####
+
+MAKE PLPs:
+nj=8
+Source data dir: data_libri-boot3Quarter/test
+Destination feats dir: plp_libri-boot3Quarter
+Log dir: data_libri-boot3Quarter/test/make_plp_log
+steps/make_plp.sh --cmd utils/run.pl --nj 8 data_libri-boot3Quarter/test plp_libri-boot3Quarter/make_plp_log plp_libri-boot3Quarter
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test
+steps/make_plp.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating PLP features for test
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot3Quarter/test/.backup
+
+Succeeded creating CMVN stats for test
+
+fix_data_dir.sh: kept all 119 utterances.
+fix_data_dir.sh: old files are kept in data_libri-boot3Quarter/test/.backup
+./extract_feats.sh: splitting feats into 8 subdirs
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/1
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/2
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/3
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/4
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/5
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/6
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/7
+utils/validate_data_dir.sh: Successfully validated data-directory data_libri-boot3Quarter/test/split8/8
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+####================####
+#### BEGIN DECODING ####
+####================####
+
+
+ ### Decoding with 8 jobs  ### steps/decode.sh 6
+decode.sh: feature type is delta
+#### BEGIN CALCULATE WER ####
+
+####==============####
+#### END DECODING ####
+####==============####
+
+###
+###
+../../../src/gmmbin/gmm-info exp_libri-boot3Quarter/triphones/final.mdl 
+###
