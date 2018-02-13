@@ -1,4 +1,4 @@
-%WER 92.84 [ 3086 / 3324, 16 ins, 1282 del, 1788 sub ] data_libri-boot3Quarter/test/decode/wer_9
+%WER 96.18 [ 3197 / 3324, 9 ins, 1721 del, 1467 sub ] data_libri-boot3Quarter/test/decode/wer_9
 graph = exp_libri-boot3Quarter/triphones/graph/HCLG.fst
 acoustic model = exp_libri-boot3Quarter/triphones/final.mdl
 number of phones 71
