@@ -145,7 +145,7 @@ if [ $stage -le -2 ]; then
     echo "$0: Initializing triphone model"
     
     $cmd $exp_dir/log/init_model.log \
-        gmm-init-model \
+         gmm-init-model \
             --write-occs=$exp_dir/1.occs \
             $exp_dir/tree \
             $exp_dir/treeacc \
