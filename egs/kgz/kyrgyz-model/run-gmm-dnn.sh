@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for gmm in {1..2}; do
+for gmm in {3..4}; do
 
 
 
@@ -13,7 +13,7 @@ for gmm in {1..2}; do
     # clean up from last gmm run
     rm -rf data_* exp_* plp_*
 
-    for corpus in libri-org libri-boot1Quarter libri-boot2Quarter libri-boot3Quarter; do
+    for corpus in libri-boot2Quarter libri-boot3Quarter libri-org libri-boot1Quarter; do
         
         # clean up from last gmm run
         rm -rf input_$corpus/audio input_$corpus/phones.txt input_$corpus/transcripts
@@ -25,17 +25,18 @@ for gmm in {1..2}; do
     
 
     
-    echo "#####################"
-    echo "### TRAIN NEW DNN ###"
-    echo "#####################"
+    # echo "#####################"
+    # echo "### TRAIN NEW DNN ###"
+    # echo "#####################"
 
-    # clean up from last dnn run
-    rm -rf exp data plp
+    # # clean up from last dnn run
+    # rm -rf exp data plp
     
-    ./setup_multitask.sh "libri-org libri-boot1Quarter libri-boot2Quarter libri-boot3Quarter"
+    # ./setup_multitask.sh "libri-org libri-boot1Quarter libri-boot2Quarter libri-boot3Quarter"
 
-    env -i ./run-run-nnet3.sh $gmm
+    # env -i ./run-run-nnet3.sh $gmm
     
 done
 
 
+sudo shutdown now
