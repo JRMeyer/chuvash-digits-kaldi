@@ -228,7 +228,7 @@ if [ $stage -le 0 ]; then
                     || exit 1;
         
             $cmd $exp_dir/log/update.$x.log \
-                gmm-est \
+                 gmm-est \
                     --write-occs=$exp_dir/$[$x+1].occs \
                     --mix-up=$num_gauss \
                     --power=$power \
