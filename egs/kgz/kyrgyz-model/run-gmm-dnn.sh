@@ -34,3 +34,6 @@ for gmm in {1..2}; do
     ./run-run-nnet3.sh $gmm
     
 done
+
+
+sudo shutdown now

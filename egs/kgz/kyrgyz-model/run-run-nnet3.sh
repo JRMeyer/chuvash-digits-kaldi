@@ -4,7 +4,7 @@
 gmm=$1
 
 dim=100
-num_epochs=5
+num_epochs=1
 
 
 
