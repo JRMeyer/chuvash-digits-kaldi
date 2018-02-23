@@ -52,6 +52,15 @@ def pretty(d, indent=0):
          print('\t' * (indent+1) + str(value))
 
 
+if (int(args.numTasks) == 1):
+    train0 = [ [*x] for x in zip(* sorted(data["train"]["'output-0'"], key=itemgetter(1))) ]
+    valid0 = [ [*x] for x in zip(* sorted(data["valid"]["'output-0'"], key=itemgetter(1))) ]
+
+    plt.plot(train0[0], train0[1], label='train-TASK-A')
+    plt.plot(valid0[0], valid0[1], label='valid-TASK-A')
+
+
+    
 if (int(args.numTasks) >= 2):
     train0 = [ [*x] for x in zip(* sorted(data["train"]["'output-0'"], key=itemgetter(1))) ]
     train1 = [ [*x] for x in zip(* sorted(data["train"]["'output-1'"], key=itemgetter(1))) ]
