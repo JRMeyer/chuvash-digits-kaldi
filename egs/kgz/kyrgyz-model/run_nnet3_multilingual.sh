@@ -432,3 +432,26 @@ if [ "$decode_test" -eq "1" ]; then
 fi
 
 
+if [ "$bootstrap" != "0" ]; then
+    
+    echo "### =============== ###"
+    echo "### RESET BOOTSTRAP ###"
+    echo "### =============== ###"
+
+    echo "$0: and assuming the BASELINE model is the first in the list."
+
+    boot_pers=(${bootstrap//,/ })
+    
+    # loop over every dir except first
+    for i in `seq 1 $[$num_langs-1]`; do
+
+        echo "mv ${multi_egs_dirs[$i]}/egs.scp-org ${multi_egs_dirs[$i]}/egs.scp"
+        mv ${multi_egs_dirs[$i]}/egs.scp-org ${multi_egs_dirs[$i]}/egs.scp
+        
+        echo "###"
+        echo "### $0: moved ${multi_egs_dirs[$i]}/egs.scp to ${multi_egs_dirs[$i]}/egs.scp"
+        echo "###"
+
+    done
+    
+fi
