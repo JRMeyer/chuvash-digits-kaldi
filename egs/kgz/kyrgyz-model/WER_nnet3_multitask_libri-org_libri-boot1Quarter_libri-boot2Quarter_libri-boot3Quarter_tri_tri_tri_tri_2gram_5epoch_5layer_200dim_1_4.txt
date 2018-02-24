@@ -1,0 +1,41 @@
+%WER 43.77 [ 1455 / 3324, 153 ins, 273 del, 1029 sub ] exp/nnet3/multitask/decode/wer_10
+test_data_dir=data_libri-org/test
+graph_dir=exp_libri-org/triphones/graph
+decode_dir=exp/nnet3/multitask/decode
+final_model=exp/nnet3/multitask/libri-org/final_adj.mdl
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-org
+    num_targets= 856
+    data_dir= data/libri-org/train
+    ali_dir= exp/libri-org/tri_ali
+    egs_dir= exp/libri-org/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot1Quarter
+    num_targets= 832
+    data_dir= data/libri-boot1Quarter/train
+    ali_dir= exp/libri-boot1Quarter/tri_ali
+    egs_dir= exp/libri-boot1Quarter/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot2Quarter
+    num_targets= 856
+    data_dir= data/libri-boot2Quarter/train
+    ali_dir= exp/libri-boot2Quarter/tri_ali
+    egs_dir= exp/libri-boot2Quarter/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot3Quarter
+    num_targets= 840
+    data_dir= data/libri-boot3Quarter/train
+    ali_dir= exp/libri-boot3Quarter/tri_ali
+    egs_dir= exp/libri-boot3Quarter/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
