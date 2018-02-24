@@ -220,8 +220,20 @@ if [ "$bootstrap" != "0" ]; then
         mv ${multi_egs_dirs[$i]}/egs.scp ${multi_egs_dirs[$i]}/egs.scp-org
         ./bootstrap_resample.sh ${multi_egs_dirs[$i]}/egs.scp-org ${multi_egs_dirs[$i]}/egs.scp ${boot_pers[$i-1]}
 
+        
         num_boot_egs=( `wc -l ${multi_egs_dirs[$i]}/egs.scp` )
+        
+        cp ${multi_egs_dirs[$i]}/egs.scp ${multi_egs_dirs[$i]}/egs.boot1
+        cp ${multi_egs_dirs[$i]}/egs.scp ${multi_egs_dirs[$i]}/egs.boot2
+        cp ${multi_egs_dirs[$i]}/egs.scp ${multi_egs_dirs[$i]}/egs.boot3
 
+        sed -Ei 's/ /_1 /g' ${multi_egs_dirs[$i]}/egs.boot1
+        sed -Ei 's/ /_2 /g' ${multi_egs_dirs[$i]}/egs.boot2
+        sed -Ei 's/ /_3 /g' ${multi_egs_dirs[$i]}/egs.boot3
+
+        cat ${multi_egs_dirs[$i]}/egs.boot1 ${multi_egs_dirs[$i]}/egs.boot2 ${multi_egs_dirs[$i]}/egs.boot3 >> ${multi_egs_dirs[$i]}/egs.scp
+        rm ${multi_egs_dirs[$i]}/egs.boot1 ${multi_egs_dirs[$i]}/egs.boot2 ${multi_egs_dirs[$i]}/egs.boot3
+        
         echo "###"
         echo "### $0: Bootstrapped $num_boot_egs examples into ${multi_egs_dirs[$i]}/egs.scp"
         echo "###"
