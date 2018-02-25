@@ -3,8 +3,8 @@
 
 gmm=$1
 
-dim=300
-num_epochs=10
+dim=50
+num_epochs=5
 
 
 
@@ -93,7 +93,7 @@ do
     
     ### A + B ###
     ## 25per
-    # ./run_nnet3_multilingual.sh "libri-org libri-boot1Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}_COPIES" "tree tree" ".25"
+    ./run_nnet3_multilingual.sh "libri-org libri-boot1Quarter" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}_COPIES" "tree tree" ".1"
 
     # # ### A + B + C ###
     # # ## 25per + 50per
@@ -101,7 +101,7 @@ do
 
     # # ### A + B + C + D ###
     # # ## 25per + 50per + 75per
-    ./run_nnet3_multilingual.sh "libri-org libri-boot1Quarter libri-boot2Quarter libri-boot3Quarter" "tri tri tri tri" "0.5,0.5,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree tree tree" ".25,.25,.25"
+    #./run_nnet3_multilingual.sh "libri-org libri-boot1Quarter libri-boot2Quarter libri-boot3Quarter" "tri tri tri tri" "0.5,0.5,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree tree tree" ".25,.25,.25"
     
     
 done
