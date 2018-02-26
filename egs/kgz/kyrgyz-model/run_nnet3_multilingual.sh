@@ -68,7 +68,7 @@ bootstrap=$8
 
 cmd="utils/run.pl"
 
-exp_dir=/data/exp/nnet3/multitask
+exp_dir=/data/MTL/exp/nnet3/multitask
 master_egs_dir=$exp_dir/egs
 num_langs=${#lang_list[@]}
 
@@ -85,18 +85,18 @@ if [ 1 ]; then
     # Check data files from each lang
     # using ${typo_list[$i]}_ali for alignment dir
     for i in `seq 0 $[$num_langs-1]`; do
-        for f in /data/data/${lang_list[$i]}/train/{feats.scp,text} \
-                      /data/exp/${lang_list[$i]}/${typo_list[$i]}_ali/ali.1.gz \
-                      /data/exp/${lang_list[$i]}/${typo_list[$i]}_ali/tree; do
+        for f in /data/MTL/data/${lang_list[$i]}/train/{feats.scp,text} \
+                      /data/MTL/exp/${lang_list[$i]}/${typo_list[$i]}_ali/ali.1.gz \
+                      /data/MTL/exp/${lang_list[$i]}/${typo_list[$i]}_ali/tree; do
             [ ! -f $f ] && echo "$0: no such file $f" && exit 1;
         done
     done
     
     # Make lists of dirs for languages
     for i in `seq 0 $[$num_langs-1]`; do
-        multi_data_dirs[$i]=/data/data/${lang_list[$i]}/train
-        multi_egs_dirs[$i]=/data/exp/${lang_list[$i]}/nnet3/egs
-        multi_ali_dirs[$i]=/data/exp/${lang_list[$i]}/${typo_list[$i]}_ali
+        multi_data_dirs[$i]=/data/MTL/data/${lang_list[$i]}/train
+        multi_egs_dirs[$i]=/data/MTL/exp/${lang_list[$i]}/nnet3/egs
+        multi_ali_dirs[$i]=/data/MTL/exp/${lang_list[$i]}/${typo_list[$i]}_ali
     done
     
     for i in `seq 0 $[$num_langs-1]`;do
@@ -389,7 +389,7 @@ if [ "$decode_test" -eq "1" ]; then
     done
 
     # Get training ACC in right format for plotting
-    utils/format_accuracy_for_plot.sh "/data/exp/nnet3/multitask/log" "ACC_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt";
+    utils/format_accuracy_for_plot.sh "/data/MTL/exp/nnet3/multitask/log" "ACC_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt";
     
     for x in ${decode_dir}*; do
         [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh > WER_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt;
