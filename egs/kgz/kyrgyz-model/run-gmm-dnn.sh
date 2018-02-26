@@ -2,15 +2,17 @@
 
 
 
-for gmm in {1..100}; do
+for num in {1..100}; do
 
+    rm -rf input_libri-boot$num/audio
     env -i ./run_gmm.sh libri-boot$num 1
     
 done
 
+rm -rf input_libri-org/audio
+
 env -i ./run_gmm.sh libri-org 1
 
-sudo shutdown now
 
 # for gmm in {1..100}; do
 

@@ -1,0 +1,10 @@
+%WER 50.81 [ 1689 / 3324, 242 ins, 168 del, 1279 sub ] data_libri-boot29/test/decode/wer_11
+graph = exp_libri-boot29/triphones/graph/HCLG.fst
+acoustic model = exp_libri-boot29/triphones/final.mdl
+number of phones 71
+number of pdfs 832
+number of transition-ids 1830
+number of transition-states 911
+feature dimension 39
+number of gaussians 1920
+test dir = data_libri-boot29/test
