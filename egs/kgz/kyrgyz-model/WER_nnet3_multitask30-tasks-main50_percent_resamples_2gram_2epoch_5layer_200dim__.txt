@@ -1,0 +1,275 @@
+%WER 45.28 [ 1505 / 3324, 124 ins, 274 del, 1107 sub ] /data/MTL/exp/nnet3/multitask/decode/wer_11
+test_data_dir=data_libri-boot1/test
+graph_dir=exp_libri-boot1/triphones/graph
+decode_dir=/data/MTL/exp/nnet3/multitask/decode
+final_model=/data/MTL/exp/nnet3/multitask/libri-boot1/final_adj.mdl
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot1
+    num_targets= 840
+    data_dir= /data/MTL/data/libri-boot1/train
+    ali_dir= /data/MTL/exp/libri-boot1/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot1/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot12
+    num_targets= 840
+    data_dir= /data/MTL/data/libri-boot12/train
+    ali_dir= /data/MTL/exp/libri-boot12/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot12/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot15
+    num_targets= 832
+    data_dir= /data/MTL/data/libri-boot15/train
+    ali_dir= /data/MTL/exp/libri-boot15/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot15/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot18
+    num_targets= 848
+    data_dir= /data/MTL/data/libri-boot18/train
+    ali_dir= /data/MTL/exp/libri-boot18/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot18/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot20
+    num_targets= 824
+    data_dir= /data/MTL/data/libri-boot20/train
+    ali_dir= /data/MTL/exp/libri-boot20/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot20/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot23
+    num_targets= 856
+    data_dir= /data/MTL/data/libri-boot23/train
+    ali_dir= /data/MTL/exp/libri-boot23/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot23/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot26
+    num_targets= 832
+    data_dir= /data/MTL/data/libri-boot26/train
+    ali_dir= /data/MTL/exp/libri-boot26/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot26/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot29
+    num_targets= 832
+    data_dir= /data/MTL/data/libri-boot29/train
+    ali_dir= /data/MTL/exp/libri-boot29/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot29/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot4
+    num_targets= 848
+    data_dir= /data/MTL/data/libri-boot4/train
+    ali_dir= /data/MTL/exp/libri-boot4/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot4/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot7
+    num_targets= 840
+    data_dir= /data/MTL/data/libri-boot7/train
+    ali_dir= /data/MTL/exp/libri-boot7/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot7/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot10
+    num_targets= 856
+    data_dir= /data/MTL/data/libri-boot10/train
+    ali_dir= /data/MTL/exp/libri-boot10/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot10/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot13
+    num_targets= 840
+    data_dir= /data/MTL/data/libri-boot13/train
+    ali_dir= /data/MTL/exp/libri-boot13/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot13/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot16
+    num_targets= 824
+    data_dir= /data/MTL/data/libri-boot16/train
+    ali_dir= /data/MTL/exp/libri-boot16/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot16/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot19
+    num_targets= 832
+    data_dir= /data/MTL/data/libri-boot19/train
+    ali_dir= /data/MTL/exp/libri-boot19/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot19/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot21
+    num_targets= 840
+    data_dir= /data/MTL/data/libri-boot21/train
+    ali_dir= /data/MTL/exp/libri-boot21/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot21/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot24
+    num_targets= 824
+    data_dir= /data/MTL/data/libri-boot24/train
+    ali_dir= /data/MTL/exp/libri-boot24/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot24/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot27
+    num_targets= 832
+    data_dir= /data/MTL/data/libri-boot27/train
+    ali_dir= /data/MTL/exp/libri-boot27/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot27/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot3
+    num_targets= 840
+    data_dir= /data/MTL/data/libri-boot3/train
+    ali_dir= /data/MTL/exp/libri-boot3/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot3/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot5
+    num_targets= 840
+    data_dir= /data/MTL/data/libri-boot5/train
+    ali_dir= /data/MTL/exp/libri-boot5/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot5/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot8
+    num_targets= 832
+    data_dir= /data/MTL/data/libri-boot8/train
+    ali_dir= /data/MTL/exp/libri-boot8/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot8/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot11
+    num_targets= 856
+    data_dir= /data/MTL/data/libri-boot11/train
+    ali_dir= /data/MTL/exp/libri-boot11/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot11/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot14
+    num_targets= 840
+    data_dir= /data/MTL/data/libri-boot14/train
+    ali_dir= /data/MTL/exp/libri-boot14/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot14/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot17
+    num_targets= 824
+    data_dir= /data/MTL/data/libri-boot17/train
+    ali_dir= /data/MTL/exp/libri-boot17/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot17/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot2
+    num_targets= 848
+    data_dir= /data/MTL/data/libri-boot2/train
+    ali_dir= /data/MTL/exp/libri-boot2/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot2/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot22
+    num_targets= 816
+    data_dir= /data/MTL/data/libri-boot22/train
+    ali_dir= /data/MTL/exp/libri-boot22/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot22/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot25
+    num_targets= 800
+    data_dir= /data/MTL/data/libri-boot25/train
+    ali_dir= /data/MTL/exp/libri-boot25/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot25/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot28
+    num_targets= 848
+    data_dir= /data/MTL/data/libri-boot28/train
+    ali_dir= /data/MTL/exp/libri-boot28/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot28/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot30
+    num_targets= 856
+    data_dir= /data/MTL/data/libri-boot30/train
+    ali_dir= /data/MTL/exp/libri-boot30/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot30/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot6
+    num_targets= 832
+    data_dir= /data/MTL/data/libri-boot6/train
+    ali_dir= /data/MTL/exp/libri-boot6/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot6/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-boot9
+    num_targets= 824
+    data_dir= /data/MTL/data/libri-boot9/train
+    ali_dir= /data/MTL/exp/libri-boot9/tri_ali
+    egs_dir= /data/MTL/exp/libri-boot9/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
