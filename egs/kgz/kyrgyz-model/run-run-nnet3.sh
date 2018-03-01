@@ -4,17 +4,9 @@
 gmm=$1
 
 dim=200
-<<<<<<< HEAD
 num_epochs=2
 
-./run_nnet3_multilingual.sh "libri-boot1 libri-boot12 libri-boot15 libri-boot18 libri-boot20 libri-boot23 libri-boot26 libri-boot29 libri-boot4 libri-boot7 libri-boot10 libri-boot13 libri-boot16 libri-boot19 libri-boot21 libri-boot24 libri-boot27 libri-boot3 libri-boot5 libri-boot8 libri-boot11 libri-boot14 libri-boot17 libri-boot2 libri-boot22 libri-boot25 libri-boot28 libri-boot30 libri-boot6 libri-boot9" "tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri" "1.0,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree" "0"
-
-# ./run_nnet3_multilingual.sh "libri-boot1 libri-boot12 libri-boot15 libri-boot18 libri-boot20 libri-boot23 libri-boot26 libri-boot29 libri-boot4 libri-boot7 libri-boot10 libri-boot13 libri-boot16 libri-boot19 libri-boot21 libri-boot24 libri-boot27 libri-boot3 libri-boot5 libri-boot8 libri-boot11 libri-boot14 libri-boot17 libri-boot2 libri-boot22 libri-boot25 libri-boot28 libri-boot30 libri-boot6 libri-boot9" "tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri" "1.0,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree" "0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5"
-=======
-num_epochs=5
-
 ./run_nnet3_multilingual.sh "libri-boot1 libri-boot12 libri-boot15 libri-boot18 libri-boot20 libri-boot23 libri-boot26 libri-boot29 libri-boot4 libri-boot7 libri-boot10 libri-boot13 libri-boot16 libri-boot19 libri-boot21 libri-boot24 libri-boot27 libri-boot3 libri-boot5 libri-boot8 libri-boot11 libri-boot14 libri-boot17 libri-boot2 libri-boot22 libri-boot25 libri-boot28 libri-boot30 libri-boot6 libri-boot9" "tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri tri" "0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree tree" "0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5"
->>>>>>> dfee268acdbc6baae91a316beb50c6793cefd525
 
 
 exit
@@ -43,7 +35,6 @@ exit
 # ### A + B + C + D ###
 # ## 4 baselines
 # ./run_nnet3_multilingual.sh "libri-org libri-org libri-org libri-org" "tri tri tri tri" "0.5,0.5,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree tree tree" "0"
-
 
 for dnn in {1..5}
 do
