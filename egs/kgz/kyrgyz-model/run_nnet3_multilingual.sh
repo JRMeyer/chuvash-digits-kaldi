@@ -32,12 +32,12 @@
 ##
 #
 
-config_nnet=1
-make_egs=1
+config_nnet=0
+make_egs=0
 # stop here for bootstrap
-combine_egs=1
-train_nnet=1
-make_copies_nnet=1
+combine_egs=0
+train_nnet=0
+make_copies_nnet=0
 decode_test=1
 
 #
@@ -380,13 +380,15 @@ if [ "$decode_test" -eq "1" ]; then
 
     printf "\n#### BEGIN CALCULATE WER ####\n";
 
-    # Concatenate langs to for WER filename
-    cat_langs=""
-    cat_typos=""
-    for i in `seq 0 $[$num_langs-1]`; do
-        cat_langs="${cat_langs}_${lang_list[$i]}"
-        cat_typos="${cat_typos}_${typo_list[$i]}"
-    done
+    cat_langs='30-tasks-main'
+    cat_typos='50_percent_resamples'
+    # # Concatenate langs to for WER filename
+    # cat_langs=""
+    # cat_typos=""
+    # for i in `seq 0 $[$num_langs-1]`; do
+    #     cat_langs="${cat_langs}_${lang_list[$i]}"
+    #     cat_typos="${cat_typos}_${typo_list[$i]}"
+    # done
 
     # Get training ACC in right format for plotting
     utils/format_accuracy_for_plot.sh "/data/MTL/exp/nnet3/multitask/log" "ACC_nnet3_multitask${cat_langs}${cat_typos}_${run}.txt";
