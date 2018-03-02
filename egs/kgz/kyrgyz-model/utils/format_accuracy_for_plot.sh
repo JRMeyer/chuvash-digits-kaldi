@@ -1,3 +1,9 @@
+## Joshua Meyer 2018
+##
+## format logged training data from compute_prob_valid.* and
+## compute_prob_train.* so that the scipt utils/plot_accuracy.py
+## and matplotlib can work with it.
+
 
 logdir=$1
 save_to=$2
