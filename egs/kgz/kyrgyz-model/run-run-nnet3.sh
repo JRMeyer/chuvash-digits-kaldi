@@ -2,53 +2,53 @@
 
 
 gmm=$1
-dim=500
-num_epochs=10
+dim=100
+num_epochs=1
 
 
 
-for dnn in {1..5}
-do
+# # ### A + B ###
+# # ## 2 baselines 
+# ./run_nnet3_multilingual.sh "atai atai" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "0"
+
+# rm -rf /data/MTL/exp/nnet3
+# rm -rf /data/MTL/exp/atai/nnet3
+# rm -rf /data/MTL/exp/libri-boot1/nnet3
+# rm -rf /data/MTL/exp/libri-boot2/nnet3
 
 
-# ### A + B ###
-# ## 2 baselines 
-./run_nnet3_multilingual.sh "atai atai" "tri tri" "0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "0"
+# ./run_nnet3_multilingual.sh "atai atai atai" "tri tri tri" "0.5,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree tree" "0"
 
-rm -rf /data/MTL/exp/nnet3
-rm -rf /data/MTL/exp/atai/nnet3
-rm -rf /data/MTL/exp/libri-boot1/nnet3
-rm -rf /data/MTL/exp/libri-boot2/nnet3
-
-
-./run_nnet3_multilingual.sh "atai atai atai" "tri tri tri" "0.5,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree tree" "0"
-
-rm -rf /data/MTL/exp/nnet3
-rm -rf /data/MTL/exp/atai/nnet3
-rm -rf /data/MTL/exp/libri-boot1/nnet3
-rm -rf /data/MTL/exp/libri-boot2/nnet3
-
-
-./run_nnet3_multilingual.sh "atai libri-boot1" "tri tri" "1.0,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "0"
+# rm -rf /data/MTL/exp/nnet3
+# rm -rf /data/MTL/exp/atai/nnet3
+# rm -rf /data/MTL/exp/libri-boot1/nnet3
+# rm -rf /data/MTL/exp/libri-boot2/nnet3
 
 rm -rf /data/MTL/exp/nnet3
 rm -rf /data/MTL/exp/atai/nnet3
 rm -rf /data/MTL/exp/libri-boot1/nnet3
 rm -rf /data/MTL/exp/libri-boot2/nnet3
 
-./run_nnet3_multilingual.sh "atai libri-boot2" "tri mono" "1.0,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "0"
-rm -rf /data/MTL/exp/nnet3
-rm -rf /data/MTL/exp/atai/nnet3
-rm -rf /data/MTL/exp/libri-boot1/nnet3
-rm -rf /data/MTL/exp/libri-boot2/nnet3
 
-./run_nnet3_multilingual.sh "atai libri-boot2 libri-boot1" "tri mono tri" "1.0,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree tree" "0"
-rm -rf /data/MTL/exp/nnet3
-rm -rf /data/MTL/exp/atai/nnet3
-rm -rf /data/MTL/exp/libri-boot1/nnet3
-rm -rf /data/MTL/exp/libri-boot2/nnet3
+./run_nnet3_multilingual.sh "atai libri-boot1" "tri tri" "10.0,1.0" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "0"
 
-done
+# rm -rf /data/MTL/exp/nnet3
+# rm -rf /data/MTL/exp/atai/nnet3
+# rm -rf /data/MTL/exp/libri-boot1/nnet3
+# rm -rf /data/MTL/exp/libri-boot2/nnet3
+
+# ./run_nnet3_multilingual.sh "atai libri-boot2" "tri mono" "10.0,1.0" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree" "0"
+# rm -rf /data/MTL/exp/nnet3
+# rm -rf /data/MTL/exp/atai/nnet3
+# rm -rf /data/MTL/exp/libri-boot1/nnet3
+# rm -rf /data/MTL/exp/libri-boot2/nnet3
+
+# ./run_nnet3_multilingual.sh "atai libri-boot2 libri-boot1" "tri mono tri" "1.0,0.5,0.5" $dim $num_epochs "2gram_${num_epochs}epoch_5layer_${dim}dim_${gmm}_${dnn}" "tree tree tree" "0"
+# rm -rf /data/MTL/exp/nnet3
+# rm -rf /data/MTL/exp/atai/nnet3
+# rm -rf /data/MTL/exp/libri-boot1/nnet3
+# rm -rf /data/MTL/exp/libri-boot2/nnet3
+
 
 exit
 
