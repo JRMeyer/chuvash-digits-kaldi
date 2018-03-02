@@ -6,6 +6,7 @@ dim=500
 num_epochs=10
 
 
+
 for dnn in {1..5}
 do
 
