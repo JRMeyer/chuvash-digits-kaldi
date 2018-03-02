@@ -14,8 +14,6 @@ from operator import itemgetter
 import argparse
 parser = argparse.ArgumentParser()
 
-#-db DATABSE -u USERNAME -p PASSWORD -size 20
-
 parser.add_argument("-n", "--numTasks")
 parser.add_argument("-i", "--infile")
 parser.add_argument("-t", "--plotTitle")
@@ -52,34 +50,48 @@ def pretty(d, indent=0):
          print('\t' * (indent+1) + str(value))
 
 
-if (int(args.numTasks) == 1):
-    train0 = [ [*x] for x in zip(* sorted(data["train"]["'output-0'"], key=itemgetter(1))) ]
-    valid0 = [ [*x] for x in zip(* sorted(data["valid"]["'output-0'"], key=itemgetter(1))) ]
 
-    plt.plot(train0[0], train0[1], label='train-TASK-A')
-    plt.plot(valid0[0], valid0[1], label='valid-TASK-A')
+
+for i in range(1, int(args.numTasks)):
+    
+    output="'output-" + str(i) + "'"
+    
+    train = [ [*x] for x in zip(* sorted(data["train"][output], key=itemgetter(0))) ]
+    valid = [ [*x] for x in zip(* sorted(data["valid"][output], key=itemgetter(0))) ]
+    plt.plot(train[0], train[1], 'C'+str(2*i), label='train-TASK-'+str(i))
+    plt.plot(valid[0], valid[1], 'C'+str((2*i)+1), label='valid-TASK-'+str(i))
+
+
+output="'output-0'"
+        
+train = [ [*x] for x in zip(* sorted(data["train"][output], key=itemgetter(0))) ]
+valid = [ [*x] for x in zip(* sorted(data["valid"][output], key=itemgetter(0))) ]
+plt.plot(train[0], train[1], 'C0', label='train-TASK-MAIN')
+plt.plot(valid[0], valid[1], 'C1', label='valid-TASK-MAIN')
+        
+        
 
 
     
-if (int(args.numTasks) >= 2):
-    train0 = [ [*x] for x in zip(* sorted(data["train"]["'output-0'"], key=itemgetter(1))) ]
-    train1 = [ [*x] for x in zip(* sorted(data["train"]["'output-1'"], key=itemgetter(1))) ]
-    valid0 = [ [*x] for x in zip(* sorted(data["valid"]["'output-0'"], key=itemgetter(1))) ]
-    valid1 = [ [*x] for x in zip(* sorted(data["valid"]["'output-1'"], key=itemgetter(1))) ]
-
-    plt.plot(train0[0], train0[1], label='train-TASK-A')
-    plt.plot(valid0[0], valid0[1], label='valid-TASK-A')
-
-    plt.plot(train1[0], train1[1], label='train-TASK-B')
-    plt.plot(valid1[0], valid1[1], label='valid-TASK-B')
+# if (int(args.numTasks) >= 2):
+#     train1 = [ [*x] for x in zip(* sorted(data["train"]["'output-1'"], key=itemgetter(1))) ]
+#     valid1 = [ [*x] for x in zip(* sorted(data["valid"]["'output-1'"], key=itemgetter(1))) ]
+#     plt.plot(train1[0], train1[1], label='train-TASK-B')
+#     plt.plot(valid1[0], valid1[1], label='valid-TASK-B')
 
     
-if (int(args.numTasks) >= 3):
-    train2 = [ [*x] for x in zip(* sorted(data["train"]["'output-2'"], key=itemgetter(1))) ]
-    valid2 = [ [*x] for x in zip(* sorted(data["valid"]["'output-2'"], key=itemgetter(1))) ]
+# if (int(args.numTasks) >= 3):
+#     train2 = [ [*x] for x in zip(* sorted(data["train"]["'output-2'"], key=itemgetter(1))) ]
+#     valid2 = [ [*x] for x in zip(* sorted(data["valid"]["'output-2'"], key=itemgetter(1))) ]
+#     plt.plot(train2[0], train2[1], label='train-TASK-C')
+#     plt.plot(valid2[0], valid2[1], label='valid-TASK-C')
 
-    plt.plot(train2[0], train2[1], label='train-TASK-C')
-    plt.plot(valid2[0], valid2[1], label='valid-TASK-C')
+    
+# if (int(args.numTasks) >= 4):
+#     train2 = [ [*x] for x in zip(* sorted(data["train"]["'output-3'"], key=itemgetter(1))) ]
+#     valid2 = [ [*x] for x in zip(* sorted(data["valid"]["'output-3'"], key=itemgetter(1))) ]
+#     plt.plot(train2[0], train2[1], label='train-TASK-D')
+#     plt.plot(valid2[0], valid2[1], label='valid-TASK-D')
 
 
     
