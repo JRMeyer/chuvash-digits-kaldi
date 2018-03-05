@@ -66,8 +66,8 @@ decode_test=1
 ##
 #
 tot_gauss_mono=1000
-num_leaves_tri=5000
-tot_gauss_tri=10000
+num_leaves_tri=2000
+tot_gauss_tri=5000
 num_iters_mono=25
 num_iters_tri=25
 #
