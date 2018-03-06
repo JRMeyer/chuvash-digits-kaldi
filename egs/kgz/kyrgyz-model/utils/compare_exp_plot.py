@@ -42,7 +42,7 @@ for infile in infiles:
 
 for i in range(num_exps):
         
-    valid = [ [*x] for x in zip(* sorted(data[infiles[i]]['0'], key=itemgetter(1))) ]
+    valid = [ [*x] for x in zip(* sorted(data[infiles[i]]['0'], key=itemgetter(0))) ]
     plt.plot(valid[0], valid[1], 'C'+str(2*i), label=infiles[i])
 
         
