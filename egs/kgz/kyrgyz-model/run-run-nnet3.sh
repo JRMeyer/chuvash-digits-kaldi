@@ -8,20 +8,12 @@ num_epochs=10
 ### librispeech has 4.86 hours and atai has 1.59
 ###  1:2 == 1.53
 ###  1:1 == 3.06
-###  2:1 == 6.11
+###  2:1 == 6.12
 
 
 
-dnn="1-to-2"
-weight="1.53"
-
-
-# dnn="1-to-1"
-# weight="3.06"
-
-
-# dnn="2-to-1"
-# weight="6.12"
+dnn="1-to-1"
+weight="3.06"
 
 
 
