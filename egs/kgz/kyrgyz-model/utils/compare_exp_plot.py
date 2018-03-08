@@ -1,4 +1,4 @@
-# takes as input the output from format_acc.sh script
+# takes as input the output from extract-valid-ACC.sh script
 
 # train 'output-1' 993 0.584804
 # train 'output-0' 993 0.465945
@@ -11,6 +11,12 @@ import csv
 from collections import defaultdict
 from operator import itemgetter
 import sys
+
+
+
+###
+### USAGE: compare_exp_plot.sh "atai_tri_tri libri-tri_tri_tri libri-half_tri_tri"
+###
 
 infiles=sys.argv[1].split(' ')
 num_exps=len(infiles)
@@ -42,7 +48,7 @@ for infile in infiles:
 
 for i in range(num_exps):
         
-    valid = [ [*x] for x in zip(* sorted(data[infiles[i]]['0'], key=itemgetter(1))) ]
+    valid = [ [*x] for x in zip(* sorted(data[infiles[i]]['0'], key=itemgetter(0))) ]
     plt.plot(valid[0], valid[1], 'C'+str(2*i), label=infiles[i])
 
         
@@ -74,7 +80,7 @@ for i in range(num_exps):
     
 plt.legend()
 plt.xlabel('Training Iteration')
-title=str('Atai + LibriSpeech MTL')
+title=str('1-to-2 Target:Source Weighting // Kyrgyz + English MTL')
 
 plt.title(title)
 plt.ylabel('Frame Classification Accuracy')
