@@ -1,0 +1,32 @@
+%WER 48.00 [ 492 / 1025, 48 ins, 124 del, 320 sub ] /data/MTL/exp/nnet3/multitask/decode/wer_11
+test_data_dir=data_atai/test
+graph_dir=exp_atai/triphones/graph
+decode_dir=/data/MTL/exp/nnet3/multitask/decode
+final_model=/data/MTL/exp/nnet3/multitask/atai/final_adj.mdl
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= atai
+    num_targets= 752
+    data_dir= /data/MTL/data/atai/train
+    ali_dir= /data/MTL/exp/atai/tri_ali
+    egs_dir= /data/MTL/exp/atai/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-half
+    num_targets= 664
+    data_dir= /data/MTL/data/libri-half/train
+    ali_dir= /data/MTL/exp/libri-half/tri_ali
+    egs_dir= /data/MTL/exp/libri-half/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-tri
+    num_targets= 1584
+    data_dir= /data/MTL/data/libri-tri/train
+    ali_dir= /data/MTL/exp/libri-tri/tri_ali
+    egs_dir= /data/MTL/exp/libri-tri/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
