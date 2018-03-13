@@ -1,4 +1,4 @@
-#!/bin/bash
+\#!/bin/bash
 
 
 dim=500
@@ -12,8 +12,8 @@ num_epochs=10
 
 
 
-dnn="1-to-1"
-weight="3.06"
+dnn="2-to-1"
+weight="6.12"
 
 
 
