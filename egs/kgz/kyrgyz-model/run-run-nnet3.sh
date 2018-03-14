@@ -12,8 +12,8 @@ num_epochs=10
 
 
 
-dnn="2-to-1"
-weight="6.12"
+dnn="no-weight"
+weight="1.0"
 
 
 
