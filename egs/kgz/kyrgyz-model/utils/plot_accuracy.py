@@ -17,10 +17,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--numTasks")
 parser.add_argument("-i", "--infile")
 parser.add_argument("-t", "--plotTitle")
+parser.add_argument("-a", "--auxTask")
 
 args = parser.parse_args()
 
-
+task=args.auxTask
 # example
 # train: output1: 100: .53
 
@@ -58,16 +59,16 @@ for i in range(1, int(args.numTasks)):
     
     train = [ [*x] for x in zip(* sorted(data["train"][output], key=itemgetter(0))) ]
     valid = [ [*x] for x in zip(* sorted(data["valid"][output], key=itemgetter(0))) ]
-    plt.plot(train[0], train[1], 'C'+str(2*i), label='train-TASK-'+str(i))
-    plt.plot(valid[0], valid[1], 'C'+str((2*i)+1), label='valid-TASK-'+str(i))
+    plt.plot(train[0], train[1], 'C'+str(2*i), label='English Train '+str(task))
+    plt.plot(valid[0], valid[1], 'C'+str((2*i)+1), label='English Valid '+str(task))
 
 
 output="'output-0'"
         
 train = [ [*x] for x in zip(* sorted(data["train"][output], key=itemgetter(0))) ]
 valid = [ [*x] for x in zip(* sorted(data["valid"][output], key=itemgetter(0))) ]
-plt.plot(train[0], train[1], 'C0', label='train-TASK-MAIN')
-plt.plot(valid[0], valid[1], 'C1', label='valid-TASK-MAIN')
+plt.plot(train[0], train[1], 'C0', label='Kyrgyz Train')
+plt.plot(valid[0], valid[1], 'C1', label='Kyrgyz Valid')
         
         
 
@@ -95,10 +96,15 @@ plt.plot(valid[0], valid[1], 'C1', label='valid-TASK-MAIN')
 
 
     
-plt.legend()
+plt.legend(loc='lower right')
 plt.xlabel('Training Iteration')
 title=str(args.plotTitle)
 
 plt.title(title)
 plt.ylabel('Frame Classification Accuracy')
+
+x1,x2,y1,y2 = plt.axis()
+plt.axis((x1,x2,0.0,1.0))
+
+
 plt.show()
