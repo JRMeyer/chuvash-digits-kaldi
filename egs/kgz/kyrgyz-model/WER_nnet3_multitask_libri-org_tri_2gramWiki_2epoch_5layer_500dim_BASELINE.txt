@@ -1,0 +1,14 @@
+%WER 41.67 [ 1385 / 3324, 145 ins, 268 del, 972 sub ] /data/MTL/exp/nnet3/multitask/decode/wer_10
+test_data_dir=data_libri-org/test
+graph_dir=exp_libri-org/triphones/graph
+decode_dir=/data/MTL/exp/nnet3/multitask/decode
+final_model=/data/MTL/exp/nnet3/multitask/libri-org/final_adj.mdl
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-org
+    num_targets= 856
+    data_dir= /data/MTL/data/libri-org/train
+    ali_dir= /data/MTL/exp/libri-org/tri_ali
+    egs_dir= /data/MTL/exp/libri-org/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
