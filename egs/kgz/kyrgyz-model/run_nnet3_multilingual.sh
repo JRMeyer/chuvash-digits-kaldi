@@ -33,7 +33,7 @@
 #
 
 config_nnet=1
-make_egs=1
+make_egs=0
 # stop here for bootstrap
 combine_egs=1
 train_nnet=1
