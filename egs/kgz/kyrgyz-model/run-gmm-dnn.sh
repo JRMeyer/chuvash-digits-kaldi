@@ -16,13 +16,13 @@
 #     # clean up from last gmm run
 #     rm -rf data_* exp_* plp_*
 
-    for corpus in libri-org; do
+    for corpus in atai-org; do
         
         # clean up from last gmm run
         rm -rf input_$corpus/audio input_$corpus/phones.txt input_$corpus/transcripts
 
         # use env -i to run script in clean environment
-        env -i ./run_gmm.sh $corpus 1-apr-2018-fixed-lexicons
+        env -i ./run_gmm.sh $corpus 2-apr-2018
 
     done
     
