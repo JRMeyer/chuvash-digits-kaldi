@@ -1,0 +1,32 @@
+%WER 41.82 [ 1390 / 3324, 168 ins, 207 del, 1015 sub ] /data/MTL/exp/nnet3/multitask/decode/wer_9
+test_data_dir=data_libri-org/test
+graph_dir=exp_libri-org/triphones/graph
+decode_dir=/data/MTL/exp/nnet3/multitask/decode
+final_model=/data/MTL/exp/nnet3/multitask/libri-org/final_adj.mdl
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-org
+    num_targets= 856
+    data_dir= /data/MTL/data/libri-org/train
+    ali_dir= /data/MTL/exp/libri-org/tri_ali
+    egs_dir= /data/MTL/exp/libri-org/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-place
+    num_targets= 179
+    data_dir= /data/MTL/data/libri-place/train
+    ali_dir= /data/MTL/exp/libri-place/mono_ali
+    egs_dir= /data/MTL/exp/libri-place/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= libri-manner
+    num_targets= 182
+    data_dir= /data/MTL/data/libri-manner/train
+    ali_dir= /data/MTL/exp/libri-manner/mono_ali
+    egs_dir= /data/MTL/exp/libri-manner/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    
