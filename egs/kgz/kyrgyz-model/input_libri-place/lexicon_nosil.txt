@@ -1,1 +1,0 @@
-/data/librispeech/lexicon/place_lexicon_nosil.txt

@@ -65,11 +65,11 @@ decode_test=1
 ### HYPER-PARAMETERS
 ##
 #
-tot_gauss_mono=1000
-num_leaves_tri=1000
-tot_gauss_tri=2000
-num_iters_mono=25
-num_iters_tri=25
+tot_gauss_mono=500
+num_leaves_tri=10
+tot_gauss_tri=500
+num_iters_mono=10
+num_iters_tri=10
 #
 ##
 ###
@@ -154,6 +154,9 @@ if [ "$prep_train_audio" -eq "1" ]; then
         $data_dir \
         train
 fi
+
+
+
 
 
 

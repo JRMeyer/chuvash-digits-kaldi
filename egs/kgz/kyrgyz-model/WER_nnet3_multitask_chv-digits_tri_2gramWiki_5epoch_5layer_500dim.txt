@@ -1,0 +1,14 @@
+%WER 2.00 [ 10 / 500, 10 ins, 0 del, 0 sub ] /data/MTL/exp/nnet3/multitask/decode/wer_10
+test_data_dir=data_chv-digits/test
+graph_dir=exp_chv-digits/triphones/graph
+decode_dir=/data/MTL/exp/nnet3/multitask/decode
+final_model=/data/MTL/exp/nnet3/multitask/chv-digits/final_adj.mdl
+
+    ###### BEGIN LANGUAGE INFO ######
+    lang= chv-digits
+    num_targets= 18
+    data_dir= /data/MTL/data/chv-digits/train
+    ali_dir= /data/MTL/exp/chv-digits/tri_ali
+    egs_dir= /data/MTL/exp/chv-digits/nnet3/egs
+    ###### END LANGUAGE INFO ######
+    

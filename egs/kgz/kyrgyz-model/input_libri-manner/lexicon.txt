@@ -1,1 +1,0 @@
-/data/librispeech/lexicon/manner_lexicon.txt

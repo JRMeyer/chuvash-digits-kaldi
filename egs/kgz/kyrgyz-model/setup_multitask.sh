@@ -3,7 +3,7 @@
 # langs should be a char string like 'eng eng span'
 #
 # ASSUMES: file structure for each $lang:
-#     
+#
 #     data_${lang}/
 #                  train/
 #                  lang/
@@ -38,11 +38,11 @@ langs=( $langs )
 
 for lang in ${langs[@]}; do
     mkdir -p $to_dir/data/$lang $to_dir/exp/$lang;
-    
+
     cd $to_dir/data/$lang;
     ln -s $from_dir/data_${lang}/train/ train
     ln -s $from_dir/data_${lang}/lang/ lang
-    
+
     cd $to_dir/exp/$lang;
     ln -s $from_dir/exp_${lang}/triphones tri
     ln -s $from_dir/exp_${lang}/triphones_aligned tri_ali
@@ -50,29 +50,3 @@ for lang in ${langs[@]}; do
     ln -s $from_dir/exp_${lang}/monophones_aligned mono_ali
 
 done
-
-
-
-
-# langs=$1
-
-# langs=( $langs )
-
-# for lang in ${langs[@]}; do
-#     mkdir -p data/$lang exp/$lang;
-    
-#     cd data/$lang;
-#     ln -s ../../data_${lang}/train/ train
-#     ln -s ../../data_${lang}/lang/ lang
-    
-#     cd ../../exp/$lang;
-#     ln -s ../../exp_${lang}/triphones tri
-#     ln -s ../../exp_${lang}/triphones_aligned tri_ali
-#     ln -s ../../exp_${lang}/monophones mono
-#     ln -s ../../exp_${lang}/monophones_aligned mono_ali
-
-#     cd ../../
-# done
-
-
-    

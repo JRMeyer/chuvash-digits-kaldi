@@ -1,0 +1,20 @@
+\data\
+ngram  1=    13
+
+
+\1-grams:
+-5.0  <s>
+-1.0 nol
+-1.0 pir
+-1.0 ike
+-1.0 vise
+-1.0 tavata
+-1.0 pilek
+-1.0 ulta
+-1.0 sicce
+-1.0 sakkar
+-1.0 taxxar
+-5.0  </s>
+-10.0 <unk>
+
+\end\

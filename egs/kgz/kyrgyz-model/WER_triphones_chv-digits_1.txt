@@ -1,0 +1,10 @@
+%WER 2.40 [ 12 / 500, 10 ins, 0 del, 2 sub ] data_chv-digits/test/decode/wer_11
+graph = exp_chv-digits/triphones/graph/HCLG.fst
+acoustic model = exp_chv-digits/triphones/final.mdl
+number of phones 18
+number of pdfs 18
+number of transition-ids 120
+number of transition-states 56
+feature dimension 39
+number of gaussians 162
+test dir = data_chv-digits/test
